@@ -19,8 +19,8 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        chunkFileNames: "[format]/[name].js",
-        entryFileNames: "[format]/[name].js",
+        chunkFileNames: "[name].js",
+        entryFileNames: "[name].js",
       },
     },
   },
