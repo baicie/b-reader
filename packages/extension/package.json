@@ -29,6 +29,7 @@
     "code-debug": "bash -exec 'code --extensionDevelopmentPath=$(pwd)'"
   },
   "dependencies": {
-    "@b-reader/utils": "workspace:^"
+    "@b-reader/utils": "workspace:^",
+    "epubjs": "^0.3.93"
   }
 }

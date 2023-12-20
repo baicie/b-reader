@@ -6,9 +6,16 @@
   "scripts": {
     "dev": "pnpm run build --watch",
     "build": "vite build --emptyOutDir",
-    "preview": "vite preview"
+    "dev2": "vite"
   },
   "dependencies": {
-    "@b-reader/utils": "workspace:^"
+    "@b-reader/utils": "workspace:^",
+    "@bendera/vscode-webview-elements": "^0.17.1",
+    "@vscode/webview-ui-toolkit": "^1.4.0",
+    "pinia": "^2.1.7",
+    "vue-router": "^4.2.5"
+  },
+  "devDependencies": {
+    "@types/vscode-webview": "^1.57.4"
   }
 }

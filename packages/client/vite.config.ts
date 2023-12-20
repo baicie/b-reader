@@ -8,7 +8,11 @@ export default defineConfig({
       "@": resolve(__dirname, "src"),
     },
   },
-  plugins: [vue()],
+  plugins: [
+    vue({
+      customElement: true,
+    }),
+  ],
   build: {
     outDir: "../extension/vue-dist",
     rollupOptions: {
