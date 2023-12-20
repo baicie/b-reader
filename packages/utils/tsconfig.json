@@ -1,3 +1,8 @@
 {
-  "references": [{ "path": "../../tsconfig.json" }]
+  "references": [{ "path": "../../tsconfig.json" }],
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext"
+  }
 }

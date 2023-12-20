@@ -2,9 +2,14 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "strictNullChecks": true,
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
+    "composite": true,
     "paths": {
-      "@/*": ["packages/*"]
+      "@b-reader/*": ["packages/*"]
     }
   }
 }

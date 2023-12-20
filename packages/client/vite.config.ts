@@ -1,26 +1,21 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-import path from "node:path";
+import { resolve } from "path";
 
 export default defineConfig({
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "src"),
+      "@": resolve(__dirname, "src"),
     },
   },
   plugins: [vue()],
   build: {
-    outDir: "../extension/client",
-    emptyOutDir: true,
-    minify: true,
-    lib: {
-      entry: path.resolve(__dirname, "src/main.ts"),
-      formats: ["es"],
-    },
+    outDir: "../extension/vue-dist",
     rollupOptions: {
       output: {
-        chunkFileNames: "[name].js",
-        entryFileNames: "[name].js",
+        entryFileNames: `assets/[name].js`,
+        chunkFileNames: `assets/[name].js`,
+        assetFileNames: `assets/[name].[ext]`,
       },
     },
   },

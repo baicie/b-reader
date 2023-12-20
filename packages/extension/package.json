@@ -4,21 +4,13 @@
   "description": "",
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.85.0"
+    "vscode": "^1.63.0"
   },
   "categories": [
     "Other"
   ],
   "activationEvents": [],
-  "main": "./out/extension.js",
-  "scripts": {
-    "vscode:prepublish": "pnpm run build",
-    "build": "tsup",
-    "dev": "pnpm run build --watch",
-    "pretest": "pnpm run build && pnpm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "vscode-test"
-  },
+  "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
@@ -27,8 +19,16 @@
       }
     ]
   },
+  "scripts": {
+    "vscode:prepublish": "pnpm run build",
+    "build": "tsup",
+    "dev": "pnpm run code-debug && pnpm run build --watch",
+    "pretest": "pnpm run build && pnpm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "vscode-test",
+    "code-debug": "bash -exec 'code --extensionDevelopmentPath=$(pwd)'"
+  },
   "dependencies": {
-    "@b-reader/client": "workspace:^",
     "@b-reader/utils": "workspace:^"
   }
 }
