@@ -5,3 +5,5 @@ type NonReadonlyProperties<T> = {
       : K
     : K;
 }[keyof T];
+
+type GetFUnctionArgsType<T> = T extends (...args: infer R) => any ? R : never;

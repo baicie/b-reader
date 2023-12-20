@@ -1,17 +1,13 @@
-import vscode from "vscode";
+import { clientPath, getWebViewContent } from "@b-reader/utils";
 import path from "node:path";
-import {
-  scanClientDist,
-  clientPath,
-  getWebViewContent,
-  useExtensionPath,
-} from "@b-reader/utils";
-import { useVscodeContent } from "./content";
+import vscode, { ExtensionContext } from "vscode";
+import { resolveConfig } from "./config";
+import { BReaderContext } from "./context";
 
-export function activate(context: vscode.ExtensionContext) {
+export function activate(context: ExtensionContext) {
   console.log('Congratulations, your extension "b-reader" is now active!');
-  const { update, content: readerContent } = useVscodeContent(context);
-  const { resolvePath } = useExtensionPath(context.extensionPath);
+  const config = resolveConfig(context);
+  console.log(config);
 
   let kindDisposable = vscode.commands.registerCommand(
     `b-reader.helloWorld`,
@@ -33,7 +29,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(kindDisposable);
 }
 
-export function prepareWebView(context: vscode.ExtensionContext) {
+export function prepareWebView(context: ExtensionContext) {
   const panel = vscode.window.createWebviewPanel(
     "vueWebview",
     "vue webview",
@@ -56,7 +52,6 @@ export function prepareWebView(context: vscode.ExtensionContext) {
     path.relative(context.extensionPath, clientPath),
     panel
   );
-  console.log(html);
 
   panel.webview.html = html;
   return panel;
