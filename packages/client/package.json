@@ -14,8 +14,5 @@
     "@vscode/webview-ui-toolkit": "^1.4.0",
     "pinia": "^2.1.7",
     "vue-router": "^4.2.5"
-  },
-  "devDependencies": {
-    "@types/vscode-webview": "^1.57.4"
   }
 }

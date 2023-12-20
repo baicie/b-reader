@@ -1,9 +1,17 @@
 import vscode from "vscode";
 import path from "node:path";
-import { scanClientDist, clientPath, getWebViewContent } from "@b-reader/utils";
+import {
+  scanClientDist,
+  clientPath,
+  getWebViewContent,
+  useExtensionPath,
+} from "@b-reader/utils";
+import { useVscodeContent } from "./content";
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "b-reader" is now active!');
+  const { update, content: readerContent } = useVscodeContent(context);
+  const { resolvePath } = useExtensionPath(context.extensionPath);
 
   let kindDisposable = vscode.commands.registerCommand(
     `b-reader.helloWorld`,

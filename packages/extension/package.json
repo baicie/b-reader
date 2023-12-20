@@ -1,14 +1,34 @@
 {
   "name": "@b-reader/extension",
   "displayName": "b-reader",
-  "description": "",
+  "description": "read more book",
   "version": "0.0.1",
+  "icon": "ikun.png",
+  "qna": "https://github.com/baicie/b-reader/issues",
+  "bugs": {
+    "url": "https://github.com/baicie/b-reader/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/baicie/b-reader"
+  },
   "engines": {
     "vscode": "^1.63.0"
   },
   "categories": [
     "Other"
   ],
+  "keywords": [
+    "b-reader",
+    "epub",
+    "reader"
+  ],
+  "license": "MIT",
+  "author": {
+    "email": "zl316546@gmail.com",
+    "name": "baicie",
+    "url": "https://github.com/baicie"
+  },
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
@@ -30,6 +50,7 @@
   },
   "dependencies": {
     "@b-reader/utils": "workspace:^",
-    "epubjs": "^0.3.93"
+    "epubjs": "^0.3.93",
+    "lowdb": "^6.1.1"
   }
 }

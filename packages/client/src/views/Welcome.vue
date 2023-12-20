@@ -1,6 +1,4 @@
-<script lang="ts" setup>
-__DEV__;
-</script>
+<script lang="ts" setup></script>
 <template>
   <div>Welcome</div>
 </template>

@@ -5,7 +5,6 @@ import "@bendera/vscode-webview-elements";
 import "@vscode/webview-ui-toolkit";
 import { store } from "./store";
 import { router } from "./routers";
-import "@types/vscode-webview";
 
 const app = createApp(App);
 app.use(router);

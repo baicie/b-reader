@@ -1,3 +1,6 @@
 - [ ] store
 - [ ] api
 - [ ] node db
+- [ ] sqlite
+- [ ] typeorm
+- [ ] nestjs
