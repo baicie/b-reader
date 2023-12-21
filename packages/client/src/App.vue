@@ -1,8 +1,4 @@
-<script setup lang="ts">
-const vscode = acquireVsCodeApi();
-
-vscode.postMessage({});
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <RouterView />

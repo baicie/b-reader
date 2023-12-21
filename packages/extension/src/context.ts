@@ -1,7 +1,7 @@
-import { ExtensionContext } from "vscode";
+import { ExtensionContext, Uri } from "vscode";
 
 export type BReaderContext = {
-  dbPath?: string;
+  dbPath?: Uri;
 };
 
 export type NonReadonlyBReaderContext = NonReadonlyProperties<BReaderContext>;
@@ -44,5 +44,6 @@ export function useVscodeContext(_context: ExtensionContext) {
     get,
     undates,
     context,
+    config,
   };
 }

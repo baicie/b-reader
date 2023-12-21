@@ -3,7 +3,7 @@
   "displayName": "b-reader",
   "description": "read more book",
   "version": "0.0.1",
-  "icon": "ikun.png",
+  "icon": "icon/ikun.png",
   "qna": "https://github.com/baicie/b-reader/issues",
   "bugs": {
     "url": "https://github.com/baicie/b-reader/issues"
@@ -37,7 +37,24 @@
         "command": "b-reader.helloWorld",
         "title": "Hello World"
       }
-    ]
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "treeView",
+          "title": "b-reader",
+          "icon": "icon/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "treeView": [
+        {
+          "id": "b-reader-menu",
+          "name": "menu"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "pnpm run build",
@@ -51,6 +68,10 @@
   "dependencies": {
     "@b-reader/utils": "workspace:^",
     "epubjs": "^0.3.93",
+    "i18n": "^0.15.1",
     "lowdb": "^6.1.1"
+  },
+  "buildOptions": {
+    "type": "vscode"
   }
 }

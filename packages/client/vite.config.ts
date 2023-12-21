@@ -23,4 +23,7 @@ export default defineConfig({
       },
     },
   },
+  define: {
+    __PLATFORM__: "vscode",
+  },
 });

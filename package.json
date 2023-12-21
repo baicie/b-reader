@@ -7,6 +7,7 @@
   },
   "devDependencies": {
     "@baicie/commitizen": "^0.1.0",
+    "@types/i18n": "^0.13.10",
     "@types/mocha": "^10.0.6",
     "@types/node": "~20.10.5",
     "@types/vscode": "^1.85.0",

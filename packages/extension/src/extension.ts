@@ -1,60 +1,22 @@
 import { clientPath, getWebViewContent } from "@b-reader/utils";
 import path from "node:path";
-import vscode, { ExtensionContext } from "vscode";
-import { resolveConfig } from "./config";
-import { BReaderContext } from "./context";
+import { window, commands, ExtensionContext, ViewColumn, Uri } from "vscode";
+import { TREEVIEW_ID, resolveConfig } from "./config";
+import { menusProvider } from "./menus/tree-data-provider";
+import { prepareWebView } from "./view/web-view";
 
 export function activate(context: ExtensionContext) {
-  console.log('Congratulations, your extension "b-reader" is now active!');
   const config = resolveConfig(context);
-  console.log(config);
 
-  let kindDisposable = vscode.commands.registerCommand(
-    `b-reader.helloWorld`,
-    () => {
-      vscode.window.showInformationMessage(
-        "Opening vue generated webview inside extension!"
-      );
-      const panel = prepareWebView(context);
-
-      panel.webview.onDidReceiveMessage(
-        async ({ message }) => {
-          vscode.window.showInformationMessage(message);
-        },
-        undefined,
-        context.subscriptions
-      );
-    }
-  );
+  let kindDisposable = commands.registerCommand(`b-reader.helloWorld`, () => {
+    prepareWebView(context);
+  });
   context.subscriptions.push(kindDisposable);
+
+  window.createTreeView(TREEVIEW_ID, {
+    treeDataProvider: menusProvider,
+    showCollapseAll: true,
+  });
 }
 
-export function prepareWebView(context: ExtensionContext) {
-  const panel = vscode.window.createWebviewPanel(
-    "vueWebview",
-    "vue webview",
-    vscode.ViewColumn.One,
-    {
-      enableScripts: true,
-      localResourceRoots: [
-        vscode.Uri.file(
-          path.join(
-            context.extensionPath,
-            path.relative(context.extensionPath, clientPath)
-          )
-        ),
-      ],
-    }
-  );
-
-  const html = getWebViewContent(
-    context,
-    path.relative(context.extensionPath, clientPath),
-    panel
-  );
-
-  panel.webview.html = html;
-  return panel;
-}
-// this method is called when your extension is deactivated
 export function deactivate() {}

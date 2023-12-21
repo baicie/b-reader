@@ -1,4 +1,0 @@
-- [ ] store
-- [ ] api
-- [x] node db 
-- [ ] ci

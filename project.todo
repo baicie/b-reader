@@ -1,0 +1,134 @@
+{
+  "todotree": {
+    "tree": [
+      {
+        "key": 1703125381894,
+        "children": [],
+        "todo": {
+          "content": "store",
+          "id": 1703125381894,
+          "level": "default",
+          "done": false,
+          "start": 1703125381895,
+          "focus": false,
+          "end": 1703125566676
+        }
+      },
+      {
+        "key": 1703125575253,
+        "children": [],
+        "todo": {
+          "content": "api router",
+          "id": 1703125575253,
+          "level": "default",
+          "done": false,
+          "start": 1703125575253
+        }
+      },
+      {
+        "key": 1703125582252,
+        "children": [],
+        "todo": {
+          "content": "ci",
+          "id": 1703125582252,
+          "level": "default",
+          "done": false,
+          "start": 1703125582252
+        }
+      },
+      {
+        "key": 1703125587020,
+        "children": [],
+        "todo": {
+          "content": "json db",
+          "id": 1703125587020,
+          "level": "default",
+          "done": false,
+          "start": 1703125587020
+        }
+      },
+      {
+        "key": 1703125591708,
+        "children": [],
+        "todo": {
+          "content": "slider menus",
+          "id": 1703125591708,
+          "level": "default",
+          "done": false,
+          "start": 1703125591708
+        }
+      },
+      {
+        "key": 1703125604345,
+        "children": [],
+        "todo": {
+          "content": "i18n?",
+          "id": 1703125604345,
+          "level": "default",
+          "done": false,
+          "start": 1703125604345
+        }
+      },
+      {
+        "key": 1703125757169,
+        "children": [
+          {
+            "key": 1703125773978,
+            "children": [],
+            "todo": {
+              "content": "如何将平台与client差异抽离",
+              "id": 1703125773978,
+              "level": "default",
+              "done": false,
+              "start": 1703125773978
+            }
+          },
+          {
+            "key": 1703126088317,
+            "children": [],
+            "todo": {
+              "content": "pc桌面端的尝试？",
+              "id": 1703126088317,
+              "level": "default",
+              "done": false,
+              "start": 1703126088317
+            }
+          },
+          {
+            "key": 1703126117451,
+            "children": [],
+            "todo": {
+              "content": "web container的尝试？",
+              "id": 1703126117451,
+              "level": "default",
+              "done": false,
+              "start": 1703126117451
+            }
+          }
+        ],
+        "todo": {
+          "content": "思考作业",
+          "id": 1703125757169,
+          "level": "default",
+          "done": false,
+          "start": 1703125757170
+        }
+      }
+    ],
+    "expandKeys": [
+      1703125757169
+    ],
+    "schema": "https://github.com/Saber2pr/vsc-ext-todolist/blob/master/src/api/type.ts#L3",
+    "add_mode": "bottom",
+    "virtual": false,
+    "timelines": [],
+    "showLine": false,
+    "playFontSize": 24,
+    "title": "project",
+    "autoSort": false,
+    "showEndTime": false,
+    "simpleMode": false,
+    "lang": "zh-cn",
+    "version": "1703126125108"
+  }
+}

@@ -12,7 +12,11 @@
     "@b-reader/utils": "workspace:^",
     "@bendera/vscode-webview-elements": "^0.17.1",
     "@vscode/webview-ui-toolkit": "^1.4.0",
+    "i18n-vue": "^1.0.0",
     "pinia": "^2.1.7",
     "vue-router": "^4.2.5"
+  },
+  "buildOptions": {
+    "type": "private"
   }
 }
