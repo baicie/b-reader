@@ -38,8 +38,6 @@ export function getWebViewContent(
         vscode.Uri.file(path.join(dirPath, $2))
       );
       const replaceHref = $1 + webviewUri.toString() + '"';
-      console.log("replaceHref", replaceHref);
-
       return replaceHref;
     }
   );

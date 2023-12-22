@@ -1,22 +1,33 @@
-import { useVscodeContext } from "../context";
-import { ExtensionContext, Uri, workspace } from "vscode";
-import { DB_NAME } from "@b-reader/utils";
+import { Uri, workspace } from "vscode";
+import { BReaderContext } from "../context";
 
-interface DataBase {}
+export const useDatabase = (config: BReaderContext) => {
+  async function getValue<T extends object>(path: string) {
+    const res = await workspace.fs.readFile(
+      Uri.joinPath(config.dbPath!, `${path}.json`)
+    );
+    const de = new TextDecoder();
+    const json = de.decode(res);
 
-export const useDatabase = (context: ExtensionContext) => {
-  const { config } = useVscodeContext(context);
-  if (config.dbPath) {
-    workspace.fs.createDirectory(config.dbPath);
+    return JSON.parse(json) as T;
   }
 
-  function getConfig(path: string) {
-    try {
-      return workspace.fs.readFile(Uri.joinPath(config.dbPath!, path));
-    } catch (error) {}
+  async function setValue<S extends object>(path: string, value: S = {} as S) {
+    await workspace.fs.writeFile(
+      Uri.joinPath(config.dbPath!, `${path}.json`),
+      Buffer.from(JSON.stringify(value))
+    );
+  }
+
+  function initDatabase(config: BReaderContext) {
+    if (config.dbPath) {
+      workspace.fs.createDirectory(config.dbPath);
+    }
   }
 
   return {
-    getConfig,
+    getValue,
+    setValue,
+    initDatabase,
   };
 };

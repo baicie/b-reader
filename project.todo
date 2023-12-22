@@ -8,10 +8,10 @@
           "content": "store",
           "id": 1703125381894,
           "level": "default",
-          "done": false,
+          "done": true,
           "start": 1703125381895,
           "focus": false,
-          "end": 1703125566676
+          "end": 1703257082699
         }
       },
       {
@@ -43,8 +43,10 @@
           "content": "json db",
           "id": 1703125587020,
           "level": "default",
-          "done": false,
-          "start": 1703125587020
+          "done": true,
+          "start": 1703125587020,
+          "focus": false,
+          "end": 1703257090416
         }
       },
       {
@@ -54,8 +56,10 @@
           "content": "slider menus",
           "id": 1703125591708,
           "level": "default",
-          "done": false,
-          "start": 1703125591708
+          "done": true,
+          "start": 1703125591708,
+          "focus": false,
+          "end": 1703257100494
         }
       },
       {
@@ -65,8 +69,10 @@
           "content": "i18n?",
           "id": 1703125604345,
           "level": "default",
-          "done": false,
-          "start": 1703125604345
+          "done": true,
+          "start": 1703125604345,
+          "focus": false,
+          "end": 1703262013799
         }
       },
       {
@@ -113,6 +119,39 @@
           "done": false,
           "start": 1703125757170
         }
+      },
+      {
+        "key": 1703257211625,
+        "children": [],
+        "todo": {
+          "content": "text",
+          "id": 1703257211625,
+          "level": "default",
+          "done": false,
+          "start": 1703257211625
+        }
+      },
+      {
+        "key": 1703257215665,
+        "children": [],
+        "todo": {
+          "content": "笔趣阁？",
+          "id": 1703257215665,
+          "level": "default",
+          "done": false,
+          "start": 1703257215665
+        }
+      },
+      {
+        "key": 1703257222872,
+        "children": [],
+        "todo": {
+          "content": "panel title",
+          "id": 1703257222872,
+          "level": "default",
+          "done": false,
+          "start": 1703257222872
+        }
       }
     ],
     "expandKeys": [
@@ -129,6 +168,6 @@
     "showEndTime": false,
     "simpleMode": false,
     "lang": "zh-cn",
-    "version": "1703126125108"
+    "version": "1703262013840"
   }
 }

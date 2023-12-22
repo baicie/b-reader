@@ -1,5 +1,6 @@
 import { ProviderResult, TreeDataProvider, TreeItem } from "vscode";
 import { menus } from "./menus";
+import { Commands } from "../config";
 
 export type ReaderSlider = {
   name: string;
@@ -12,7 +13,7 @@ class SliderProvider implements TreeDataProvider<ReaderSlider>, Disposable {
     return {
       label: element.name,
       command: {
-        command: element.path,
+        command: Commands.openReaderWebView,
         title: element.name,
         arguments: [element],
       },

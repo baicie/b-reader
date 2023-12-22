@@ -31,6 +31,7 @@
   },
   "activationEvents": [],
   "main": "./dist/extension.js",
+  "l10n": "./l10n",
   "contributes": {
     "commands": [
       {
@@ -41,17 +42,17 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "treeView",
+          "id": "b-reader-activity",
           "title": "b-reader",
           "icon": "icon/icon.svg"
         }
       ]
     },
     "views": {
-      "treeView": [
+      "b-reader-activity": [
         {
           "id": "b-reader-menu",
-          "name": "menu"
+          "name": "%b-reader.views.menu.title%"
         }
       ]
     }
@@ -68,7 +69,7 @@
   "dependencies": {
     "@b-reader/utils": "workspace:^",
     "epubjs": "^0.3.93",
-    "i18n": "^0.15.1",
+    "file-type": "^18.7.0",
     "lowdb": "^6.1.1"
   },
   "buildOptions": {
