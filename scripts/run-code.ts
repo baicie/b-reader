@@ -7,13 +7,16 @@ const extensionPath = path.resolve(__dirname, "../packages/extension");
 function main() {
   switch (platform()) {
     case "win32":
-      execSync(`'code --extensionDevelopmentPath=$(pwd)'`, {
-        cwd: extensionPath,
+      const powerShellCommand = `Start-Process code -ArgumentList "--extensionDevelopmentPath=$(pwd)" -PassThru`;
+      execSync(`powershell -Command "& { ${powerShellCommand} }"`, {
+        cwd: extensionPath
       });
+      break;
     case "darwin":
       execSync(`bash -exec 'code --extensionDevelopmentPath=$(pwd)'`, {
         cwd: extensionPath,
       });
+      break;
   }
 }
 
