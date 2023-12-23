@@ -1,7 +1,8 @@
-import { BOOKS, DB_NAME, useExtensionPath } from "@b-reader/utils";
-import { ExtensionContext, Uri } from "vscode";
+import { BOOKS, DB_NAME, clientPath, useExtensionPath } from "@b-reader/utils";
+import { ExtensionContext, Uri, env } from "vscode";
 import { BReaderContext } from "./context";
 import { useDatabase } from "./db";
+import path from "node:path";
 
 export const TREEVIEW_ID = "b-reader-menu";
 
@@ -10,19 +11,24 @@ export enum Commands {
   openReader = "b-reader.local.openReader",
 }
 
-export const resolveConfig = (context: ExtensionContext) => {
-  const {} = useExtensionPath(context.extensionPath);
-
+export const resolveConfig = async (context: ExtensionContext) => {
   const config: BReaderContext = {
+    extensionPath: context.extensionPath,
     dbPath: Uri.joinPath(context.globalStorageUri, DB_NAME),
     bookPath: Uri.joinPath(context.globalStorageUri, BOOKS),
+    localResourceRoots: Uri.file(
+      path.join(
+        context.extensionPath,
+        path.relative(context.extensionPath, clientPath)
+      )
+    ),
+    language: env.language,
   };
 
   const database = useDatabase(config);
 
-  database.initDatabase(config);
+  await database.initDatabase(config);
   //
-  // const { locale, localize } = useI18n();
 
   return {
     config,

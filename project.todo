@@ -152,6 +152,19 @@
           "done": false,
           "start": 1703257222872
         }
+      },
+      {
+        "key": 1703328010441,
+        "children": [],
+        "todo": {
+          "content": "启动脚本",
+          "id": 1703328010441,
+          "level": "default",
+          "done": true,
+          "start": 1703328010442,
+          "focus": false,
+          "end": 1703329947812
+        }
       }
     ],
     "expandKeys": [
@@ -168,6 +181,6 @@
     "showEndTime": false,
     "simpleMode": false,
     "lang": "zh-cn",
-    "version": "1703262013840"
+    "version": "1703329947876"
   }
 }

@@ -29,9 +29,9 @@
     "name": "baicie",
     "url": "https://github.com/baicie"
   },
-  "activationEvents": [],
   "main": "./dist/extension.js",
   "l10n": "./l10n",
+  "activationEvents": [],
   "contributes": {
     "commands": [
       {
@@ -42,16 +42,17 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "b-reader-activity",
+          "id": "b-reader-slider",
           "title": "b-reader",
           "icon": "icon/icon.svg"
         }
       ]
     },
     "views": {
-      "b-reader-activity": [
+      "b-reader-slider": [
         {
-          "id": "b-reader-menu",
+          "type": "webview",
+          "id": "b-reader-slider",
           "name": "%b-reader.views.menu.title%"
         }
       ]
@@ -64,7 +65,7 @@
     "pretest": "pnpm run build && pnpm run lint",
     "lint": "eslint src --ext ts",
     "test": "vscode-test",
-    "code-debug": "bash -exec 'code --extensionDevelopmentPath=$(pwd)'"
+    "code-debug": "tsx ../../scripts/run-code.ts"
   },
   "dependencies": {
     "@b-reader/utils": "workspace:^",

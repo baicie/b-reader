@@ -1,24 +1,13 @@
-import { ExtensionContext, commands, l10n, window, env } from "vscode";
-import { Commands, TREEVIEW_ID, resolveConfig } from "./config";
-import { menusProvider } from "./menus/tree-data-provider";
-import { prepareWebView } from "./view/web-view";
+import { ExtensionContext } from "vscode";
+import { regisiterCommands } from "./commands";
+import { resolveConfig } from "./config";
+import { regisiterWebView } from "./view";
 
-export function activate(context: ExtensionContext) {
-  const { config, database } = resolveConfig(context);
-  console.log("l10n", l10n.t("Hello"), env.language);
+export async function activate(context: ExtensionContext) {
+  const { config } = await resolveConfig(context);
 
-  let kindDisposable = commands.registerCommand(
-    Commands.openReaderWebView,
-    async () => {
-      prepareWebView(context);
-    }
-  );
-  context.subscriptions.push(kindDisposable);
-
-  window.createTreeView(TREEVIEW_ID, {
-    treeDataProvider: menusProvider,
-    showCollapseAll: true,
-  });
+  regisiterCommands(context);
+  regisiterWebView(context, config);
 }
 
 export function deactivate() {}

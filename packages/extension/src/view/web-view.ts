@@ -1,8 +1,6 @@
-import { clientPath, getWebViewContent } from "@b-reader/utils/dist";
+import { clientPath, getWebViewPanelContent } from "@b-reader/utils";
 import path from "path";
 import { ExtensionContext, ViewColumn, Uri, window } from "vscode";
-
-type MessageType = "openReader";
 
 export function prepareWebView(context: ExtensionContext) {
   const panel = window.createWebviewPanel(
@@ -22,7 +20,7 @@ export function prepareWebView(context: ExtensionContext) {
     }
   );
 
-  const html = getWebViewContent(
+  const html = getWebViewPanelContent(
     context,
     path.relative(context.extensionPath, clientPath),
     panel

@@ -16,6 +16,10 @@ export default defineConfig({
   build: {
     outDir: "../extension/vue-dist",
     rollupOptions: {
+      input: {
+        main: resolve(__dirname, "index.html"),
+        sliderbar: resolve(__dirname, "sliderbar.html"),
+      },
       output: {
         entryFileNames: `assets/[name].js`,
         chunkFileNames: `assets/[name].js`,

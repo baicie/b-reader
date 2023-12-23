@@ -19,9 +19,9 @@ export const useDatabase = (config: BReaderContext) => {
     );
   }
 
-  function initDatabase(config: BReaderContext) {
+  async function initDatabase(config: BReaderContext) {
     if (config.dbPath) {
-      workspace.fs.createDirectory(config.dbPath);
+      await workspace.fs.createDirectory(config.dbPath);
     }
   }
 

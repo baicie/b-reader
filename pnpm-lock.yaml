@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@b-reader/utils':
+        specifier: workspace:^
+        version: link:packages/utils
       '@baicie/commitizen':
         specifier: ^0.1.0
         version: 0.1.0
