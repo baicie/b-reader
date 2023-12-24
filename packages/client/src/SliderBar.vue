@@ -38,6 +38,13 @@ const locale = computed(() => {
   }
 });
 
+const handleOpenLocal = () => {
+  sendMessage({
+    path: "openLocal",
+    data: {},
+  });
+};
+
 onBeforeMount(() => {
   initApp();
   // TOFIX 每次都会渲染？
@@ -46,7 +53,7 @@ onBeforeMount(() => {
 </script>
 <template>
   <ConfigProvider :locale="locale" :theme="theme" class="flex">
-    <Button type="primary">theme</Button>
+    <Button @click="handleOpenLocal" type="primary">打开本地</Button>
 
     <div>
       <img class="logo" src="../../extension/icon/icon.svg" />

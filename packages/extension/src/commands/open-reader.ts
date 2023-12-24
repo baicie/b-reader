@@ -1,12 +1,16 @@
 import { ExtensionContext, commands } from "vscode";
 import { Commands } from "../config";
 import { prepareWebView } from "../view/web-view";
+import { BReaderContext } from "../context";
 
-export default function regisiterCommands(context: ExtensionContext) {
+export default function regisiterCommands(
+  context: ExtensionContext,
+  config: BReaderContext
+) {
   let kindDisposable = commands.registerCommand(
     Commands.openReaderWebView,
     async () => {
-      prepareWebView(context);
+      prepareWebView(context, config);
     }
   );
   context.subscriptions.push(kindDisposable);

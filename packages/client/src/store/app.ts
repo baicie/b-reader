@@ -29,6 +29,8 @@ const appStore = defineStore("app", () => {
   }
 
   function sendMessage(message: MessageType<any>) {
+    console.log("sendMessage", message);
+
     vscode?.postMessage(message);
   }
 

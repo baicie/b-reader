@@ -1,9 +1,13 @@
 import { clientPath, getWebViewPanelContent } from "@b-reader/utils";
 import path from "path";
 import { ExtensionContext, ViewColumn, Uri, window } from "vscode";
-import { receiveMessage } from "../post-message";
+import { receiveMessage } from "../receive-message";
+import { BReaderContext } from "../context";
 
-export function prepareWebView(context: ExtensionContext) {
+export function prepareWebView(
+  context: ExtensionContext,
+  config: BReaderContext
+) {
   const panel = window.createWebviewPanel(
     "vueWebview",
     "vue webview",
@@ -26,6 +30,6 @@ export function prepareWebView(context: ExtensionContext) {
     panel
   );
   panel.webview.html = html;
-  receiveMessage(panel.webview, context);
+  receiveMessage(panel.webview, context, config);
   return panel;
 }
