@@ -2,7 +2,7 @@ import { clientPath, getWebViewPanelContent } from "@b-reader/utils";
 import path from "path";
 import { ExtensionContext, ViewColumn, Uri, window } from "vscode";
 import { receiveMessage } from "../receive-message";
-import { BReaderContext } from "../context";
+import { BReaderContext } from "@b-reader/utils";
 
 export function prepareWebView(
   context: ExtensionContext,

@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { store } from "./index";
-import { BReaderContext } from "@b-reader/extension/src/context";
+import { BReaderContext } from "@b-reader/utils";
 import { MessageType } from "@b-reader/utils";
 import { reactive } from "vue";
 import { WebviewApi } from "../vite-env";

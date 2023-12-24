@@ -1,6 +1,6 @@
-import { BOOKS, DB_NAME, clientPath, useExtensionPath } from "@b-reader/utils";
+import { BOOKS, DB_NAME, clientPath } from "@b-reader/utils";
 import { ExtensionContext, Uri, env } from "vscode";
-import { BReaderContext } from "./context";
+import { BReaderContext } from "@b-reader/utils";
 import { useDatabase } from "./db";
 import path from "node:path";
 import fs from "node:fs";
@@ -19,10 +19,11 @@ export const resolveConfig = async (context: ExtensionContext) => {
     extensionPath: context.extensionPath,
     dbPath: Uri.joinPath(context.globalStorageUri, DB_NAME),
     bookPath: Uri.joinPath(context.globalStorageUri, BOOKS),
+    imgPath: Uri.joinPath(context.globalStorageUri, "img"),
     localResourceRoots: Uri.file(path.join(clientPath)),
     language: env.language,
   };
-  initDir(config);
+  // initDir(config);
   const database = useDatabase(config);
 
   await database.initDatabase(config);
@@ -34,7 +35,11 @@ export const resolveConfig = async (context: ExtensionContext) => {
   };
 };
 
-function initDir(config: BReaderContext) {
+/**
+ * @deprecated
+ * @param config
+ */
+export function initDir(config: BReaderContext) {
   const { dbPath, bookPath } = config;
 
   const paths = {

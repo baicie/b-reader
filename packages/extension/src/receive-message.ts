@@ -2,7 +2,7 @@ import { MessageType } from "@b-reader/utils";
 import { ExtensionContext, Webview } from "vscode";
 import { readFile, writeBook } from "./utils/read-file";
 import { openUrl } from "./utils/open";
-import { BReaderContext } from "./context";
+import { BReaderContext } from "@b-reader/utils";
 
 export async function receiveMessage(
   webview: Webview,

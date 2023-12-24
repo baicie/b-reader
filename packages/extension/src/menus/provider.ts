@@ -1,7 +1,7 @@
 import { getWebViewContent, sliderbarPath } from "@b-reader/utils";
 import path from "node:path";
 import { ExtensionContext, WebviewView, WebviewViewProvider } from "vscode";
-import { BReaderContext } from "../context";
+import { BReaderContext } from "@b-reader/utils";
 import { receiveMessage } from "../receive-message";
 
 export class MenusProvider implements WebviewViewProvider {

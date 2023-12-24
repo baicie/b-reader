@@ -1,5 +1,5 @@
 import { Uri, workspace } from "vscode";
-import { BReaderContext } from "../context";
+import { BReaderContext } from "@b-reader/utils";
 
 export const useDatabase = (config: BReaderContext) => {
   async function getValue<T extends object>(path: string) {

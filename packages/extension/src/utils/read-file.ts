@@ -2,7 +2,7 @@ import { BookConfig } from "@b-reader/utils";
 import fs from "node:fs";
 import path from "node:path";
 import { Uri, workspace } from "vscode";
-import { BReaderContext } from "../context";
+import { BReaderContext } from "@b-reader/utils";
 
 export async function readFile(filePath: string) {
   return await workspace.fs.readFile(Uri.file(path.resolve(filePath)));
@@ -22,8 +22,7 @@ export async function writeBook(book: BookConfig, config: BReaderContext) {
 
     if (!fs.existsSync(bookNamePath)) {
       // 书不在
-      const bookFile = await readFile(book.path);
-      await writeFile(bookNamePath, bookFile.toString());
+      fs.copyFileSync(book.path, bookNamePath);
     }
   } catch (error) {
     console.log("writeBook error: ", error);
