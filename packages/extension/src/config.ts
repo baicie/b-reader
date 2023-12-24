@@ -16,12 +16,7 @@ export const resolveConfig = async (context: ExtensionContext) => {
     extensionPath: context.extensionPath,
     dbPath: Uri.joinPath(context.globalStorageUri, DB_NAME),
     bookPath: Uri.joinPath(context.globalStorageUri, BOOKS),
-    localResourceRoots: Uri.file(
-      path.join(
-        context.extensionPath,
-        path.relative(context.extensionPath, clientPath)
-      )
-    ),
+    localResourceRoots: Uri.file(path.join(clientPath)),
     language: env.language,
   };
 

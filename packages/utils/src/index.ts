@@ -6,5 +6,6 @@ import {
 
 export * from "./path";
 export * from "./constant";
+export type * from "./types";
 
 export { scanClientDist, getWebViewContent, getWebViewPanelContent };

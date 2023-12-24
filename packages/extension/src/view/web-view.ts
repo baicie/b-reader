@@ -1,6 +1,7 @@
 import { clientPath, getWebViewPanelContent } from "@b-reader/utils";
 import path from "path";
 import { ExtensionContext, ViewColumn, Uri, window } from "vscode";
+import { receiveMessage } from "../post-message";
 
 export function prepareWebView(context: ExtensionContext) {
   const panel = window.createWebviewPanel(
@@ -19,22 +20,12 @@ export function prepareWebView(context: ExtensionContext) {
       ],
     }
   );
-
   const html = getWebViewPanelContent(
     context,
     path.relative(context.extensionPath, clientPath),
     panel
   );
-
   panel.webview.html = html;
-
-  panel.webview.onDidReceiveMessage(
-    async (message) => {
-      console.log("message", message);
-    },
-    undefined,
-    context.subscriptions
-  );
-
+  receiveMessage(panel.webview, context);
   return panel;
 }
