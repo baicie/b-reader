@@ -24,4 +24,7 @@ export type BReaderContext = Partial<{
   language: string;
   extensionPath: string;
   imgPath: Uri;
+  globalStorageUri: Uri;
 }>;
+
+export type BookType = "edup" | "txt" | "online";

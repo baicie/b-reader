@@ -1,8 +1,10 @@
-import { MessageType } from "@b-reader/utils";
+import { BReaderContext, Book, BookConfig, MessageType } from "@b-reader/utils";
 import { ExtensionContext, Webview } from "vscode";
-import { readFile, writeBook } from "./utils/read-file";
+import { StoreKeys } from "./config";
+import { useDatabase } from "./db";
 import { openUrl } from "./utils/open";
-import { BReaderContext } from "@b-reader/utils";
+import { writeBook, writeBookInfor } from "./utils/read-file";
+import { sendMessage } from "./utils/send-message";
 
 export async function receiveMessage(
   webview: Webview,
@@ -13,17 +15,32 @@ export async function receiveMessage(
     async (message: MessageType<any>) => {
       switch (message.path) {
         case "book":
-          await writeBook(message.data, config);
+          await receiveBook(message.data, config);
           break;
         case "openLocal":
-          if (!config.bookPath) {
+          if (!message.data) {
             return;
           }
-          openUrl(config.bookPath.fsPath);
+          openUrl(message.data);
+          break;
+        case "bookInfor":
+          receiveBookInfor(config, webview);
           break;
       }
     },
     undefined,
     context.subscriptions
   );
+}
+
+async function receiveBook(book: BookConfig, config: BReaderContext) {
+  await writeBook(book, config);
+  writeBookInfor(book, config);
+}
+
+async function receiveBookInfor(config: BReaderContext, webview: Webview) {
+  const { getValue } = useDatabase(config);
+  const res = await getValue<Record<string, Book>>(StoreKeys.book);
+  console.log("res: ", res);
+  sendMessage(webview, "bookInfor", res);
 }

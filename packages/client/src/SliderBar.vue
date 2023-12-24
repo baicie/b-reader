@@ -38,10 +38,11 @@ const locale = computed(() => {
   }
 });
 
-const handleOpenLocal = () => {
+const handleOpenLocal = (path?: string) => {
+  if (!path) return;
   sendMessage({
     path: "openLocal",
-    data: {},
+    data: path,
   });
 };
 
@@ -53,7 +54,16 @@ onBeforeMount(() => {
 </script>
 <template>
   <ConfigProvider :locale="locale" :theme="theme" class="flex">
-    <Button @click="handleOpenLocal" type="primary">打开本地</Button>
+    <Button @click="() => handleOpenLocal(config.bookPath?.path)" type="primary"
+      >打开本地</Button
+    >
+
+    <Button
+      type="primary"
+      v-dev
+      @click="() => handleOpenLocal(config.globalStorageUri?.path)"
+      >dev</Button
+    >
 
     <div>
       <img class="logo" src="../../extension/icon/icon.svg" />

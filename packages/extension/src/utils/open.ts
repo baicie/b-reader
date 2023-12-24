@@ -1,6 +1,7 @@
 import { exec } from "node:child_process";
 
 export function openUrl(folderPath: string) {
+  // TOFIX  替换为包稳健
   try {
     switch (process.platform) {
       case "darwin": // macOS

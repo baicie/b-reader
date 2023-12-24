@@ -1,22 +1,25 @@
-import { Uri, workspace } from "vscode";
 import { BReaderContext } from "@b-reader/utils";
+import path from "node:path";
+import { Uri, workspace } from "vscode";
+import { decoder } from "../utils/decoder";
+import { existsOrCreate } from "../utils/file";
 
 export const useDatabase = (config: BReaderContext) => {
-  async function getValue<T extends object>(path: string) {
-    const res = await workspace.fs.readFile(
-      Uri.joinPath(config.dbPath!, `${path}.json`)
-    );
-    const de = new TextDecoder();
-    const json = de.decode(res);
-
-    return JSON.parse(json) as T;
+  async function getValue<T extends object>(_path: string) {
+    const _uri = resolvePath(_path);
+    const res = await workspace.fs.readFile(_uri);
+    return decoder<T>(res);
   }
 
-  async function setValue<S extends object>(path: string, value: S = {} as S) {
-    await workspace.fs.writeFile(
-      Uri.joinPath(config.dbPath!, `${path}.json`),
-      Buffer.from(JSON.stringify(value))
-    );
+  async function setValue<S extends object>(_path: string, value: S = {} as S) {
+    const _uri = resolvePath(_path);
+    await workspace.fs.writeFile(_uri, Buffer.from(JSON.stringify(value)));
+  }
+
+  function resolvePath(_path: string) {
+    const resultPath = path.resolve(config.dbPath!.path, `${_path}.json`);
+    existsOrCreate(resultPath);
+    return Uri.file(resultPath);
   }
 
   async function initDatabase(config: BReaderContext) {

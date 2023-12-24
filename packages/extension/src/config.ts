@@ -12,11 +12,16 @@ export enum Commands {
   openReader = "b-reader.local.openReader",
 }
 
+export enum StoreKeys {
+  book = "book",
+}
+
 export const resolveConfig = async (context: ExtensionContext) => {
   console.log("resolveConfig");
 
   const config: BReaderContext = {
     extensionPath: context.extensionPath,
+    globalStorageUri: context.globalStorageUri,
     dbPath: Uri.joinPath(context.globalStorageUri, DB_NAME),
     bookPath: Uri.joinPath(context.globalStorageUri, BOOKS),
     imgPath: Uri.joinPath(context.globalStorageUri, "img"),

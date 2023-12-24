@@ -42,4 +42,6 @@ declare global {
    */
   // eslint-disable-next-line @definitelytyped/no-unnecessary-generics
   function acquireVsCodeApi<StateType = unknown>(): WebviewApi<StateType>;
+
+  var __MODE__: "development" | "production";
 }
