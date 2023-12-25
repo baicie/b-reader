@@ -66,6 +66,7 @@ export type BReaderContext = Partial<{
   extensionPath: string;
   imgPath: Uri;
   globalStorageUri: Uri;
+  appid: string;
 }>;
 
 export type BookType = "edup" | "txt" | "online";

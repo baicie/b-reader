@@ -12,10 +12,10 @@ const routes: RouteRecordRaw[] = [
     path: "/welcome",
     component: Welcome,
   },
-  // {
-  //   path: "/bookshelf",
-  //   component: Book,
-  // },
+  {
+    path: "/bookshelf",
+    component: Book,
+  },
 ];
 
 export const router = createRouter({

@@ -1,13 +1,17 @@
-import { clientPath, getWebViewPanelContent } from "@b-reader/utils";
+import {
+  BReaderContext,
+  clientPath,
+  getWebViewPanelContent,
+} from "@b-reader/utils";
 import path from "path";
-import { ExtensionContext, ViewColumn, Uri, window } from "vscode";
+import { ExtensionContext, Uri, ViewColumn, window } from "vscode";
 import { receiveMessage } from "../receive-message";
-import { BReaderContext } from "@b-reader/utils";
-import { sendMessage } from "../utils/send-message";
+import { mixinAppid } from "../utils/appid";
 
 export function prepareWebView(
   context: ExtensionContext,
-  config: BReaderContext
+  config: BReaderContext,
+  data: any
 ) {
   const panel = window.createWebviewPanel(
     "vueWebview",
@@ -25,13 +29,18 @@ export function prepareWebView(
       ],
     }
   );
+
+  console.log("prepareWebView", data);
+
   const html = getWebViewPanelContent(
     context,
     path.relative(context.extensionPath, clientPath),
-    panel
+    panel,
+    data
   );
+
   panel.webview.html = html;
+  mixinAppid(config);
   receiveMessage(panel.webview, context, config);
-  // sendMessage(panel.webview, "config", config);
   return panel;
 }

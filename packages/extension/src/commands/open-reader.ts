@@ -9,8 +9,8 @@ export default function regisiterCommands(
 ) {
   let kindDisposable = commands.registerCommand(
     Commands.openReaderWebView,
-    async () => {
-      prepareWebView(context, config);
+    async (data) => {
+      prepareWebView(context, config, data);
     }
   );
   context.subscriptions.push(kindDisposable);

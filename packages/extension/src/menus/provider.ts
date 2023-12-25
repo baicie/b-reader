@@ -1,8 +1,12 @@
-import { getWebViewContent, sliderbarPath } from "@b-reader/utils";
+import {
+  BReaderContext,
+  getWebViewContent,
+  sliderbarPath,
+} from "@b-reader/utils";
 import path from "node:path";
 import { ExtensionContext, WebviewView, WebviewViewProvider } from "vscode";
-import { BReaderContext } from "@b-reader/utils";
 import { receiveMessage } from "../receive-message";
+import { mixinAppid } from "../utils/appid";
 
 export class MenusProvider implements WebviewViewProvider {
   private config: BReaderContext;
@@ -31,10 +35,8 @@ export class MenusProvider implements WebviewViewProvider {
       webviewView
     );
     webviewView.webview.html = html;
-
+    mixinAppid(this.config);
     receiveMessage(webviewView.webview, this.context, this.config);
-
-    this.sendMessage("config", this.config);
   }
 
   sendMessage(path: string, message: unknown) {

@@ -1,12 +1,21 @@
 <script setup lang="ts">
 import { ConfigProvider } from "ant-design-vue";
 import { locale, theme } from "./theme";
+import { onBeforeMount } from "vue";
+import { useAppStore } from "@/store/app";
+import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
 
-// const router = useRouter();
+const router = useRouter();
 
-// const app = useAppStore();
-// const { config } = storeToRefs(app);
-// const { initApp, sendMessage } = app;
+const app = useAppStore();
+const { config } = storeToRefs(app);
+const { initApp } = app;
+
+onBeforeMount(() => {
+  initApp(router);
+  console.log("app2", config.value);
+});
 </script>
 
 <template>

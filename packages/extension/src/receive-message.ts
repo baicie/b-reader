@@ -27,7 +27,10 @@ export async function receiveMessage(
           receiveBookInfor(config, webview);
           break;
         case "openWebview":
-          openWebview(message.data, webview);
+          openWebview(message.data);
+          break;
+        case "config":
+          sendMessage(webview, "config", config);
           break;
       }
     },
@@ -44,10 +47,9 @@ async function receiveBook(book: BookConfig, config: BReaderContext) {
 async function receiveBookInfor(config: BReaderContext, webview: Webview) {
   const { getValue } = useDatabase(config);
   const res = await getValue<Record<string, Book>>(StoreKeys.book);
-  sendMessage(webview, "bookInfor", res);
+  await sendMessage(webview, "bookInfor", res);
 }
 
-async function openWebview(data: string, webview: Webview) {
-  commands.executeCommand(Commands.openReaderWebView);
-  sendMessage(webview, "routerTo", data);
+async function openWebview(data: string) {
+  await commands.executeCommand(Commands.openReaderWebView, data);
 }

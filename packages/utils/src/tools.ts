@@ -20,7 +20,8 @@ export function scanClientDist() {
 export function getWebViewPanelContent(
   context: vscode.ExtensionContext,
   templatePath: string,
-  panel: vscode.WebviewPanel
+  panel: vscode.WebviewPanel,
+  data: any
 ) {
   const resourcePath = path.join(
     context.extensionPath,

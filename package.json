@@ -4,7 +4,7 @@
     "cz": "bcz",
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "lint": "oxlint --fix"
+    "lint-fix": "eslint . --fix"
   },
   "devDependencies": {
     "@b-reader/utils": "workspace:^",
@@ -12,6 +12,7 @@
     "@types/i18n": "^0.13.10",
     "@types/mocha": "^10.0.6",
     "@types/node": "~20.10.5",
+    "@types/uuid": "^9.0.7",
     "@types/vscode": "^1.85.0",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
     "@typescript-eslint/parser": "^6.15.0",
