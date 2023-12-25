@@ -1,14 +1,48 @@
 import { Uri } from "vscode";
 
-export type MessageType<T extends unknown> = {
-  path: string;
-  data: T;
+export type MessageType =
+  | MessageTypeConfig
+  | MessageTypeBookShelf
+  | MessageTypeBook
+  | MessageTypeOpenLocal
+  | MessageTypeRouterTo
+  | MessageTypeBookInfor;
+
+export type MessageTypeConfig = {
+  path: "config";
+  data: BReaderContext;
 };
+
+export type MessageTypeBookShelf = {
+  path: "bookshelf";
+  data: string;
+};
+
+export type MessageTypeBook = {
+  path: "book";
+  data: BookConfig;
+};
+
+export type MessageTypeOpenLocal = {
+  path: "openLocal";
+  data: string;
+};
+
+export type MessageTypeRouterTo = {
+  path: "routerTo";
+  data: string;
+};
+
+export type MessageTypeBookInfor = {
+  path: "bookInfor";
+  data: Record<string, Book>;
+};
+// message
 
 export type BookConfig = {
   name: string;
   path: string;
-  type: string;
+  type?: string;
 };
 
 export type Book = {

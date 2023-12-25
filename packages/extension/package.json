@@ -62,7 +62,8 @@
   "scripts": {
     "vscode:prepublish": "pnpm run build",
     "build": "tsup",
-    "dev": "pnpm run code-debug && pnpm run build --watch",
+    "dev": "pnpm run build --watch",
+    "predev": "pnpm run code-debug",
     "pretest": "pnpm run build && pnpm run lint",
     "lint": "eslint src --ext ts",
     "test": "vscode-test",

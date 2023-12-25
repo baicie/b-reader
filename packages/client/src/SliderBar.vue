@@ -46,6 +46,13 @@ const handleOpenLocal = (path?: string) => {
   });
 };
 
+const handleRouteTo = (path: string) => {
+  sendMessage({
+    path: "routerTo",
+    data: path,
+  });
+};
+
 onBeforeMount(() => {
   initApp();
   // TOFIX 每次都会渲染？
@@ -78,7 +85,7 @@ onBeforeMount(() => {
       </Upload>
     </div>
 
-    <div>书架</div>
+    <Button @click="handleRouteTo('bookshelf')">书架</Button>
 
     <div>all books</div>
 

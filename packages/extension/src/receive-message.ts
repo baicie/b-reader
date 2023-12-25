@@ -12,7 +12,7 @@ export async function receiveMessage(
   config: BReaderContext
 ) {
   webview.onDidReceiveMessage(
-    async (message: MessageType<any>) => {
+    async (message: MessageType) => {
       switch (message.path) {
         case "book":
           await receiveBook(message.data, config);
@@ -25,6 +25,8 @@ export async function receiveMessage(
           break;
         case "bookInfor":
           receiveBookInfor(config, webview);
+          break;
+        case "routerTo":
           break;
       }
     },
