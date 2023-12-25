@@ -1,5 +1,7 @@
 // @ts-nocheck
 import { RouteRecordRaw, createRouter, createWebHashHistory } from "vue-router";
+import Welcome from "../views/welcome.vue";
+import Book from "../views/books.vue";
 
 const routes: RouteRecordRaw[] = [
   {
@@ -8,8 +10,12 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: "/welcome",
-    component: () => import("@/views/Welcome.vue"),
+    component: Welcome,
   },
+  // {
+  //   path: "/bookshelf",
+  //   component: Book,
+  // },
 ];
 
 export const router = createRouter({

@@ -1,6 +1,6 @@
 import { BReaderContext, Book, BookConfig, MessageType } from "@b-reader/utils";
-import { ExtensionContext, Webview } from "vscode";
-import { StoreKeys } from "./config";
+import { ExtensionContext, Webview, commands } from "vscode";
+import { Commands, StoreKeys } from "./config";
 import { useDatabase } from "./db";
 import { openUrl } from "./utils/open";
 import { writeBook, writeBookInfor } from "./utils/read-file";
@@ -26,7 +26,8 @@ export async function receiveMessage(
         case "bookInfor":
           receiveBookInfor(config, webview);
           break;
-        case "routerTo":
+        case "openWebview":
+          openWebview(message.data, webview);
           break;
       }
     },
@@ -43,6 +44,10 @@ async function receiveBook(book: BookConfig, config: BReaderContext) {
 async function receiveBookInfor(config: BReaderContext, webview: Webview) {
   const { getValue } = useDatabase(config);
   const res = await getValue<Record<string, Book>>(StoreKeys.book);
-  console.log("res: ", res);
   sendMessage(webview, "bookInfor", res);
+}
+
+async function openWebview(data: string, webview: Webview) {
+  commands.executeCommand(Commands.openReaderWebView);
+  sendMessage(webview, "routerTo", data);
 }

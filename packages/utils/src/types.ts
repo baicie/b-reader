@@ -6,7 +6,8 @@ export type MessageType =
   | MessageTypeBook
   | MessageTypeOpenLocal
   | MessageTypeRouterTo
-  | MessageTypeBookInfor;
+  | MessageTypeBookInfor
+  | MessageTypeOpenWebview;
 
 export type MessageTypeConfig = {
   path: "config";
@@ -37,6 +38,12 @@ export type MessageTypeBookInfor = {
   path: "bookInfor";
   data: Record<string, Book>;
 };
+
+export type MessageTypeOpenWebview = {
+  path: "openWebview";
+  data: string;
+};
+
 // message
 
 export type BookConfig = {

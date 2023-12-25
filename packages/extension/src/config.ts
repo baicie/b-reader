@@ -5,7 +5,7 @@ import { useDatabase } from "./db";
 import path from "node:path";
 import fs from "node:fs";
 
-export const TREEVIEW_ID = "b-reader-menu";
+export const TREEVIEW_ID = "b-reader-slider";
 
 export enum Commands {
   openReaderWebView = "b-reader.local.openReaderWebView",

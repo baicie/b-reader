@@ -1,6 +1,6 @@
 import { ExtensionContext, commands } from "vscode";
 import { Commands } from "../config";
-import { prepareWebView } from "../view/web-view";
+import { prepareWebView } from "../view/reader";
 import { BReaderContext } from "@b-reader/utils";
 
 export default function regisiterCommands(

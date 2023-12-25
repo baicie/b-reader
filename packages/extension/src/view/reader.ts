@@ -3,6 +3,7 @@ import path from "path";
 import { ExtensionContext, ViewColumn, Uri, window } from "vscode";
 import { receiveMessage } from "../receive-message";
 import { BReaderContext } from "@b-reader/utils";
+import { sendMessage } from "../utils/send-message";
 
 export function prepareWebView(
   context: ExtensionContext,
@@ -31,5 +32,6 @@ export function prepareWebView(
   );
   panel.webview.html = html;
   receiveMessage(panel.webview, context, config);
+  // sendMessage(panel.webview, "config", config);
   return panel;
 }

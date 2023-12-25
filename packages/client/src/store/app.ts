@@ -4,14 +4,16 @@ import { BReaderContext } from "@b-reader/utils";
 import { MessageType } from "@b-reader/utils";
 import { reactive } from "vue";
 import { WebviewApi } from "../vite-env";
-import { useRouter } from "vue-router";
+import { Router, useRouter } from "vue-router";
+import { emitter } from "../utils/mitt";
 
 const appStore = defineStore("app", () => {
   const config: BReaderContext = reactive({});
   let vscode: WebviewApi<unknown> | undefined;
-  const router = useRouter();
+  let router: Router | undefined;
 
-  function initApp() {
+  function initApp(_router?: Router) {
+    router = _router;
     vscode = acquireVsCodeApi();
 
     window.addEventListener("message", (event) => {
@@ -23,6 +25,8 @@ const appStore = defineStore("app", () => {
         case "bookshelf":
           routerGoto(message.data);
           break;
+        case "routerTo":
+          routerGoto(message.data);
       }
     });
   }
@@ -34,7 +38,15 @@ const appStore = defineStore("app", () => {
   };
 
   const routerGoto = (path: string) => {
-    router.push(path);
+    let _path = path;
+    if (!path.startsWith("/")) {
+      _path = "/" + path;
+    }
+    router?.push(_path);
+  };
+
+  const emmitMessage = (message: MessageType) => {
+    emitter.emit(message.path, message.data);
   };
 
   const sendMessage = (message: MessageType) => {

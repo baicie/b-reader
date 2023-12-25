@@ -1,12 +1,10 @@
 <script lang="ts" setup>
 import { useAppStore } from "@/store/app";
 import { Button, ConfigProvider, Upload, UploadFile } from "ant-design-vue";
-import enUS from "ant-design-vue/es/locale/en_US";
-import zhCN from "ant-design-vue/es/locale/zh_CN";
 import { storeToRefs } from "pinia";
-import { computed, onBeforeMount, ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { theme } from "./theme";
+import { locale, theme } from "./theme";
 
 const { t } = useI18n();
 const app = useAppStore();
@@ -27,17 +25,6 @@ const beforeUpload = (file: UploadFile & { path: string }) => {
 
 const classification = ref([]);
 
-const locale = computed(() => {
-  switch (config.value.language) {
-    case "zh-cn":
-      return zhCN;
-    case "en-us":
-      return enUS;
-    default:
-      return zhCN;
-  }
-});
-
 const handleOpenLocal = (path?: string) => {
   if (!path) return;
   sendMessage({
@@ -46,9 +33,10 @@ const handleOpenLocal = (path?: string) => {
   });
 };
 
-const handleRouteTo = (path: string) => {
+const handleOpenWebview = (path: string) => {
+  // emitter.emit("openWebview", path);
   sendMessage({
-    path: "routerTo",
+    path: "openWebview",
     data: path,
   });
 };
@@ -85,7 +73,7 @@ onBeforeMount(() => {
       </Upload>
     </div>
 
-    <Button @click="handleRouteTo('bookshelf')">书架</Button>
+    <Button @click="handleOpenWebview('bookshelf')">书架</Button>
 
     <div>all books</div>
 
