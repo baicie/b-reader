@@ -4,16 +4,17 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "pnpm run build --watch",
-    "build": "vite build --emptyOutDir",
+    "dev": "pnpm run build --watch --mode development",
+    "build": "vite build --emptyOutDir --mode production",
     "dev2": "vite"
   },
   "dependencies": {
+    "@ant-design/icons-vue": "^7.0.1",
     "@b-reader/utils": "workspace:^",
-    "@bendera/vscode-webview-elements": "^0.17.1",
-    "@vscode/webview-ui-toolkit": "^1.4.0",
-    "i18n-vue": "^1.0.0",
+    "ant-design-vue": "^4.0.8",
+    "mitt": "^3.0.1",
     "pinia": "^2.1.7",
+    "vue-i18n": "^9.8.0",
     "vue-router": "^4.2.5"
   },
   "buildOptions": {

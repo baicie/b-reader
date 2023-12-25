@@ -6,7 +6,7 @@ import { regisiterWebView } from "./view";
 export async function activate(context: ExtensionContext) {
   const { config } = await resolveConfig(context);
 
-  regisiterCommands(context);
+  regisiterCommands(context, config);
   regisiterWebView(context, config);
 }
 

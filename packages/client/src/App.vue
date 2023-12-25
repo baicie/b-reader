@@ -1,7 +1,18 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ConfigProvider } from "ant-design-vue";
+import { locale, theme } from "./theme";
+
+// const router = useRouter();
+
+// const app = useAppStore();
+// const { config } = storeToRefs(app);
+// const { initApp, sendMessage } = app;
+</script>
 
 <template>
-  <RouterView />
+  <ConfigProvider :locale="locale" :theme="theme" class="flex">
+    <RouterView />
+  </ConfigProvider>
 </template>
 
 <style scoped>
