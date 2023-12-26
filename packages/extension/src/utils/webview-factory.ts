@@ -29,6 +29,8 @@ export const webviewFactory = (
     if (factoryConfig && factoryConfig.onlyOne && webview) {
       return webview;
     }
+    console.log("bookid", data);
+
     const panel = window.createWebviewPanel(
       "vueWebview",
       "vue webview",

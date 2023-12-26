@@ -1,11 +1,10 @@
+import { BReaderContext, MessageType } from "@b-reader/utils";
 import { defineStore } from "pinia";
-import { store } from "./index";
-import { BReaderContext } from "@b-reader/utils";
-import { MessageType } from "@b-reader/utils";
 import { reactive } from "vue";
-import { WebviewApi } from "../vite-env";
-import { Router, useRouter } from "vue-router";
+import { Router } from "vue-router";
 import { emitter } from "../utils/mitt";
+import { WebviewApi } from "../vite-env";
+import { store } from "./index";
 import { AppState } from "./types";
 
 const appStore = defineStore("app", () => {

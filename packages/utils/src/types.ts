@@ -7,7 +7,8 @@ export type MessageType =
   | MessageTypeOpenLocal
   | MessageTypeRouterTo
   | MessageTypeBookInfor
-  | MessageTypeOpenWebview;
+  | MessageTypeOpenWebview
+  | MessageTyoeOpenBook;
 
 export type MessageTypeConfig = {
   path: "config";
@@ -41,6 +42,11 @@ export type MessageTypeBookInfor = {
 
 export type MessageTypeOpenWebview = {
   path: "openWebview";
+  data: string;
+};
+
+export type MessageTyoeOpenBook = {
+  path: "openBook";
   data: string;
 };
 

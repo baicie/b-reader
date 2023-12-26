@@ -34,15 +34,17 @@ export async function writeBook(book: BookConfig, config: BReaderContext) {
 
 export async function writeBookInfor(book: BookConfig, config: BReaderContext) {
   const { setValue, getValue } = useDatabase(config);
+
+  const bookid = await calculateMD5(book.path);
   const _book: Book = {
     config: book,
-    md5: await calculateMD5(book.path),
+    md5: bookid,
     img: "",
   };
 
   const bookStore = await getValue<Record<string, Book>>(StoreKeys.book);
 
-  bookStore[book.name] = _book;
+  bookStore[bookid] = _book;
 
   await setValue(StoreKeys.book, bookStore);
 }

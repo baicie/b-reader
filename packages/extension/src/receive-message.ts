@@ -38,6 +38,10 @@ export async function receiveMessage(
         case "config":
           sendMessage(webview, "config", config);
           break;
+        case "openBook":
+          receiveOpenBook(message.data, config);
+
+          break;
       }
     },
     undefined,
@@ -48,6 +52,7 @@ export async function receiveMessage(
 async function receiveBook(book: BookConfig, config: BReaderContext) {
   await writeBook(book, config);
   writeBookInfor(book, config);
+  // TODO 通知书架更新 webview store
 }
 
 async function receiveBookInfor(config: BReaderContext, webview: Webview) {
@@ -61,11 +66,18 @@ async function openWebview(data: string, config: BReaderContext) {
   const bookStore = await getValue<BReaderUser>(StoreKeys.user);
 
   if (bookStore.welcome) {
-    await commands.executeCommand(Commands.openReaderWebView, data);
+    await commands.executeCommand(Commands.openBookSelefWebView, data);
   } else {
     await commands.executeCommand(Commands.openWelcome, data);
     await setValue(StoreKeys.user, {
       welcome: true,
     });
   }
+}
+
+async function receiveOpenBook(bookId: string, config: BReaderContext) {
+  const { getValue } = useDatabase(config);
+  const res = await getValue<Record<string, Book>>(StoreKeys.book);
+  const message = res[bookId];
+  await commands.executeCommand(Commands.openReader, message);
 }
