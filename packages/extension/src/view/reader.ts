@@ -1,7 +1,8 @@
 import {
   BReaderContext,
   clientPath,
-  getWebViewPanelContent,
+  getWebViewContent,
+  resolvehtml,
 } from "@b-reader/utils";
 import path from "path";
 import { ExtensionContext, Uri, ViewColumn, window } from "vscode";
@@ -19,24 +20,14 @@ export function prepareWebView(
     ViewColumn.One,
     {
       enableScripts: true,
-      localResourceRoots: [
-        Uri.file(
-          path.join(
-            context.extensionPath,
-            path.relative(context.extensionPath, clientPath)
-          )
-        ),
-      ],
+      localResourceRoots: [config.localResourceRoots!],
     }
   );
 
-  console.log("prepareWebView", data);
-
-  const html = getWebViewPanelContent(
-    context,
-    path.relative(context.extensionPath, clientPath),
-    panel,
-    data
+  const html = getWebViewContent(
+    config,
+    path.relative(config.extensionPath!, resolvehtml("reader")),
+    panel
   );
 
   panel.webview.html = html;

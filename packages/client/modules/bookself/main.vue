@@ -9,6 +9,6 @@
 // # style
 </script>
 <template>
-  <div>vue book</div>
+  <div>book</div>
 </template>
 <style lang="scss" scoped></style>

@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { useAppStore } from "@/store/app";
+import { useAppStore } from "../../src/store/app";
 import { Button, ConfigProvider, Upload, UploadFile } from "ant-design-vue";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { locale, theme } from "./theme";
+import { locale, theme } from "../../src/theme";
 
 const { t } = useI18n();
 const app = useAppStore();
@@ -61,7 +61,7 @@ onBeforeMount(() => {
     >
 
     <div>
-      <img class="logo" src="../../extension/icon/icon.svg" />
+      <img class="logo" src="../../../extension/icon/icon.svg" />
     </div>
 
     <div>

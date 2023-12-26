@@ -1,8 +1,40 @@
-import { defineConfig } from "vite";
+import { Plugin, defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-import { resolve } from "path";
+import path, { resolve } from "node:path";
+import glob from "fast-glob";
 
-export default defineConfig(({ mode }) => {
+const modulesPath = path.resolve(__dirname, "html");
+
+const customPlugins = (): Plugin[] => {
+  const resolveInput: Plugin = {
+    name: "resolve-input",
+    async config(config) {
+      const files = await glob("*.html", {
+        onlyFiles: true,
+        cwd: modulesPath,
+      });
+
+      for (const file of files) {
+        config.build!.rollupOptions!.input![file] = path.resolve(
+          modulesPath,
+          file
+        );
+      }
+    },
+  };
+
+  return [resolveInput];
+};
+
+const getName = (path: string, name: string, alias?: string): string => {
+  return `${alias || name}/${path
+    .toString()
+    .split(`${name}/`)[1]
+    .split("/")[0]
+    .toString()}`.replace("_", "");
+};
+
+export default defineConfig(() => {
   return {
     resolve: {
       alias: {
@@ -10,6 +42,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     plugins: [
+      customPlugins(),
       vue({
         customElement: true,
       }),
@@ -17,14 +50,16 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: "../extension/vue-dist",
       rollupOptions: {
-        input: {
-          main: resolve(__dirname, "index.html"),
-          sliderbar: resolve(__dirname, "sliderbar.html"),
-        },
+        input: {},
         output: {
-          entryFileNames: `assets/[name].js`,
-          chunkFileNames: `assets/[name].js`,
-          assetFileNames: `assets/[name].[ext]`,
+          chunkFileNames: "assets/[name].js",
+          entryFileNames: "assets/[name].js",
+          inlineDynamicImports: false,
+          manualChunks(id) {
+            if (id.includes("node_modules/")) {
+              return getName(id, "node_modules/.pnpm", "deps");
+            }
+          },
         },
       },
     },

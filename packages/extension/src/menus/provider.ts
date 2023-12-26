@@ -1,7 +1,7 @@
 import {
   BReaderContext,
   getWebViewContent,
-  sliderbarPath,
+  resolvehtml,
 } from "@b-reader/utils";
 import path from "node:path";
 import { ExtensionContext, WebviewView, WebviewViewProvider } from "vscode";
@@ -31,7 +31,7 @@ export class MenusProvider implements WebviewViewProvider {
 
     const html = getWebViewContent(
       this.config,
-      path.relative(this.config.extensionPath, sliderbarPath),
+      path.relative(this.config.extensionPath, resolvehtml("sliderbar")),
       webviewView
     );
     webviewView.webview.html = html;
