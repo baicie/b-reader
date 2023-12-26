@@ -9,6 +9,7 @@ export const TREEVIEW_ID = "b-reader-slider";
 
 export enum Commands {
   openReaderWebView = "b-reader.local.openReaderWebView",
+  openBookSelefWebView = "b-reader.local.openBookSelefWebView",
   openReader = "b-reader.local.openReader",
 }
 

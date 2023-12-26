@@ -1,3 +1,3 @@
 import { webviewFactory } from "../utils/webview-factory";
 
-export const prepareWebView = webviewFactory("reader");
+export const prepareWebView = webviewFactory("bookself");
