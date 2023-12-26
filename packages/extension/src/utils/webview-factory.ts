@@ -4,12 +4,31 @@ import {
   resolvehtml,
 } from "@b-reader/utils/dist";
 import path from "path";
-import { ExtensionContext, ViewColumn, window } from "vscode";
+import {
+  ExtensionContext,
+  ViewColumn,
+  WebviewPanel,
+  WebviewView,
+  window,
+} from "vscode";
 import { receiveMessage } from "../receive-message";
 import { mixinAppid } from "./appid";
 
-export const webviewFactory = (name: string) => {
+export type WebviewFactoryConfig = {
+  onlyOne?: boolean;
+  name?: string;
+  title?: string;
+};
+
+export const webviewFactory = (
+  name: string,
+  factoryConfig?: WebviewFactoryConfig
+) => {
+  let webview: WebviewPanel | undefined;
   return (context: ExtensionContext, config: BReaderContext, data: any) => {
+    if (factoryConfig && factoryConfig.onlyOne && webview) {
+      return webview;
+    }
     const panel = window.createWebviewPanel(
       "vueWebview",
       "vue webview",
@@ -30,6 +49,8 @@ export const webviewFactory = (name: string) => {
     panel.webview.html = html;
     mixinAppid(config);
     receiveMessage(panel.webview, context, config);
+
+    webview = panel;
     return panel;
   };
 };

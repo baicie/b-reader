@@ -70,3 +70,8 @@ export type BReaderContext = Partial<{
 }>;
 
 export type BookType = "edup" | "txt" | "online";
+
+// user
+export type BReaderUser = {
+  welcome: boolean;
+};

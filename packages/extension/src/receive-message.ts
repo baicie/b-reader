@@ -1,4 +1,10 @@
-import { BReaderContext, Book, BookConfig, MessageType } from "@b-reader/utils";
+import {
+  BReaderContext,
+  BReaderUser,
+  Book,
+  BookConfig,
+  MessageType,
+} from "@b-reader/utils";
 import { ExtensionContext, Webview, commands } from "vscode";
 import { Commands, StoreKeys } from "./config";
 import { useDatabase } from "./db";
@@ -27,7 +33,7 @@ export async function receiveMessage(
           receiveBookInfor(config, webview);
           break;
         case "openWebview":
-          openWebview(message.data);
+          openWebview(message.data, config);
           break;
         case "config":
           sendMessage(webview, "config", config);
@@ -50,6 +56,16 @@ async function receiveBookInfor(config: BReaderContext, webview: Webview) {
   await sendMessage(webview, "bookInfor", res);
 }
 
-async function openWebview(data: string) {
-  await commands.executeCommand(Commands.openReaderWebView, data);
+async function openWebview(data: string, config: BReaderContext) {
+  const { setValue, getValue } = useDatabase(config);
+  const bookStore = await getValue<BReaderUser>(StoreKeys.user);
+
+  if (bookStore.welcome) {
+    await commands.executeCommand(Commands.openReaderWebView, data);
+  } else {
+    await commands.executeCommand(Commands.openWelcome, data);
+    await setValue(StoreKeys.user, {
+      welcome: true,
+    });
+  }
 }

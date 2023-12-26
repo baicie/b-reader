@@ -11,10 +11,12 @@ export enum Commands {
   openReaderWebView = "b-reader.local.openReaderWebView",
   openBookSelefWebView = "b-reader.local.openBookSelefWebView",
   openReader = "b-reader.local.openReader",
+  openWelcome = "b-reader.local.openWelcome",
 }
 
 export enum StoreKeys {
   book = "book",
+  user = "user",
 }
 
 export const resolveConfig = async (context: ExtensionContext) => {
