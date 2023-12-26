@@ -1,10 +1,11 @@
 import { Book, BookConfig, BookType, calculateMD5 } from "@b-reader/utils";
 import fs from "node:fs";
-import path from "node:path";
+import path, { parse } from "node:path";
 import { Uri, workspace } from "vscode";
 import { BReaderContext } from "@b-reader/utils";
 import { useDatabase } from "../db";
 import { StoreKeys } from "../config";
+import { parseBook } from "../book-parse";
 
 export async function readFile(filePath: string) {
   return await workspace.fs.readFile(Uri.file(path.resolve(filePath)));
@@ -41,7 +42,7 @@ export async function writeBookInfor(book: BookConfig, config: BReaderContext) {
     md5: bookid,
     img: "",
   };
-
+  parseBook(book, config);
   const bookStore = await getValue<Record<string, Book>>(StoreKeys.book);
 
   bookStore[bookid] = _book;

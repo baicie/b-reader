@@ -71,7 +71,7 @@
   },
   "dependencies": {
     "@b-reader/utils": "workspace:^",
-    "epubjs": "^0.3.93",
+    "epub": "^1.2.1",
     "file-type": "^18.7.0",
     "lowdb": "^6.1.1",
     "uuid": "^9.0.1"

@@ -55,7 +55,7 @@ export type MessageTyoeOpenBook = {
 export type BookConfig = {
   name: string;
   path: string;
-  type?: string;
+  type?: BookType;
 };
 
 export type Book = {
@@ -75,7 +75,7 @@ export type BReaderContext = Partial<{
   appid: string;
 }>;
 
-export type BookType = "edup" | "txt" | "online";
+export type BookType = "application/epub+zip";
 
 // user
 export type BReaderUser = {
