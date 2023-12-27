@@ -4,6 +4,6 @@ type NonReadonlyProperties<T> = {
       ? never
       : K
     : K;
-}[keyof T];
+}[keyof T]
 
-type GetFUnctionArgsType<T> = T extends (...args: infer R) => any ? R : never;
+type GetFUnctionArgsType<T> = T extends (...args: infer R) => any ? R : never

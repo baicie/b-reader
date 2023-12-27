@@ -1,36 +1,36 @@
 {
+  "publisher": "baicie",
   "name": "@b-reader/extension",
   "displayName": "b-reader",
-  "description": "read more book",
   "version": "0.0.1",
-  "icon": "icon/ikun.png",
-  "qna": "https://github.com/baicie/b-reader/issues",
-  "bugs": {
-    "url": "https://github.com/baicie/b-reader/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/baicie/b-reader"
-  },
-  "engines": {
-    "vscode": "^1.63.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "keywords": [
-    "b-reader",
-    "epub",
-    "reader"
-  ],
-  "license": "MIT",
-  "publisher": "baicie",
+  "description": "read more book",
   "author": {
     "email": "zl316546@gmail.com",
     "name": "baicie",
     "url": "https://github.com/baicie"
   },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/baicie/b-reader"
+  },
+  "bugs": {
+    "url": "https://github.com/baicie/b-reader/issues"
+  },
+  "keywords": [
+    "b-reader",
+    "epub",
+    "reader"
+  ],
+  "categories": [
+    "Other"
+  ],
   "main": "./dist/extension.js",
+  "icon": "icon/ikun.png",
+  "qna": "https://github.com/baicie/b-reader/issues",
+  "engines": {
+    "vscode": "^1.63.0"
+  },
   "l10n": "./l10n",
   "activationEvents": [],
   "contributes": {
@@ -70,8 +70,8 @@
     "code-debug": "tsx ../../scripts/run-code.ts"
   },
   "dependencies": {
+    "@b-reader/epub": "workspace:^",
     "@b-reader/utils": "workspace:^",
-    "epub": "^1.2.1",
     "file-type": "^18.7.0",
     "lowdb": "^6.1.1",
     "uuid": "^9.0.1"

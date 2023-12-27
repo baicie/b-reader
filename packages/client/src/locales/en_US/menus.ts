@@ -1,3 +1,3 @@
 export default {
-  add_book: "Add Book",
-};
+  add_book: 'Add Book',
+}

@@ -1,7 +1,7 @@
-import mitt from "mitt";
+import mitt from 'mitt'
 
-export const emitter = mitt();
+export const emitter = mitt()
 
 export function clearEmitter() {
-  emitter.all.clear();
+  emitter.all.clear()
 }

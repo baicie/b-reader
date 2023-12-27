@@ -1,51 +1,22 @@
-import { BookConfig, BReaderContext } from "@b-reader/utils/dist";
-import epub, { TocElement } from "epub";
-
-export const useEpubParse = (path: string) => {
-  const book = new epub(path);
-
-  const parseChapter = (): Promise<TocElement[]> => {
-    return new Promise((resolve) => {
-      book.on("end", function () {
-        resolve(book.flow);
-      });
-      book.parse();
-    });
-  };
-
-  const parseContent = () => {};
-
-  const getChapter = (id: string) => {
-    return new Promise((resolve, reject) => {
-      book.getChapter(id, function (error, text) {
-        if (error) {
-          reject(error);
-        }
-        resolve(text);
-      });
-    });
-  };
-
-  return {
-    book,
-    parseChapter,
-    parseContent,
-    getChapter,
-  };
-};
+import path from 'node:path'
+import epub from '@b-reader/epub'
+import type { BReaderContext, BookConfig } from '@b-reader/utils/dist'
+import { useDatabase } from '../db'
 
 export async function parseEpub(
   bookConfig: BookConfig,
-  config: BReaderContext
+  config: BReaderContext,
 ) {
-  console.log("parseEpub: ", bookConfig);
-
-  const { book, parseChapter, getChapter } = useEpubParse(bookConfig.path);
-  const flow = await parseChapter();
-  console.log("book: ", book);
-  console.log("flow: ", flow);
-  flow.forEach((item) => {
-    const res = getChapter(item.id);
-    console.log("res", res);
-  });
+  try {
+    const { setValue } = useDatabase(config)
+    console.log('parseEpub: ', bookConfig)
+    const { parse } = epub(
+      bookConfig.path,
+      path.resolve(path.dirname(bookConfig.path), `${bookConfig.name}.unzip`),
+    )
+    await parse()
+  }
+  catch (error) {
+    console.log(error)
+  }
 }

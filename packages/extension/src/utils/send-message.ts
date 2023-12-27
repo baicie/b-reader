@@ -1,12 +1,12 @@
-import { Webview } from "vscode";
+import type { Webview } from 'vscode'
 
 export async function sendMessage(
   webview: Webview,
   _path: string,
-  data: unknown
+  data: unknown,
 ) {
   await webview.postMessage({
     path: _path,
     data,
-  });
+  })
 }

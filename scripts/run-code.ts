@@ -1,23 +1,23 @@
-import { platform } from "node:os";
-import { execSync } from "node:child_process";
-import path from "node:path";
+import { platform } from 'node:os'
+import { execSync } from 'node:child_process'
+import path from 'node:path'
 
-const extensionPath = path.resolve(__dirname, "../packages/extension");
+const extensionPath = path.resolve(__dirname, '../packages/extension')
 
 function main() {
   switch (platform()) {
-    case "win32":
-      const powerShellCommand = `Start-Process code -ArgumentList "--extensionDevelopmentPath=$(pwd)" -PassThru`;
+    case 'win32':
+      const powerShellCommand = 'Start-Process code -ArgumentList "--extensionDevelopmentPath=$(pwd)" -PassThru'
       execSync(`powershell -Command "& { ${powerShellCommand} }"`, {
-        cwd: extensionPath
-      });
-      break;
-    case "darwin":
-      execSync(`bash -exec 'code --extensionDevelopmentPath=$(pwd)'`, {
         cwd: extensionPath,
-      });
-      break;
+      })
+      break
+    case 'darwin':
+      execSync('bash -exec \'code --extensionDevelopmentPath=$(pwd)\'', {
+        cwd: extensionPath,
+      })
+      break
   }
 }
 
-main();
+main()

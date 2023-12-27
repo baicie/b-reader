@@ -1,15 +1,16 @@
-import { ExtensionContext, window } from "vscode";
-import { BReaderContext } from "@b-reader/utils";
-import { MenusProvider } from "../menus/provider";
-import { TREEVIEW_ID } from "../config";
+import type { ExtensionContext } from 'vscode'
+import { window } from 'vscode'
+import type { BReaderContext } from '@b-reader/utils'
+import { MenusProvider } from '../menus/provider'
+import { TREEVIEW_ID } from '../config'
 
 export function prepareSliderBarWebView(
   context: ExtensionContext,
-  config: BReaderContext
+  config: BReaderContext,
 ) {
-  const menusProvider = new MenusProvider(config, context);
+  const menusProvider = new MenusProvider(config, context)
 
   context.subscriptions.push(
-    window.registerWebviewViewProvider(TREEVIEW_ID, menusProvider)
-  );
+    window.registerWebviewViewProvider(TREEVIEW_ID, menusProvider),
+  )
 }

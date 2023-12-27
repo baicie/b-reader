@@ -1,4 +1,4 @@
-import { Uri } from "vscode";
+import type { Uri } from 'vscode'
 
 export type MessageType =
   | MessageTypeConfig
@@ -8,76 +8,76 @@ export type MessageType =
   | MessageTypeRouterTo
   | MessageTypeBookInfor
   | MessageTypeOpenWebview
-  | MessageTyoeOpenBook;
+  | MessageTyoeOpenBook
 
-export type MessageTypeConfig = {
-  path: "config";
-  data: BReaderContext;
-};
+export interface MessageTypeConfig {
+  path: 'config'
+  data: BReaderContext
+}
 
-export type MessageTypeBookShelf = {
-  path: "bookshelf";
-  data: string;
-};
+export interface MessageTypeBookShelf {
+  path: 'bookshelf'
+  data: string
+}
 
-export type MessageTypeBook = {
-  path: "book";
-  data: BookConfig;
-};
+export interface MessageTypeBook {
+  path: 'book'
+  data: BookConfig
+}
 
-export type MessageTypeOpenLocal = {
-  path: "openLocal";
-  data: string;
-};
+export interface MessageTypeOpenLocal {
+  path: 'openLocal'
+  data: string
+}
 
-export type MessageTypeRouterTo = {
-  path: "routerTo";
-  data: string;
-};
+export interface MessageTypeRouterTo {
+  path: 'routerTo'
+  data: string
+}
 
-export type MessageTypeBookInfor = {
-  path: "bookInfor";
-  data: Record<string, Book>;
-};
+export interface MessageTypeBookInfor {
+  path: 'bookInfor'
+  data: Record<string, Book>
+}
 
-export type MessageTypeOpenWebview = {
-  path: "openWebview";
-  data: string;
-};
+export interface MessageTypeOpenWebview {
+  path: 'openWebview'
+  data: string
+}
 
-export type MessageTyoeOpenBook = {
-  path: "openBook";
-  data: string;
-};
+export interface MessageTyoeOpenBook {
+  path: 'openBook'
+  data: string
+}
 
 // message
 
-export type BookConfig = {
-  name: string;
-  path: string;
-  type?: BookType;
-};
+export interface BookConfig {
+  name: string
+  path: string
+  type?: BookType
+}
 
-export type Book = {
-  config: BookConfig;
-  md5: string;
-  img: string;
-};
+export interface Book {
+  config: BookConfig
+  md5: string
+  img: string
+}
 
 export type BReaderContext = Partial<{
-  dbPath: Uri;
-  bookPath: Uri;
-  localResourceRoots: Uri;
-  language: string;
-  extensionPath: string;
-  imgPath: Uri;
-  globalStorageUri: Uri;
-  appid: string;
-}>;
+  dbPath: Uri
+  bookPath: Uri
+  localResourceRoots: Uri
+  language: string
+  extensionPath: string
+  imgPath: Uri
+  globalStorageUri: Uri
+  appid: string
+}>
 
-export type BookType = "application/epub+zip";
+export type BookType = 'application/epub+zip' | 'application/pdf'
 
 // user
-export type BReaderUser = {
-  welcome: boolean;
-};
+export interface BReaderUser {
+  welcome: boolean
+}

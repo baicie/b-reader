@@ -1,4 +1,4 @@
-import { defineConfig } from "@baicie/commitizen";
+import { defineConfig } from '@baicie/commitizen'
 
 export default defineConfig({
   options: {
@@ -6,4 +6,4 @@ export default defineConfig({
     useDefaultSteps: true,
   },
   steps: [],
-});
+})

@@ -1,3 +1,3 @@
-import { webviewFactory } from "../utils/webview-factory";
+import { webviewFactory } from '../utils/webview-factory'
 
-export const prepareWebView = webviewFactory("bookself");
+export const prepareWebView = webviewFactory('bookself')

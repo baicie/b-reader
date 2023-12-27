@@ -1,15 +1,13 @@
-import fs from "node:fs";
-import { Uri } from "vscode";
+import fs from 'node:fs'
+import type { Uri } from 'vscode'
 
 export function existsOrCreate(target: string | Uri) {
-  let _path = "";
-  if (typeof target === "string") {
-    _path = target;
-  } else {
-    _path = target.path;
-  }
+  let _path = ''
+  if (typeof target === 'string')
+    _path = target
+  else
+    _path = target.path
 
-  if (!fs.existsSync(_path)) {
-    fs.writeFileSync(_path, JSON.stringify({}), { encoding: "utf-8" });
-  }
+  if (!fs.existsSync(_path))
+    fs.writeFileSync(_path, JSON.stringify({}), { encoding: 'utf-8' })
 }

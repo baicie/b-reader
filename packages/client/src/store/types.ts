@@ -1,3 +1,3 @@
-export type AppState = {
-  goto: string;
-};
+export interface AppState {
+  goto: string
+}

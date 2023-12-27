@@ -1,17 +1,24 @@
 {
   "private": true,
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "cz": "bcz",
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "lint-fix": "eslint . --fix"
+    "lint-fix": "eslint . --fix",
+    "ox-fix": "oxlint --fix"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "0.41.0",
     "@b-reader/utils": "workspace:^",
     "@baicie/commitizen": "^0.1.0",
+    "@types/archiver": "^6.0.2",
     "@types/i18n": "^0.13.10",
     "@types/mocha": "^10.0.6",
     "@types/node": "~20.10.5",
+    "@types/unzipper": "^0.10.9",
     "@types/uuid": "^9.0.7",
     "@types/vscode": "^1.85.0",
     "@typescript-eslint/eslint-plugin": "^6.15.0",

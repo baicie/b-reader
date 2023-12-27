@@ -1,8 +1,8 @@
 {
   "name": "@b-reader/client",
-  "private": true,
-  "version": "0.0.0",
   "type": "module",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
     "dev": "pnpm run build --watch --mode development",
     "build": "vite build --emptyOutDir --mode production",

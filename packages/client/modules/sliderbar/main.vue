@@ -1,83 +1,94 @@
 <script lang="ts" setup>
-import { useAppStore } from "../../src/store/app";
-import { Button, ConfigProvider, Upload, UploadFile } from "ant-design-vue";
-import { storeToRefs } from "pinia";
-import { onBeforeMount, ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { locale, theme } from "../../src/theme";
+import type { UploadFile } from 'ant-design-vue'
+import { Button, ConfigProvider, Upload } from 'ant-design-vue'
+import { storeToRefs } from 'pinia'
+import { onBeforeMount, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import type { BookConfig } from '@b-reader/utils'
+import { locale, theme } from '../../src/theme'
+import { useAppStore } from '../../src/store/app'
 
-const { t } = useI18n();
-const app = useAppStore();
-const { config } = storeToRefs(app);
-const { initApp, sendMessage } = app;
+const { t } = useI18n()
+const app = useAppStore()
+const { config } = storeToRefs(app)
+const { initApp, sendMessage } = app
 
-const beforeUpload = (file: UploadFile & { path: string }) => {
+function beforeUpload(file: UploadFile & { path: string }) {
   sendMessage({
-    path: "book",
+    path: 'book',
     data: {
       name: file.name,
       path: file.path,
       type: file.type,
-    },
-  });
-  return Promise.reject();
-};
+    } as BookConfig,
+  })
+  return Promise.reject()
+}
 
-const classification = ref([]);
+const classification = ref([])
 
-const handleOpenLocal = (path?: string) => {
-  if (!path) return;
+function handleOpenLocal(path?: string) {
+  if (!path)
+    return
   sendMessage({
-    path: "openLocal",
+    path: 'openLocal',
     data: path,
-  });
-};
+  })
+}
 
-const handleOpenWebview = (path: string) => {
+function handleOpenWebview(path: string) {
   // emitter.emit("openWebview", path);
   sendMessage({
-    path: "openWebview",
+    path: 'openWebview',
     data: path,
-  });
-};
+  })
+}
 
 onBeforeMount(() => {
-  initApp();
+  initApp()
   // TOFIX 每次都会渲染？
-  console.log("initApp");
-});
+  console.log('initApp')
+})
 </script>
+
 <template>
   <ConfigProvider :locale="locale" :theme="theme" class="flex">
-    <Button @click="() => handleOpenLocal(config.bookPath?.path)" type="primary"
-      >打开本地</Button
-    >
+    <Button type="primary" @click="() => handleOpenLocal(config.bookPath?.path)">
+      打开本地
+    </Button>
 
     <Button
-      type="primary"
       v-dev
+      type="primary"
       @click="() => handleOpenLocal(config.globalStorageUri?.path)"
-      >dev</Button
     >
+      dev
+    </Button>
 
     <div>
-      <img class="logo" src="../../../extension/icon/icon.svg" />
+      <img class="logo" src="../../../extension/icon/icon.svg">
     </div>
 
     <div>
       <Upload
-        :beforeUpload="(file:any)=>beforeUpload(file)"
-        accept=".epub,.txt"
+        :before-upload="(file:any) => beforeUpload(file)"
+        accept=".epub,.txt,.pdf"
       >
-        <Button type="ghost"> {{ t("menus.add_book") }} </Button>
+        <Button type="primary">
+          {{ t("menus.add_book") }}
+        </Button>
       </Upload>
     </div>
 
-    <Button @click="handleOpenWebview('bookshelf')">书架</Button>
+    <Button @click="handleOpenWebview('bookshelf')">
+      书架
+    </Button>
 
     <div>all books</div>
 
-    <div v-if="classification.length">默认分类</div>
+    <div v-if="classification.length">
+      默认分类
+    </div>
 
     <template v-for="item in classification" :key="item.id">
       <div>{{ item }}</div>
@@ -90,6 +101,7 @@ onBeforeMount(() => {
     <div>设置</div>
   </ConfigProvider>
 </template>
+
 <style lang="scss" scoped>
 .flex {
   display: flex;
