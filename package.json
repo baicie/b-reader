@@ -7,7 +7,7 @@
     "cz": "bcz",
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "lint-fix": "eslint . --fix",
+    "lint-fix": "eslint ./packages ./scripts --fix",
     "ox-fix": "oxlint --fix"
   },
   "devDependencies": {
@@ -21,6 +21,7 @@
     "@types/unzipper": "^0.10.9",
     "@types/uuid": "^9.0.7",
     "@types/vscode": "^1.85.0",
+    "@types/xml2js": "^0.4.14",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
     "@typescript-eslint/parser": "^6.15.0",
     "@vitejs/plugin-vue": "^4.5.2",

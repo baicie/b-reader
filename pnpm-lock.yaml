@@ -38,6 +38,9 @@ importers:
       '@types/vscode':
         specifier: ^1.85.0
         version: 1.85.0
+      '@types/xml2js':
+        specifier: ^0.4.14
+        version: 0.4.14
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.15.0
         version: 6.15.0(@typescript-eslint/parser@6.15.0)(eslint@8.56.0)(typescript@5.3.3)
@@ -131,6 +134,9 @@ importers:
       '@b-reader/epub':
         specifier: workspace:^
         version: link:../epub
+      '@b-reader/pdf':
+        specifier: workspace:^
+        version: link:../pdf
       '@b-reader/utils':
         specifier: workspace:^
         version: link:../utils
@@ -143,6 +149,12 @@ importers:
       uuid:
         specifier: ^9.0.1
         version: 9.0.1
+
+  packages/pdf:
+    dependencies:
+      pdf2json:
+        specifier: ^3.0.5
+        version: 3.0.5
 
   packages/utils:
     dependencies:
@@ -1062,6 +1074,12 @@ packages:
     resolution: {integrity: sha512-ltIpx+kM7g/MLRZfkbL7EsCEjfzCcScLpkg37eXEtx5kmrAKBkTJwd1GIAjDSL8wTpM6Hzn5YO4pSb91BEwu1g==}
     dev: true
 
+  /@types/xml2js@0.4.14:
+    resolution: {integrity: sha512-4YnrRemBShWRO2QjvUin8ESA41rH+9nQGLUGZV/1IDhi3SL9OhdpNC/MrulTWuptXKwhx/aDxE7toV0f/ypIXQ==}
+    dependencies:
+      '@types/node': 20.10.5
+    dev: true
+
   /@typescript-eslint/eslint-plugin@6.15.0(@typescript-eslint/parser@6.15.0)(eslint@8.56.0)(typescript@5.3.3):
     resolution: {integrity: sha512-j5qoikQqPccq9QoBAupOP+CBu8BaJ8BLjaXSioDISeTZkVO3ig7oSIKh3H+rEpee7xCXtWwSB4KIL5l6hWZzpg==}
     engines: {node: ^16.0.0 || >=18.0.0}
@@ -1434,6 +1452,11 @@ packages:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
+    dev: false
+
+  /@xmldom/xmldom@0.8.10:
+    resolution: {integrity: sha512-2WALfTl4xo2SkGCYRt6rDTFfk9R1czmBvUQy12gK2KuRKIpWEhcbbzy8EZXtz/jkRqHX8bFEc6FC1HjX4TUWYw==}
+    engines: {node: '>=10.0.0'}
     dev: false
 
   /acorn-jsx@5.3.2(acorn@8.11.2):
@@ -3394,6 +3417,16 @@ packages:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
     dev: true
+
+  /pdf2json@3.0.5:
+    resolution: {integrity: sha512-Un1yLbSlk/zfwrltgguskExIioXZlFSFwsyXU0cnBorLywbTbcdzmJJEebh+U2cFCtR7y8nDs5lPHAe7ldxjZg==}
+    engines: {node: '>=18.12.1', npm: '>=8.19.2'}
+    hasBin: true
+    dependencies:
+      '@xmldom/xmldom': 0.8.10
+    dev: false
+    bundledDependencies:
+      - '@xmldom/xmldom'
 
   /peek-readable@5.0.0:
     resolution: {integrity: sha512-YtCKvLUOvwtMGmrniQPdO7MwPjgkFBtFIrmfSbYmYuq3tKDV/mcfAhBth1+C3ru7uXIZasc/pHnb+YDYNkkj4A==}

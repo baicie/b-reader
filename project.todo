@@ -165,10 +165,45 @@
           "focus": false,
           "end": 1703329947812
         }
+      },
+      {
+        "key": 1703645116047,
+        "children": [
+          {
+            "key": 1703645129783,
+            "children": [],
+            "todo": {
+              "content": "lint",
+              "id": 1703645129783,
+              "level": "default",
+              "done": false,
+              "start": 1703645129783
+            }
+          },
+          {
+            "key": 1703646054557,
+            "children": [],
+            "todo": {
+              "content": "commit lint",
+              "id": 1703646054557,
+              "level": "default",
+              "done": false,
+              "start": 1703646054557
+            }
+          }
+        ],
+        "todo": {
+          "content": "脚本相关",
+          "id": 1703645116047,
+          "level": "default",
+          "done": false,
+          "start": 1703645116047
+        }
       }
     ],
     "expandKeys": [
-      1703125757169
+      1703125757169,
+      1703645116047
     ],
     "schema": "https://github.com/Saber2pr/vsc-ext-todolist/blob/master/src/api/type.ts#L3",
     "add_mode": "bottom",
@@ -181,6 +216,6 @@
     "showEndTime": false,
     "simpleMode": false,
     "lang": "zh-cn",
-    "version": "1703329947876"
+    "version": "1703646065218"
   }
 }

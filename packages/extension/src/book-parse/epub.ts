@@ -10,11 +10,10 @@ export async function parseEpub(
   try {
     const { setValue } = useDatabase(config)
     console.log('parseEpub: ', bookConfig)
-    const { parse } = epub(
+    epub(
       bookConfig.path,
       path.resolve(path.dirname(bookConfig.path), `${bookConfig.name}.unzip`),
     )
-    await parse()
   }
   catch (error) {
     console.log(error)

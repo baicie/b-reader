@@ -7,6 +7,7 @@ const extensionPath = path.resolve(__dirname, '../packages/extension')
 function main() {
   switch (platform()) {
     case 'win32':
+      // eslint-disable-next-line no-case-declarations
       const powerShellCommand = 'Start-Process code -ArgumentList "--extensionDevelopmentPath=$(pwd)" -PassThru'
       execSync(`powershell -Command "& { ${powerShellCommand} }"`, {
         cwd: extensionPath,

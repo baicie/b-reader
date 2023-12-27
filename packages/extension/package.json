@@ -71,6 +71,7 @@
   },
   "dependencies": {
     "@b-reader/epub": "workspace:^",
+    "@b-reader/pdf": "workspace:^",
     "@b-reader/utils": "workspace:^",
     "file-type": "^18.7.0",
     "lowdb": "^6.1.1",
