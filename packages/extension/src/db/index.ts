@@ -1,3 +1,4 @@
+/* eslint-disable n/prefer-global/buffer */
 import path from 'node:path'
 import type { BReaderContext } from '@b-reader/utils'
 import { Uri, workspace } from 'vscode'

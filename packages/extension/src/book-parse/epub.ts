@@ -1,6 +1,7 @@
 import path from 'node:path'
-import epub from '@b-reader/epub'
+import { Epub } from '@b-reader/epub'
 import type { BReaderContext, BookConfig } from '@b-reader/utils/dist'
+import { Uri, workspace } from 'vscode'
 import { useDatabase } from '../db'
 
 export async function parseEpub(
@@ -9,10 +10,13 @@ export async function parseEpub(
 ) {
   try {
     const { setValue } = useDatabase(config)
-    console.log('parseEpub: ', bookConfig)
-    epub(
-      bookConfig.path,
-      path.resolve(path.dirname(bookConfig.path), `${bookConfig.name}.unzip`),
+    const book = new Epub(bookConfig.path)
+    await book.parse()
+    const spines = book.getSpines()
+    const res = await book.getContent(spines[1].idref)
+
+    setValue(
+      'test', res,
     )
   }
   catch (error) {
