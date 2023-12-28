@@ -14,6 +14,9 @@ export async function parseEpub(
     await book.parse()
     const spines = book.getSpines()
     const res = await book.getContent(spines[1].idref)
+    console.log(
+      'book', book,
+    )
 
     setValue(
       'test', res,

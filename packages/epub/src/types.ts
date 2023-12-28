@@ -16,14 +16,58 @@ export interface Guide {
 
 }
 
+export interface TocMeta {
+  id: string
+  href: string
+  tocs?: Toc
+}
+
+export interface Toc {
+  head: TocHead[]
+  docTitle: TocDocTitle[]
+  /**
+   * nav core data
+   */
+  navMap: TocNavMap[]
+  xmlns: string
+  version: string
+  'xml:lang': string
+}
+
+export interface Meta {
+  content: string
+  name: string
+}
+
+export interface TocHead {
+  meta: Meta[]
+}
+
+export interface TocDocTitle {
+  text: string[]
+}
+
+export interface TocNavLabel {
+  text: string[]
+}
+
+export interface TocContent {
+  src: string
+}
+
+export interface TocNavPoint {
+  navLabel: TocNavLabel[]
+  content: TocContent[]
+  class: string
+  id: string
+  playOrder: string
+}
+
+export interface TocNavMap {
+  navPoint: TocNavPoint[]
+}
+
 export interface RootFile {
   ['full-path']: string
   ['media-type']: string
 }
-
-// tslib
-// type Awaited<T extends PromiseLike<any>> = T extends PromiseLike<infer U>
-//   ? U extends PromiseLike<any>
-//     ? Awaited<U>
-//     : U
-//   : never
