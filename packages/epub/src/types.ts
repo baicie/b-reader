@@ -61,6 +61,7 @@ export interface TocNavPoint {
   class: string
   id: string
   playOrder: string
+  navPoint?: TocNavPoint[]
 }
 
 export interface TocNavMap {
@@ -70,4 +71,12 @@ export interface TocNavMap {
 export interface RootFile {
   ['full-path']: string
   ['media-type']: string
+}
+
+//
+export interface Nav {
+  label: string
+  content: string
+  parentId?: string
+  children?: Nav[]
 }

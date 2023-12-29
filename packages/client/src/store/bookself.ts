@@ -1,10 +1,8 @@
-import { defineStore } from 'pinia'
 import type { Book, MessageType } from '@b-reader/utils'
 import { reactive } from 'vue'
 import { useAppStore } from './app'
-import { store } from './index'
 
-const bookselfStore = defineStore('bookself', () => {
+export function useBookselfStore() {
   const { initApp, config, sendMessage } = useAppStore()
   const state = reactive({
     books: {} as Record<string, Book>,
@@ -15,7 +13,6 @@ const bookselfStore = defineStore('bookself', () => {
       const message = event.data as MessageType
       switch (message.path) {
         case 'bookInfor':
-          console.log('bookInfor', message.data)
           state.books = message.data
           break
       }
@@ -33,7 +30,6 @@ const bookselfStore = defineStore('bookself', () => {
   }
 
   const clickBook = (bookId: string) => {
-    console.log('clickBook', bookId)
     sendMessage({
       path: 'openBook',
       data: bookId,
@@ -46,8 +42,4 @@ const bookselfStore = defineStore('bookself', () => {
     state,
     clickBook,
   }
-})
-
-export function useBookselfStore() {
-  return bookselfStore(store)
 }

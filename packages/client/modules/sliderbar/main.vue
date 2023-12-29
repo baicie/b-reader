@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import type { UploadFile } from 'ant-design-vue'
 import { Button, ConfigProvider, Upload } from 'ant-design-vue'
-import { storeToRefs } from 'pinia'
 import { onBeforeMount, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { BookConfig } from '@b-reader/utils'
@@ -9,9 +8,7 @@ import { locale, theme } from '../../src/theme'
 import { useAppStore } from '../../src/store/app'
 
 const { t } = useI18n()
-const app = useAppStore()
-const { config } = storeToRefs(app)
-const { initApp, sendMessage } = app
+const { initApp, sendMessage, config } = useAppStore()
 
 function beforeUpload(file: UploadFile & { path: string }) {
   sendMessage({
@@ -22,6 +19,7 @@ function beforeUpload(file: UploadFile & { path: string }) {
       type: file.type,
     } as BookConfig,
   })
+  // eslint-disable-next-line prefer-promise-reject-errors
   return Promise.reject()
 }
 
@@ -47,7 +45,7 @@ function handleOpenWebview(path: string) {
 onBeforeMount(() => {
   initApp()
   // TOFIX 每次都会渲染？
-  console.log('initApp')
+  // console.log('initApp')
 })
 </script>
 

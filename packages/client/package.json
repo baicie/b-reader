@@ -13,11 +13,8 @@
     "@b-reader/utils": "workspace:^",
     "@vueuse/core": "^10.7.0",
     "ant-design-vue": "^4.0.8",
-    "mitt": "^3.0.1",
-    "pinia": "^2.1.7",
     "vue": "^3.3.13",
-    "vue-i18n": "^9.8.0",
-    "vue-router": "^4.2.5"
+    "vue-i18n": "^9.8.0"
   },
   "buildOptions": {
     "type": "private"

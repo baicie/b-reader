@@ -73,7 +73,11 @@ export type BReaderContext = Partial<{
   imgPath: Uri
   globalStorageUri: Uri
   appid: string
-}>
+} & BReaderContextInFile>
+
+export interface BReaderContextInFile {
+  unzip: boolean
+}
 
 export type BookType = 'application/epub+zip' | 'application/pdf'
 

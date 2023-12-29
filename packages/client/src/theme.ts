@@ -1,12 +1,10 @@
 import type { ThemeConfig } from 'ant-design-vue/es/config-provider/context'
-import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 import enUS from 'ant-design-vue/es/locale/en_US'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
 import { useAppStore } from './store/app'
 
-const app = useAppStore()
-const { config } = storeToRefs(app)
+const { config } = useAppStore()
 
 export const theme: ThemeConfig = {
   token: {
@@ -15,7 +13,7 @@ export const theme: ThemeConfig = {
 }
 
 export const locale = computed(() => {
-  switch (config.value.language) {
+  switch (config.language) {
     case 'zh-cn':
       return zhCN
     case 'en-us':

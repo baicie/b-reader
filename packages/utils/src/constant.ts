@@ -1,2 +1,2 @@
-export const DB_NAME = 'b-reader.config'
+export const DB_NAME = 'b-reader-store'
 export const BOOKS = 'books'

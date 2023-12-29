@@ -1,3 +1,6 @@
 {
-  "b-reader.views.menu.title": "Menu"
+  "b-reader.views.menu.title": "Menu",
+  "b-reader.views.menu.home": "Home",
+  "b-reader.views.menu.settings": "Settings",
+  "b-reader.views.menu.settings.unzip": "Unzip"
 }

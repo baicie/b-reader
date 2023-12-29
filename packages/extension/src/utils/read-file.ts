@@ -1,3 +1,4 @@
+/* eslint-disable n/prefer-global/buffer */
 import fs from 'node:fs'
 import path from 'node:path'
 import type { BReaderContext, Book, BookConfig, BookType } from '@b-reader/utils'
@@ -30,7 +31,7 @@ export async function writeBook(book: BookConfig, config: BReaderContext) {
     book.path = bookNamePath
   }
   catch (error) {
-    console.log('writeBook error: ', error)
+    // console.log('writeBook error: ', error)
   }
 }
 
@@ -43,7 +44,7 @@ export async function writeBookInfor(book: BookConfig, config: BReaderContext) {
     md5: bookid,
     img: '',
   }
-  parseBook(book, config)
+  parseBook(_book, config)
   const bookStore = await getValue<Record<string, Book>>(StoreKeys.book)
 
   bookStore[bookid] = _book
@@ -51,6 +52,6 @@ export async function writeBookInfor(book: BookConfig, config: BReaderContext) {
   await setValue(StoreKeys.book, bookStore)
 }
 
-export function getImage(type: BookType) {
-  //
-}
+// export function getImage(type: BookType) {
+//   //
+// }

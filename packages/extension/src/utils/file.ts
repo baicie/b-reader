@@ -1,13 +1,16 @@
 import fs from 'node:fs'
+import path from 'node:path'
 import type { Uri } from 'vscode'
 
 export function existsOrCreate(target: string | Uri) {
-  let _path = ''
-  if (typeof target === 'string')
-    _path = target
-  else
-    _path = target.path
+  const filePath = typeof target === 'string' ? target : target.path
+  const directoryPath = path.dirname(filePath)
 
-  if (!fs.existsSync(_path))
-    fs.writeFileSync(_path, JSON.stringify({}), { encoding: 'utf-8' })
+  // Ensure the directory structure exists
+  if (!fs.existsSync(directoryPath))
+    fs.mkdirSync(directoryPath, { recursive: true })
+
+  // Create the file if it doesn't exist
+  if (!fs.existsSync(filePath))
+    fs.writeFileSync(filePath, JSON.stringify({}), { encoding: 'utf-8' })
 }

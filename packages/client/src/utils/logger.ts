@@ -1,11 +1,11 @@
-import { storeToRefs } from 'pinia'
 import { useAppStore } from '../store/app'
 
 export function useLog() {
-  const { config } = storeToRefs(useAppStore())
+  const { config } = useAppStore()
 
   const log = (...args: any[]) => {
-    console.log(`${config.value.appid}`, ...args)
+    // eslint-disable-next-line no-console
+    console.log(`${config.appid}`, ...args)
   }
 
   return {

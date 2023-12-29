@@ -7,7 +7,6 @@ import {
   ConfigProvider,
   Row,
 } from 'ant-design-vue'
-import { storeToRefs } from 'pinia'
 import { onBeforeMount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useBookselfStore } from '../../src/store/bookself'
@@ -15,20 +14,19 @@ import { locale, theme } from '../../src/theme'
 
 const { t } = useI18n()
 const books = useBookselfStore()
-const { config, state } = storeToRefs(books)
-const { initBookself, clickBook } = books
+const { initBookself, clickBook, state } = books
 
 onBeforeMount(() => {
   initBookself()
   // TOFIX 每次都会渲染？
-  console.log('initApp bookself')
+  // console.log('initApp bookself')
 })
 </script>
 
 <template>
   <ConfigProvider :locale="locale" :theme="theme" class="flex">
     <Row :gutter="[8, 8]">
-      <template v-for="(item, key) in state.books">
+      <template v-for="(item, key) in state.books" :key="key">
         <Col :span="6">
           <Card hoverable style="width: 240px">
             <template #cover>

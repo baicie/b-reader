@@ -57,12 +57,23 @@
           "name": "%b-reader.views.menu.title%"
         }
       ]
+    },
+    "configuration": {
+      "title": "%b-reader.views.menu.settings%",
+      "type": "object",
+      "properties": {
+        "b-reader.unzip": {
+          "type": "boolean",
+          "default": false,
+          "description": "%b-reader.views.menu.settings.unzip%"
+        }
+      }
     }
   },
   "scripts": {
     "vscode:prepublish": "pnpm run build",
     "build": "tsup",
-    "dev": "pnpm run build --watch",
+    "dev": "pnpm cross-env NODE_ENV=test pnpm tsup --watch",
     "predev": "pnpm run code-debug",
     "pretest": "pnpm run build && pnpm run lint",
     "lint": "eslint src --ext ts",
