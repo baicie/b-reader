@@ -3,6 +3,7 @@ import path from 'node:path'
 import { Epub } from '@b-reader/epub'
 import type { BReaderContext, Book, BookConfig } from '@b-reader/utils'
 import { useDatabase } from '../db'
+import { StoreKeys } from '../config'
 
 export async function parseEpub(
   book: Book,
@@ -30,7 +31,7 @@ async function cacheBook(
   if (config.unzip)
     await unzipEpub(epub, book.config)
 
-  const cachePath = `cache/${book.md5}`
+  const cachePath = `${StoreKeys.cache}/${book.md5}`
   const oldEpub = await getValue(cachePath)
   setValue(cachePath, Object.assign(oldEpub, epub))
 }

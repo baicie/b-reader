@@ -7,6 +7,7 @@ import type {
 } from '@b-reader/utils'
 import type { ExtensionContext, Webview } from 'vscode'
 import { commands } from 'vscode'
+import type { Epub } from '@b-reader/epub'
 import { Commands, StoreKeys } from './config'
 import { useDatabase } from './db'
 import { openUrl } from './utils/open'
@@ -17,6 +18,7 @@ export async function receiveMessage(
   webview: Webview,
   context: ExtensionContext,
   config: BReaderContext,
+  data?: any,
 ) {
   webview.onDidReceiveMessage(
     async (message: MessageType) => {
@@ -27,7 +29,6 @@ export async function receiveMessage(
         case 'openLocal':
           if (!message.data)
             return
-
           openUrl(message.data)
           break
         case 'bookInfor':
@@ -41,13 +42,24 @@ export async function receiveMessage(
           break
         case 'openBook':
           receiveOpenBook(message.data, config)
-
+          break
+        case 'ready':
+          sendMessage(webview, 'initData', data)
+          break
+        case 'getNav':
+          receiveNav(message.bookId, config, webview)
           break
       }
     },
     undefined,
     context.subscriptions,
   )
+}
+
+async function receiveNav(bookId: string, config: BReaderContext, webview: Webview) {
+  const { getValue } = useDatabase(config)
+  const cache = await getValue<Epub>(`${StoreKeys.cache}/${bookId}`)
+  await sendMessage(webview, 'snedNav', cache.nva)
 }
 
 async function receiveBook(book: BookConfig, config: BReaderContext) {

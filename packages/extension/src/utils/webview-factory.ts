@@ -21,14 +21,14 @@ export interface WebviewFactoryConfig {
   title?: string
 }
 
-export function webviewFactory(name: string,
-  factoryConfig?: WebviewFactoryConfig) {
+export function webviewFactory(
+  name: string,
+  factoryConfig?: WebviewFactoryConfig,
+) {
   let webview: WebviewPanel | undefined
   return (context: ExtensionContext, config: BReaderContext, data: any) => {
     if (factoryConfig && factoryConfig.onlyOne && webview)
       return webview
-
-    console.log('bookid', data)
 
     const panel = window.createWebviewPanel(
       'vueWebview',
@@ -49,7 +49,7 @@ export function webviewFactory(name: string,
 
     panel.webview.html = html
     mixinAppid(config)
-    receiveMessage(panel.webview, context, config)
+    receiveMessage(panel.webview, context, config, data)
 
     webview = panel
     return panel

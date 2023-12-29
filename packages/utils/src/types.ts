@@ -9,6 +9,10 @@ export type MessageType =
   | MessageTypeBookInfor
   | MessageTypeOpenWebview
   | MessageTyoeOpenBook
+  | MessageTyoeGetNav
+  | MessageTypeReady
+  | MessageTypeInitData
+  | MessageTypeSendNav
 
 export interface MessageTypeConfig {
   path: 'config'
@@ -48,6 +52,25 @@ export interface MessageTypeOpenWebview {
 export interface MessageTyoeOpenBook {
   path: 'openBook'
   data: string
+}
+
+export interface MessageTyoeGetNav {
+  path: 'getNav'
+  bookId: string
+}
+
+export interface MessageTypeReady {
+  path: 'ready'
+}
+
+export interface MessageTypeInitData {
+  path: 'initData'
+  data: any
+}
+
+export interface MessageTypeSendNav {
+  path: 'snedNav'
+  data: any
 }
 
 // message

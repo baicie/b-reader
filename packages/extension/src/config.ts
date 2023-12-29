@@ -19,6 +19,7 @@ export enum Commands {
 export enum StoreKeys {
   book = 'book',
   user = 'user',
+  cache = 'cache',
 }
 
 export async function resolveConfig(context: ExtensionContext) {

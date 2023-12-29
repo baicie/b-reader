@@ -13,8 +13,7 @@ import { useBookselfStore } from '../../src/store/bookself'
 import { locale, theme } from '../../src/theme'
 
 const { t } = useI18n()
-const books = useBookselfStore()
-const { initBookself, clickBook, state } = books
+const { initBookself, clickBook, state } = useBookselfStore()
 
 onBeforeMount(() => {
   initBookself()

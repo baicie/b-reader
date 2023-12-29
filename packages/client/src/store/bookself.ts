@@ -8,7 +8,7 @@ export function useBookselfStore() {
     books: {} as Record<string, Book>,
   })
 
-  const listen = () => {
+  const initListen = () => {
     window.addEventListener('message', (event) => {
       const message = event.data as MessageType
       switch (message.path) {
@@ -21,7 +21,7 @@ export function useBookselfStore() {
 
   const initBookself = () => {
     initApp()
-    listen()
+    initListen()
 
     sendMessage({
       path: 'bookInfor',
