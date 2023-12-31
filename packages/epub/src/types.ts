@@ -1,3 +1,8 @@
+import type { ParserOptions } from 'xml2js'
+
+export type {
+  ParserOptions,
+}
 export interface MetaData {
 
 }

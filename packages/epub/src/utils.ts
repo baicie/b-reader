@@ -1,5 +1,7 @@
 import path from 'node:path'
+import fs from 'node:fs'
 import { get } from 'lodash'
+import mime from 'mime-types'
 import type { Nav, TocNavPoint } from './types'
 
 interface ItemWithDollar {

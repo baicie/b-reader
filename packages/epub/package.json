@@ -9,9 +9,12 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup",
-    "dev": "pnpm run build --watch"
+    "dev": "pnpm run build --watch",
+    "test": "pnpm tsx ./src/test.ts"
   },
   "dependencies": {
+    "@xmldom/xmldom": "^0.8.10",
+    "jsdom": "^23.0.1",
     "lodash": "^4.17.21",
     "unzipper": "^0.10.14",
     "xml2js": "^0.6.2"

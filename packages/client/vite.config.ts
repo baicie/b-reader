@@ -2,6 +2,7 @@ import path, { resolve } from 'node:path'
 import type { Plugin } from 'vite'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import jsx from '@vitejs/plugin-vue-jsx'
 import glob from 'fast-glob'
 
 const modulesPath = path.resolve(__dirname, 'html')
@@ -47,6 +48,7 @@ export default defineConfig(() => {
       vue({
         customElement: true,
       }),
+      jsx(),
     ],
     build: {
       outDir: '../extension/vue-dist',

@@ -44,7 +44,7 @@ export async function writeBookInfor(book: BookConfig, config: BReaderContext) {
     md5: bookid,
     img: '',
   }
-  parseBook(_book, config)
+  await parseBook(_book, config)
   const bookStore = await getValue<Record<string, Book>>(StoreKeys.book)
 
   bookStore[bookid] = _book

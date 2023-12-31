@@ -1,9 +1,16 @@
 import path from 'node:path'
+import fs from 'node:fs'
 import { get } from 'lodash'
+import mime from 'mime-types'
+import type { ParserOptions } from 'xml2js'
 import { useUnzip } from './unzip'
 import { useParseXml } from './parse-xml'
 import type { Guide, Manifest, MetaData, Nav, RootFile, Spine, Toc, TocMeta } from './types'
 import { expandedData, resolveId, transformNavPoint } from './utils'
+
+export type {
+  Nav,
+}
 
 export class Epub {
   constructor(bookPath: string) {
@@ -46,6 +53,7 @@ export class Epub {
   }
 
   public nva: Nav[] = []
+  public content: any[] = []
 
   public cover?: string
 
@@ -59,30 +67,20 @@ export class Epub {
 
   // main func
   async parse() {
+    // eslint-disable-next-line no-console
+    console.time('epub parse')
     this.usezip = await useUnzip(this.bookPath)
     this.usexml = useParseXml()
     await this.parseMetadata()
     await this.parseToc()
     await this.parseGuide()
+    await this.parseConent()
+    // eslint-disable-next-line no-console
+    console.timeEnd('epub parse')
   }
 
   public getSpines() {
     return this.spine
-  }
-
-  public async getContent(refid: string) {
-    const spine = this.spine?.find(item => item.idref === refid)
-    if (!spine)
-      return null
-
-    const manifest = this.manifest?.find(item => item.id === spine.idref)
-    if (!manifest)
-      return null
-
-    const contentPath = manifest.href
-    const content = await this.usezip.fileFileContent(contentPath)
-    const xml = await this.usexml.parse(content)
-    return expandedData(xml)
   }
 
   public getToc() {
@@ -97,12 +95,83 @@ export class Epub {
     return this.getFile(this.cover!, 'base64')
   }
 
+  public async getContent(id?: string) {
+    if (id) {
+      const find = this.content.find(item => item.id === id)
+      if (find)
+        return [find]
+    }
+    return this.content
+  }
+
   public async getFile(path: string, type: BufferEncoding = 'utf-8') {
     return await this.usezip.getFile(path, { type })
   }
 
   public async unzip(path: string) {
     await this.usezip.unzip(path)
+  }
+
+  private async parseConent(options?: ParserOptions) {
+    try {
+      for (const item of this.spine ?? []) {
+        const manifest = this.manifest?.find(manifest => manifest.id === item.idref)
+        if (manifest && manifest.href) {
+          const filePath = resolveId(this.fullPath, manifest?.href)
+          const content = await this.usezip.fileFileContent(filePath)
+          const xml = await this.usexml.parse(content, options)
+          await this.traverseImages(xml)
+          const result = {
+            id: item.idref,
+            content: expandedData(xml),
+          }
+          this.content.push(result)
+        }
+      }
+    }
+    catch (error) {
+      // eslint-disable-next-line no-console
+      console.log('parseConent error', error)
+    }
+  }
+
+  private async traverseImages(node: any) {
+    if (node && typeof node === 'object') {
+      if (Array.isArray(node)) {
+        // 处理数组
+        for (const item of node)
+          await this.traverseImages(item)
+      }
+      else {
+        // 处理对象
+        for (const key in node) {
+          if (key === 'img') {
+            await this.updateImageToBase64(node[key])
+          }
+          else {
+            // 递归处理其他标签
+            await this.traverseImages(node[key])
+          }
+        }
+      }
+    }
+  }
+
+  // 将 img 标签中的图片转换为 base64
+  private async updateImageToBase64(imgNode) {
+    if (imgNode && imgNode[0] && imgNode[0].$ && imgNode[0].$.src) {
+      const imageFilePath = resolveId(this.fullPath, imgNode[0].$.src)
+      try {
+        const base64Image = await this.usezip.file2Base64(imageFilePath)
+        const mimeType = mime.lookup(base64Image)
+
+        // 更新 img 标签中的属性
+        imgNode[0].$.src = `data:${mimeType};base64,${base64Image}`
+      }
+      catch (error) {
+        console.error(`Error reading image file: ${imageFilePath}`)
+      }
+    }
   }
 
   private async parseGuide() {

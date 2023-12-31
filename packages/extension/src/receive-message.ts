@@ -4,6 +4,7 @@ import type {
   Book,
   BookConfig,
   MessageType,
+  MessageTypeGetContent,
 } from '@b-reader/utils'
 import type { ExtensionContext, Webview } from 'vscode'
 import { commands } from 'vscode'
@@ -13,6 +14,8 @@ import { useDatabase } from './db'
 import { openUrl } from './utils/open'
 import { writeBook, writeBookInfor } from './utils/read-file'
 import { sendMessage } from './utils/send-message'
+import { parseBook } from './book-parse'
+import { getCacheBook } from './utils/book'
 
 export async function receiveMessage(
   webview: Webview,
@@ -48,6 +51,9 @@ export async function receiveMessage(
           break
         case 'getNav':
           receiveNav(message.bookId, config, webview)
+          break
+        case 'getContent':
+          receiveContent(message.data, config, webview)
           break
       }
     },
@@ -90,8 +96,18 @@ async function openWebview(data: string, config: BReaderContext) {
 }
 
 async function receiveOpenBook(bookId: string, config: BReaderContext) {
-  const { getValue } = useDatabase(config)
-  const res = await getValue<Record<string, Book>>(StoreKeys.book)
-  const message = res[bookId]
-  await commands.executeCommand(Commands.openReader, message)
+  const bookinfo = await getCacheBook(bookId, config)
+  await commands.executeCommand(Commands.openReader, bookinfo)
+}
+
+// 获取章节内容
+async function receiveContent(data: MessageTypeGetContent['data'], config: BReaderContext, webview: Webview) {
+  // const { getValue } = useDatabase(config)
+  // const cacheJson = await getValue<Epub>(`${StoreKeys.cache}/${bookId}`)
+
+  const bookinfo = await getCacheBook(data.bookId, config)
+  const bookInstance = await parseBook(bookinfo, config)
+  const chapter = await bookInstance.getContent()
+  await sendMessage(webview, 'sendContent', chapter)
+  // cache
 }

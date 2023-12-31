@@ -13,6 +13,8 @@ export type MessageType =
   | MessageTypeReady
   | MessageTypeInitData
   | MessageTypeSendNav
+  | MessageTypeGetContent
+  | MessageTypeSendContent
 
 export interface MessageTypeConfig {
   path: 'config'
@@ -71,6 +73,26 @@ export interface MessageTypeInitData {
 export interface MessageTypeSendNav {
   path: 'snedNav'
   data: any
+}
+
+export interface MessageTypeGetContent {
+  path: 'getContent'
+  data: {
+    // href: string
+    bookId: string
+    preHref?: string
+    nextHref?: string
+  }
+}
+
+// interface ContentNode {
+//   content: string
+//   href: string
+// }
+
+export interface MessageTypeSendContent {
+  path: 'sendContent'
+  data: any[]
 }
 
 // message
