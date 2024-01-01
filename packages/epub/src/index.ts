@@ -1,11 +1,9 @@
-import path from 'node:path'
-import fs from 'node:fs'
 import { get } from 'lodash'
 import mime from 'mime-types'
 import type { ParserOptions } from 'xml2js'
-import { useUnzip } from './unzip'
 import { useParseXml } from './parse-xml'
-import type { Guide, Manifest, MetaData, Nav, RootFile, Spine, Toc, TocMeta } from './types'
+import type { Guide, Manifest, MetaData, Nav, RootFile, Spine, TocMeta } from './types'
+import { useUnzip } from './unzip'
 import { expandedData, resolveId, transformNavPoint } from './utils'
 
 export type {
@@ -119,11 +117,17 @@ export class Epub {
         if (manifest && manifest.href) {
           const filePath = resolveId(this.fullPath, manifest?.href)
           const content = await this.usezip.fileFileContent(filePath)
-          const xml = await this.usexml.parse(content, options)
-          await this.traverseImages(xml)
+          const xml = await this.usexml.parse(content, {
+            preserveChildrenOrder: true,
+            explicitChildren: true,
+          })
+          if (!xml)
+            continue
+          await this.traverseImages(xml, filePath)
+          const temp = expandedData(xml)
           const result = {
             id: item.idref,
-            content: expandedData(xml),
+            content: temp,
           }
           this.content.push(result)
         }
@@ -135,22 +139,22 @@ export class Epub {
     }
   }
 
-  private async traverseImages(node: any) {
+  private async traverseImages(node: any, importer = this.fullPath) {
     if (node && typeof node === 'object') {
       if (Array.isArray(node)) {
         // 处理数组
         for (const item of node)
-          await this.traverseImages(item)
+          await this.traverseImages(item, importer)
       }
       else {
         // 处理对象
         for (const key in node) {
           if (key === 'img') {
-            await this.updateImageToBase64(node[key])
+            await this.updateImageToBase64(node[key], importer)
           }
           else {
             // 递归处理其他标签
-            await this.traverseImages(node[key])
+            await this.traverseImages(node[key], importer)
           }
         }
       }
@@ -158,15 +162,16 @@ export class Epub {
   }
 
   // 将 img 标签中的图片转换为 base64
-  private async updateImageToBase64(imgNode) {
-    if (imgNode && imgNode[0] && imgNode[0].$ && imgNode[0].$.src) {
-      const imageFilePath = resolveId(this.fullPath, imgNode[0].$.src)
+  private async updateImageToBase64(imgNode, importer: string = this.fullPath) {
+    if (imgNode && imgNode[0] && imgNode[0].$ && imgNode[0].$.src && !imgNode[0].$.base64) {
+      const imageFilePath = resolveId(importer, imgNode[0].$.src)
       try {
         const base64Image = await this.usezip.file2Base64(imageFilePath)
         const mimeType = mime.lookup(base64Image)
 
         // 更新 img 标签中的属性
         imgNode[0].$.src = `data:${mimeType};base64,${base64Image}`
+        imgNode[0].$.base64 = true
       }
       catch (error) {
         console.error(`Error reading image file: ${imageFilePath}`)
@@ -197,6 +202,8 @@ export class Epub {
   private async parseMetadata() {
     this.rootFile = await this.getContentAndParse<RootFile>('META-INF/container.xml', 'container.rootfiles[0].rootfile[0].$')
     const rootFileContent = await this.parseXml(this.rootFile!['full-path'])
+    if (!rootFileContent)
+      return
     this.fullPath = this.rootFile!['full-path']
     this.metadata = expandedData(get(rootFileContent, 'package.metadata[0]'))
     this.manifest = expandedData(get(rootFileContent, 'package.manifest[0].item')) as Manifest[]

@@ -77,6 +77,9 @@ importers:
       fast-glob:
         specifier: ^3.3.2
         version: 3.3.2
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
       mime-types:
         specifier: ^2.1.35
         version: 2.1.35
@@ -125,6 +128,9 @@ importers:
       ant-design-vue:
         specifier: ^4.0.8
         version: 4.0.8(vue@3.3.13)
+      readium-js:
+        specifier: ^0.0.0
+        version: 0.0.0
       vue:
         specifier: ^3.3.13
         version: 3.3.13(typescript@5.3.3)
@@ -4114,6 +4120,13 @@ packages:
       picomatch: 2.3.1
     dev: true
 
+  /readium-js@0.0.0:
+    resolution: {integrity: sha512-liv8LZiNlGbmcHH0F8wjqDzKE9AAVAScM4YG2ojiBDfeU8LC9U1otjnhtizMA5kZx8YeHpOgVk/S9Smt+0pgjA==}
+    dependencies:
+      requirejs: 2.3.6
+      requirejs-text: 2.0.16
+    dev: false
+
   /regenerator-runtime@0.14.1:
     resolution: {integrity: sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw==}
     dev: false
@@ -4134,6 +4147,16 @@ packages:
     resolution: {integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /requirejs-text@2.0.16:
+    resolution: {integrity: sha512-XrzjeTb1pwzIWmkz8qnUiM20gENgiwB+66IciNuziwlaPAJsYQsQPSYyQ1kD4tGKGZxTisIfDbOHk02DpI/76Q==}
+    dev: false
+
+  /requirejs@2.3.6:
+    resolution: {integrity: sha512-ipEzlWQe6RK3jkzikgCupiTbTvm4S0/CAU5GlgptkN5SO6F3u0UD0K18wy6ErDqiCyP4J4YYe1HuAShvsxePLg==}
+    engines: {node: '>=0.4.0'}
+    hasBin: true
+    dev: false
 
   /requires-port@1.0.0:
     resolution: {integrity: sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==}

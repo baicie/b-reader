@@ -14,6 +14,7 @@
     "@b-reader/utils": "workspace:^",
     "@vueuse/core": "^10.7.0",
     "ant-design-vue": "^4.0.8",
+    "readium-js": "^0.0.0",
     "vue": "^3.3.13",
     "vue-i18n": "^9.8.0",
     "xml2js": "^0.6.2"

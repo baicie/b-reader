@@ -26,6 +26,7 @@ export class MenusProvider implements WebviewViewProvider {
 
     webviewView.webview.options = {
       enableScripts: true,
+      enableCommandUris: true,
       localResourceRoots: [this.config.localResourceRoots],
     }
 

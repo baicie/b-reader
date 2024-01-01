@@ -3,8 +3,9 @@ import type { TreeProps } from 'ant-design-vue'
 import { Layout, LayoutContent, LayoutSider, Tree, message } from 'ant-design-vue'
 import type { DataNode, EventDataNode } from 'ant-design-vue/es/tree'
 import { onBeforeMount, watchEffect } from 'vue'
+import { get } from 'lodash'
 import { locale, theme } from '../../src/theme'
-import RenderItem from './render-item.vue'
+import { RenderItem, RenderItem2 } from './render-item'
 import { useEpubRender } from './use-render'
 
 const { initReader, epub } = useEpubRender()
@@ -35,6 +36,10 @@ onBeforeMount(() => {
   initReader()
 })
 
+function getBodyItem(item: any) {
+  return get(item, 'content.html.$$[1].$$', [])
+}
+
 watchEffect(() => {
   if (epub.contents.length)
     message.destroy()
@@ -44,18 +49,33 @@ watchEffect(() => {
 <template>
   <ConfigProvider :locale="locale" :theme="theme" class="flex">
     <Layout>
-      <LayoutSider>
+      <LayoutSider :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0 }">
         <template v-if="epub.nva.length">
           <Tree :tree-data="epub.nva as unknown as DataNode[]" block-node default-expand-all selectable :field-names="filedName" @select="handleClickChapter" />
         </template>
       </LayoutSider>
-      <LayoutContent>
-        <template v-for="item in epub.contents" :key="item.id">
-          <RenderItem :content="item.content" />
-        </template>
+      <LayoutContent :style="{ margin: '24px 16px 0', overflow: 'initial' }">
+        <div :style="{ padding: '24px', background: '#fff', textAlign: 'center' }">
+          <template v-for="item in epub.contents" :key="item.id">
+            <RenderItem2 :items="getBodyItem(item)" />
+          </template>
+        </div>
       </LayoutContent>
     </Layout>
   </ConfigProvider>
 </template>
 
-<style lang="scss" scoped></style>
+<style scoped>
+#components-layout-demo-fixed-sider .logo {
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px;
+}
+.site-layout .site-layout-background {
+  background: #fff;
+}
+
+[data-theme='dark'] .site-layout .site-layout-background {
+  background: #141414;
+}
+</style>

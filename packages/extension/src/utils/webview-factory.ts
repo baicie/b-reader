@@ -36,6 +36,9 @@ export function webviewFactory(
       ViewColumn.One,
       {
         enableScripts: true,
+        enableCommandUris: true,
+        enableFindWidget: true,
+        retainContextWhenHidden: true,
         localResourceRoots: [config.localResourceRoots!],
       },
     )

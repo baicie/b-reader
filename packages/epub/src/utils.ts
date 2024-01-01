@@ -56,23 +56,23 @@ export function transformNavPoint(nav: TocNavPoint[], parentId: string = 'root')
 
 /**
  *
- * @param sourceId 引用者得路径 guide
+ * @param importer 引用者得路径 guide
  * @param id 被引用的路径 图片
  * @returns
  */
-export function resolveId(sourceId: string, id: string) {
-  if (!(sourceId && id))
-    return id || sourceId
+export function resolveId(importer: string, id: string) {
+  let res = ''
   const bareImportRE = /^(?![a-zA-Z]:)[\w@](?!.*:\/\/)/
-
-  if (sourceId.startsWith('/') && id.startsWith('.'))
-    return path.resolve(path.dirname(sourceId), id)
-
-  if (id.startsWith('.'))
-    return path.resolve(sourceId, id)
-
-  if (bareImportRE.test(id) && bareImportRE.test(sourceId))
-    return path.resolve(path.dirname(sourceId), id)
-
-  return id
+  if (!(importer && id))
+    res = id || importer
+  else if (importer.startsWith('/'))
+    res = path.resolve(path.dirname(importer), id)
+  else if (importer.startsWith('/') && id.startsWith('.'))
+    res = path.resolve(path.dirname(importer), id)
+  else if (id.startsWith('.'))
+    res = path.resolve(importer, id)
+  else if (bareImportRE.test(id) && bareImportRE.test(importer))
+    res = path.resolve(path.dirname(importer), id)
+  else res = id
+  return decodeURIComponent(res)
 }

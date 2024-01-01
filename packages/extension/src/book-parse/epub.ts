@@ -23,7 +23,8 @@ export async function parseEpub(
     cacheBook(book, config, epub)
   }
   catch (error) {
-    // console.log(error)
+    // eslint-disable-next-line no-console
+    console.log('parseEpub error', error)
   }
 }
 

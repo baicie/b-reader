@@ -5,7 +5,16 @@ import { JSDOM } from 'jsdom'
 import { DOMParser } from '@xmldom/xmldom'
 
 export function useParseXml() {
-  const parse = async (content: string, options?: ParserOptions) => await parseStringPromise(content, options)
+  const parse = async (content: string, options?: ParserOptions) => {
+    try {
+      return await parseStringPromise(content, options)
+    }
+    catch (error) {
+      // eslint-disable-next-line no-console
+      console.log('useParseXml parse error', error)
+      return null
+    }
+  }
 
   const jsdomParse = async (content: string, options: ConstructorOptions) => {
     const dom = new JSDOM(content, options)
