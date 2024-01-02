@@ -18,7 +18,9 @@ const filedName: TreeProps['fieldNames'] = {
 
 function handleClickChapter(selectedKeys: string[], e: { node: EventDataNode }) {
   if (selectedKeys.length) {
-    const id = selectedKeys[0].split('#')[1]
+    // eslint-disable-next-line no-console
+    console.log(selectedKeys, e)
+    const id = selectedKeys[0].split('#').length > 1 ? selectedKeys[0].split('#')[1] : selectedKeys[0]
     scrollToElement(id)
   }
 }
@@ -49,14 +51,14 @@ watchEffect(() => {
 <template>
   <ConfigProvider :locale="locale" :theme="theme">
     <Layout>
-      <LayoutSider :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0 }">
+      <LayoutSider :width="250" :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0 }">
         <template v-if="epub.nva.length">
           <Tree :tree-data="epub.nva as unknown as DataNode[]" block-node default-expand-all selectable :field-names="filedName" @select="handleClickChapter" />
         </template>
       </LayoutSider>
-      <LayoutContent :style="{ marginLeft: '200px' }">
+      <LayoutContent :style="{ marginLeft: '250px', padding: '24px' }">
         <template v-for="item in epub.contents" :key="item.id">
-          <RenderItem2 :items="getBodyItem(item)" />
+          <RenderItem2 :items="getBodyItem(item)" :root-id="item.id" />
         </template>
       </LayoutContent>
     </Layout>

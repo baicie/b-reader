@@ -9,6 +9,19 @@ const { config } = useAppStore()
 export const theme: ThemeConfig = {
   token: {
     colorPrimary: 'var(--vscode-button-background)',
+    fontFamily: 'var(--vscode-font-family)',
+    // fontSize: 'var(--vscode-font-size)',
+    borderRadius: 0,
+    colorBgContainer: 'var(--vscode-editor-background)',
+    colorText: 'var(--vscode-editor-foreground)',
+  },
+  components: {
+    Layout: {
+      colorBgBody: 'var(--vscode-editor-background)',
+    },
+    Slider: {
+      // colorBgBar: 'var(--vscode-editor-background)',
+    },
   },
 }
 

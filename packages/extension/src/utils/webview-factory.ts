@@ -13,6 +13,7 @@ import {
   window,
 } from 'vscode'
 import { receiveMessage } from '../receive-message'
+import { setWebviewCache } from '../view/cache'
 import { mixinAppid } from './appid'
 
 export interface WebviewFactoryConfig {
@@ -53,6 +54,8 @@ export function webviewFactory(
     panel.webview.html = html
     mixinAppid(config)
     receiveMessage(panel.webview, context, config, data)
+
+    setWebviewCache(panel.webview, name, config.appid!)
 
     webview = panel
     return panel

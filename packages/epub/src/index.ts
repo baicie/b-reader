@@ -89,8 +89,11 @@ export class Epub {
     return this.nva
   }
 
-  public getCover() {
-    return this.getFile(this.cover!, 'base64')
+  public async getCover() {
+    const base64Image = await this.getFile(this.cover!, 'base64')
+    const mimeType = mime.lookup(base64Image)
+    const res = `data:${mimeType};base64,${base64Image}`
+    return res
   }
 
   public async getContent(id?: string) {
@@ -120,13 +123,14 @@ export class Epub {
           const xml = await this.usexml.parse(content, {
             preserveChildrenOrder: true,
             explicitChildren: true,
+            ...options,
           })
           if (!xml)
             continue
           await this.traverseImages(xml, filePath)
           const temp = expandedData(xml)
           const result = {
-            id: item.idref,
+            id: manifest.href,
             content: temp,
           }
           this.content.push(result)
@@ -183,7 +187,10 @@ export class Epub {
   }
 
   private async parseGuide() {
-    const guidPath = resolveId(this.fullPath, get(this.guide, '[0].href') as unknown as string)
+    const coverGuide = this.guide?.find(item => item.type === 'cover')
+    if (!coverGuide)
+      return
+    const guidPath = resolveId(this.fullPath, get(coverGuide, 'href'))
     const coverXml = expandedData(await this.parseXml(guidPath))
 
     let imgPath = get(coverXml, 'html.body[0].div[0].img[0].src')

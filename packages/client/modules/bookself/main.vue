@@ -24,20 +24,20 @@ onBeforeMount(() => {
 
 <template>
   <ConfigProvider :locale="locale" :theme="theme" class="flex">
-    <Row :gutter="[8, 8]">
+    <Row :gutter="[8, 16]">
       <template v-for="(item, key) in state.books" :key="key">
         <Col :span="6">
-          <Card hoverable style="width: 240px">
+          <Card style="width: 240px">
             <template #cover>
               <img
-                alt="example"
-                src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+                style="width: 240px; height: 300px"
+                :src="item.img"
               >
             </template>
-            <CardMeta title="Europe Street beat">
+            <CardMeta :title="item.config.name">
               <template #description>
                 <Button @click="clickBook(key)">
-                  cbook
+                  {{ t('bookself.read') }}
                 </Button>
               </template>
             </CardMeta>
