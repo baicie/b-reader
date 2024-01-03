@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import { globSync } from 'fast-glob'
 import type { WebviewPanel, WebviewView } from 'vscode'
 import { Uri } from 'vscode'
-import { clientPath } from './path'
+import { clientPath } from '../../extension/src/path'
 
 /**
  * scan client dist

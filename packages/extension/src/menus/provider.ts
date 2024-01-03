@@ -2,12 +2,12 @@ import path from 'node:path'
 import type { BReaderContext } from '@b-reader/utils'
 import {
   getWebViewContent,
-  resolvehtml,
 } from '@b-reader/utils'
 import type { ExtensionContext, WebviewView, WebviewViewProvider } from 'vscode'
 import { receiveMessage } from '../receive-message'
 import { mixinAppid } from '../utils/appid'
 import { setWebviewCache } from '../view/cache'
+import { resolvehtml } from '../path'
 
 export class MenusProvider implements WebviewViewProvider {
   private config: BReaderContext

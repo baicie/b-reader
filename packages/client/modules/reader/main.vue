@@ -64,7 +64,3 @@ watchEffect(() => {
     </Layout>
   </ConfigProvider>
 </template>
-
-<style scoped>
-
-</style>
