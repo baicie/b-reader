@@ -1,0 +1,1 @@
+b-reader extension与client公用的一些方法
