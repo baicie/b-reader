@@ -72,9 +72,14 @@ export const RenderItem2 = defineComponent({
       type: Object,
       required: true,
     },
+    rootId: {
+      type: String,
+      required: false,
+    },
   },
   setup(props) {
     const items = computed(() => props.items)
+    const id = computed(() => props.rootId)
     return () => (
       <Fragment>
         {
@@ -91,7 +96,7 @@ export const RenderItem2 = defineComponent({
               const childElements = children
                 ? <RenderItem2 items={children}></RenderItem2>
                 : null
-              return h(tagName, { ...attributes }, childElements as any)
+              return h(tagName, { ...attributes, id: id.value }, childElements as any)
             }
           })
         }

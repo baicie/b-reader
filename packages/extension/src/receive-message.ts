@@ -13,7 +13,7 @@ import { Commands, StoreKeys } from './config'
 import { useDatabase } from './db'
 import { openUrl } from './utils/open'
 import { writeBook, writeBookInfor } from './utils/read-file'
-import { sendMessage } from './utils/send-message'
+import { sendMessage, sendMessageToAll } from './utils/send-message'
 import { parseBook } from './book-parse'
 import { getCacheBook } from './utils/book'
 
@@ -70,8 +70,10 @@ async function receiveNav(bookId: string, config: BReaderContext, webview: Webvi
 
 async function receiveBook(book: BookConfig, config: BReaderContext) {
   await writeBook(book, config)
-  writeBookInfor(book, config)
-  // TODO 通知书架更新 webview store
+  await writeBookInfor(book, config)
+  const { getValue } = useDatabase(config)
+  const res = await getValue<Record<string, Book>>(StoreKeys.book)
+  await sendMessageToAll('bookself', 'bookInfor', res)
 }
 
 async function receiveBookInfor(config: BReaderContext, webview: Webview) {
@@ -102,9 +104,6 @@ async function receiveOpenBook(bookId: string, config: BReaderContext) {
 
 // 获取章节内容
 async function receiveContent(data: MessageTypeGetContent['data'], config: BReaderContext, webview: Webview) {
-  // const { getValue } = useDatabase(config)
-  // const cacheJson = await getValue<Epub>(`${StoreKeys.cache}/${bookId}`)
-
   const bookinfo = await getCacheBook(data.bookId, config)
   const bookInstance = await parseBook(bookinfo, config)
   const chapter = await bookInstance.getContent()

@@ -2,20 +2,23 @@ import path from 'node:path'
 import type { BReaderContext } from '@b-reader/utils'
 import {
   getWebViewContent,
-  resolvehtml,
 } from '@b-reader/utils'
 import type { ExtensionContext, WebviewView, WebviewViewProvider } from 'vscode'
 import { receiveMessage } from '../receive-message'
 import { mixinAppid } from '../utils/appid'
+import { setWebviewCache } from '../view/cache'
+import { resolvehtml } from '../path'
 
 export class MenusProvider implements WebviewViewProvider {
   private config: BReaderContext
   private webviewView?: WebviewView
   private context: ExtensionContext
+  private name: string
 
-  constructor(config: BReaderContext, context: ExtensionContext) {
+  constructor(name: string, config: BReaderContext, context: ExtensionContext) {
     this.config = config
     this.context = context
+    this.name = name
   }
 
   resolveWebviewView(webviewView: WebviewView): void | Thenable<void> {
@@ -37,6 +40,9 @@ export class MenusProvider implements WebviewViewProvider {
     )
     webviewView.webview.html = html
     mixinAppid(this.config)
+
+    setWebviewCache(webviewView.webview, this.name, this.config.appid!)
+
     receiveMessage(webviewView.webview, this.context, this.config)
   }
 

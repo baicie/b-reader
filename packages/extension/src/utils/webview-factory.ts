@@ -1,9 +1,8 @@
 import path from 'node:path'
-import type { BReaderContext } from '@b-reader/utils/dist'
+import type { BReaderContext } from '@b-reader/utils'
 import {
   getWebViewContent,
-  resolvehtml,
-} from '@b-reader/utils/dist'
+} from '@b-reader/utils'
 import type {
   ExtensionContext,
   WebviewPanel,
@@ -13,6 +12,8 @@ import {
   window,
 } from 'vscode'
 import { receiveMessage } from '../receive-message'
+import { setWebviewCache } from '../view/cache'
+import { resolvehtml } from '../path'
 import { mixinAppid } from './appid'
 
 export interface WebviewFactoryConfig {
@@ -53,6 +54,8 @@ export function webviewFactory(
     panel.webview.html = html
     mixinAppid(config)
     receiveMessage(panel.webview, context, config, data)
+
+    setWebviewCache(panel.webview, name, config.appid!)
 
     webview = panel
     return panel

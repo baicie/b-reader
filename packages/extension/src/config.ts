@@ -1,11 +1,13 @@
 import path from 'node:path'
 import fs from 'node:fs'
-import type { BReaderContext, BReaderContextInFile } from '@b-reader/utils'
-import { BOOKS, DB_NAME, clientPath } from '@b-reader/utils'
+import type { BReaderContext } from '@b-reader/utils'
+import { BOOKS, DB_NAME } from '@b-reader/utils'
 import type { ExtensionContext } from 'vscode'
 import { Uri, env, workspace } from 'vscode'
-import pkg from '../package.json'
+
+// import pkg from '../package.json'
 import { useDatabase } from './db'
+import { clientPath } from './path'
 
 export const TREEVIEW_ID = 'b-reader-slider'
 
@@ -23,7 +25,7 @@ export enum StoreKeys {
 }
 
 export async function resolveConfig(context: ExtensionContext) {
-  const extensionConfig = workspace.getConfiguration(pkg.displayName)
+  const extensionConfig = workspace.getConfiguration('b-reader')
 
   const config: BReaderContext = {
     extensionPath: context.extensionPath,

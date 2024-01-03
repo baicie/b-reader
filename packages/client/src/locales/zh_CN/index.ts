@@ -1,3 +1,4 @@
 import menus from './menus'
+import bookself from './bookself'
 
-export default { menus }
+export default { menus, bookself }

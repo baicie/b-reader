@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { UploadFile } from 'ant-design-vue'
-import { Button, ConfigProvider, Upload } from 'ant-design-vue'
+import { Button, ButtonGroup, ConfigProvider, UploadDragger } from 'ant-design-vue'
 import { onBeforeMount, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { BookConfig } from '@b-reader/utils'
@@ -22,8 +22,6 @@ function beforeUpload(file: UploadFile & { path: string }) {
   // eslint-disable-next-line prefer-promise-reject-errors
   return Promise.reject()
 }
-
-const classification = ref([])
 
 function handleOpenLocal(path?: string) {
   if (!path)
@@ -51,52 +49,54 @@ onBeforeMount(() => {
 
 <template>
   <ConfigProvider :locale="locale" :theme="theme" class="flex">
-    <Button type="primary" @click="() => handleOpenLocal(config.bookPath?.path)">
-      打开本地
-    </Button>
-
-    <Button
-      v-dev
-      type="primary"
-      @click="() => handleOpenLocal(config.globalStorageUri?.path)"
-    >
-      dev
-    </Button>
-
-    <div>
-      <img class="logo" src="../../../extension/icon/icon.svg">
-    </div>
-
-    <div>
-      <Upload
+    <ButtonGroup :style="{ display: 'flex', flexDirection: 'column' }">
+      <UploadDragger
+        :show-upload-list="false"
         :before-upload="(file:any) => beforeUpload(file)"
-        accept=".epub,.txt,.pdf"
+        accept=".epub"
+        :style="{ width: '100%', display: 'block' }"
       >
-        <Button type="primary">
+        <Button type="ghost" :style="{ width: '100%' }">
           {{ t("menus.add_book") }}
         </Button>
-      </Upload>
-    </div>
+      </UploadDragger>
 
-    <Button @click="handleOpenWebview('bookshelf')">
-      书架
-    </Button>
+      <Button type="ghost" @click="() => handleOpenLocal(config.bookPath?.path)">
+        打开本地
+      </Button>
 
-    <div>all books</div>
+      <Button
+        v-dev
+        type="ghost"
+        @click="() => handleOpenLocal(config.globalStorageUri?.path)"
+      >
+        dev
+      </Button>
 
-    <div v-if="classification.length">
-      默认分类
-    </div>
+      <!-- <div>
+        <img class="logo" src="../../../extension/icon/icon.svg">
+      </div> -->
 
-    <template v-for="item in classification" :key="item.id">
-      <div>{{ item }}</div>
-    </template>
+      <Button type="ghost" @click="handleOpenWebview('bookshelf')">
+        书架
+      </Button>
 
-    <div>新建分类</div>
+      <!-- <div>all books</div> -->
 
-    <div>云端?</div>
+      <!-- <div v-if="classification.length">
+        默认分类
+      </div>
 
-    <div>设置</div>
+      <template v-for="item in classification" :key="item.id">
+        <div>{{ item }}</div>
+      </template>
+
+      <div>新建分类</div>
+
+      <div>云端?</div>
+
+      <div>设置</div> -->
+    </ButtonGroup>
   </ConfigProvider>
 </template>
 

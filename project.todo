@@ -21,8 +21,10 @@
           "content": "api router",
           "id": 1703125575253,
           "level": "default",
-          "done": false,
-          "start": 1703125575253
+          "done": true,
+          "start": 1703125575253,
+          "focus": false,
+          "end": 1704117625808
         }
       },
       {
@@ -221,8 +223,10 @@
               "content": "封面图片",
               "id": 1704102418627,
               "level": "default",
-              "done": false,
-              "start": 1704102418627
+              "done": true,
+              "start": 1704102418627,
+              "focus": false,
+              "end": 1704196025746
             }
           },
           {
@@ -256,8 +260,10 @@
               "content": "地址重构",
               "id": 1704112453986,
               "level": "default",
-              "done": false,
-              "start": 1704112453986
+              "done": true,
+              "start": 1704112453986,
+              "focus": false,
+              "end": 1704117618617
             }
           }
         ],
@@ -268,12 +274,36 @@
           "done": false,
           "start": 1704102408212
         }
+      },
+      {
+        "key": 1704201857931,
+        "children": [
+          {
+            "key": 1704201867755,
+            "children": [],
+            "todo": {
+              "content": "虚拟滚动+scollto",
+              "id": 1704201867755,
+              "level": "default",
+              "done": false,
+              "start": 1704201867755
+            }
+          }
+        ],
+        "todo": {
+          "content": "优化？",
+          "id": 1704201857931,
+          "level": "default",
+          "done": false,
+          "start": 1704201857931
+        }
       }
     ],
     "expandKeys": [
       1703125757169,
       1703645116047,
-      1704102408212
+      1704102408212,
+      1704201857931
     ],
     "schema": "https://github.com/Saber2pr/vsc-ext-todolist/blob/master/src/api/type.ts#L3",
     "add_mode": "bottom",
@@ -286,6 +316,6 @@
     "showEndTime": false,
     "simpleMode": false,
     "lang": "zh-cn",
-    "version": "1704112465535"
+    "version": "1704201883514"
   }
 }

@@ -89,8 +89,11 @@ export class Epub {
     return this.nva
   }
 
-  public getCover() {
-    return this.getFile(this.cover!, 'base64')
+  public async getCover() {
+    const base64Image = await this.getFile(this.cover!, 'base64')
+    const mimeType = mime.lookup(base64Image)
+    const res = `data:${mimeType};base64,${base64Image}`
+    return res
   }
 
   public async getContent(id?: string) {
@@ -120,13 +123,14 @@ export class Epub {
           const xml = await this.usexml.parse(content, {
             preserveChildrenOrder: true,
             explicitChildren: true,
+            ...options,
           })
           if (!xml)
             continue
           await this.traverseImages(xml, filePath)
           const temp = expandedData(xml)
           const result = {
-            id: item.idref,
+            id: manifest.href,
             content: temp,
           }
           this.content.push(result)
@@ -149,7 +153,7 @@ export class Epub {
       else {
         // 处理对象
         for (const key in node) {
-          if (key === 'img') {
+          if (key === 'img' || key === 'image') {
             await this.updateImageToBase64(node[key], importer)
           }
           else {
@@ -163,14 +167,17 @@ export class Epub {
 
   // 将 img 标签中的图片转换为 base64
   private async updateImageToBase64(imgNode, importer: string = this.fullPath) {
-    if (imgNode && imgNode[0] && imgNode[0].$ && imgNode[0].$.src && !imgNode[0].$.base64) {
-      const imageFilePath = resolveId(importer, imgNode[0].$.src)
+    if (imgNode && imgNode[0] && imgNode[0].$ && (imgNode[0].$.src || imgNode[0].$['xlink:href']) && !imgNode[0].$.base64) {
+      const imageFilePath = resolveId(importer, imgNode[0].$.src || imgNode[0].$['xlink:href'])
       try {
         const base64Image = await this.usezip.file2Base64(imageFilePath)
         const mimeType = mime.lookup(base64Image)
-
+        const res = `data:${mimeType};base64,${base64Image}`
         // 更新 img 标签中的属性
-        imgNode[0].$.src = `data:${mimeType};base64,${base64Image}`
+        if (imgNode[0].$.src)
+          imgNode[0].$.src = res
+        if (imgNode[0].$['xlink:href'])
+          imgNode[0].$['xlink:href'] = res
         imgNode[0].$.base64 = true
       }
       catch (error) {
@@ -180,7 +187,10 @@ export class Epub {
   }
 
   private async parseGuide() {
-    const guidPath = resolveId(this.fullPath, get(this.guide, '[0].href') as unknown as string)
+    const coverGuide = this.guide?.find(item => item.type === 'cover')
+    if (!coverGuide)
+      return
+    const guidPath = resolveId(this.fullPath, get(coverGuide, 'href'))
     const coverXml = expandedData(await this.parseXml(guidPath))
 
     let imgPath = get(coverXml, 'html.body[0].div[0].img[0].src')

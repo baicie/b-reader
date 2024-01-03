@@ -1,10 +1,8 @@
-import type { Book, MessageType } from '@b-reader/utils'
-import { reactive, ref, shallowReactive } from 'vue'
-import { message } from 'ant-design-vue'
 import type { Nav } from '@b-reader/epub'
-import type { EventDataNode } from 'ant-design-vue/es/tree'
+import type { Book, MessageType } from '@b-reader/utils'
+import { message } from 'ant-design-vue'
+import { reactive, shallowReactive } from 'vue'
 import { useAppStore } from '../../src/store/app'
-import { flattenNavArray } from './find-node'
 
 interface RenderData {
   nva: Nav[]
@@ -29,7 +27,7 @@ export function useEpubRender() {
       const data = event.data as MessageType
       switch (data.path) {
         case 'initData':
-          message.loading('正在加载书籍', 0)
+          // message.loading('正在加载书籍', 0)
           Object.assign(book, data.data)
           sendMessage({
             path: 'getNav',

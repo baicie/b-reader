@@ -18,7 +18,8 @@ export interface Spine {
 }
 
 export interface Guide {
-
+  type: string
+  href: string
 }
 
 export interface TocMeta {

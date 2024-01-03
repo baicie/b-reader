@@ -8,7 +8,7 @@ export function prepareSliderBarWebView(
   context: ExtensionContext,
   config: BReaderContext,
 ) {
-  const menusProvider = new MenusProvider(config, context)
+  const menusProvider = new MenusProvider('sliderbar', config, context)
 
   context.subscriptions.push(
     window.registerWebviewViewProvider(TREEVIEW_ID, menusProvider),
