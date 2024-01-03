@@ -45,6 +45,8 @@ jobs:
         uses: HaaLeo/publish-vscode-extension@v1
         with:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
+          dependencies: false
+          packagePath: "../../packages/extension"
           path: "../../packages/extension/b-reader-${{env.TAG_VERSION}}.vsix"
           registryUrl: https://marketplace.visualstudio.com
     
@@ -52,4 +54,6 @@ jobs:
         uses: HaaLeo/publish-vscode-extension@v1
         with:
           pat: ${{ secrets.OPEN_VSX_TOKEN }}
+          dependencies: false
+          packagePath: "../../packages/extension"
           path: "../../packages/extension/b-reader-${{env.TAG_VERSION}}.vsix"
