@@ -72,7 +72,7 @@
   },
   "scripts": {
     "vscode:prepublish": "pnpm tsup",
-    "build": "pnpm vsce package --no-dependencies",
+    "build": "pnpm vsce package --no-dependencies", 
     "dev": "pnpm run code-debug && pnpm cross-env NODE_ENV=production pnpm tsup --watch",
     "lint": "eslint src --ext ts",
     "code-debug": "tsx ../../scripts/run-code.ts"
