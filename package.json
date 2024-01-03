@@ -8,12 +8,14 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint-fix": "eslint ./packages ./scripts --fix",
-    "ox-fix": "oxlint --fix"
+    "update-version": "tsx scripts/update-version.ts",
+    "publish-script": "tsx scripts/publish-script.ts"
   },
   "devDependencies": {
     "@antfu/eslint-config": "0.41.0",
     "@b-reader/utils": "workspace:^",
     "@baicie/commitizen": "^0.1.0",
+    "@pnpm/find-workspace-packages": "^6.0.9",
     "@types/archiver": "^6.0.2",
     "@types/i18n": "^0.13.10",
     "@types/lodash": "^4.14.202",
@@ -45,5 +47,6 @@
     "vite": "^5.0.10",
     "vue": "^3.3.13",
     "vue-tsc": "^1.8.26"
-  }
+  },
+  "version": "0.0.0"
 }

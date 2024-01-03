@@ -1,6 +1,6 @@
 {
   "name": "@b-reader/pdf",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -13,5 +13,9 @@
   "license": "ISC",
   "dependencies": {
     "pdf2json": "^3.0.5"
+  },
+  "config": {
+    "type": "package",
+    "publish": true
   }
 }

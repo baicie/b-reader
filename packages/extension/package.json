@@ -2,7 +2,7 @@
   "publisher": "baicie",
   "name": "b-reader",
   "displayName": "b-reader",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "read more book",
   "author": {
     "email": "zl316546@gmail.com",
@@ -73,18 +73,19 @@
   "scripts": {
     "vscode:prepublish": "pnpm tsup",
     "build": "pnpm vsce package --no-dependencies",
-    "dev": "pnpm run code-debug && pnpm cross-env NODE_ENV=production pnpm tsup --watch", 
-    "lint": "eslint src --ext ts", 
+    "dev": "pnpm run code-debug && pnpm cross-env NODE_ENV=production pnpm tsup --watch",
+    "lint": "eslint src --ext ts",
     "code-debug": "tsx ../../scripts/run-code.ts"
   },
   "dependencies": {
-    "@b-reader/epub": "workspace:^", 
+    "@b-reader/epub": "workspace:^",
     "@b-reader/utils": "workspace:^",
     "file-type": "^18.7.0",
     "lowdb": "^6.1.1",
     "uuid": "^9.0.1"
   },
-  "buildOptions": {
-    "type": "vscode"
+  "config": {
+    "type": "extension",
+    "publish": false
   }
 }

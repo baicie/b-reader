@@ -1,6 +1,6 @@
 {
   "name": "@b-reader/utils",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "private": false,
   "description": "",
   "author": "",
@@ -15,7 +15,8 @@
   "dependencies": {
     "fast-glob": "^3.3.2"
   },
-  "buildOptions": {
-    "type": "npm"
+  "config": {
+    "type": "package",
+    "publish": true
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@b-reader/epub",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "",
   "author": "",
   "license": "ISC",
@@ -12,9 +12,13 @@
     "dev": "pnpm run build --watch",
     "test": "pnpm tsx ./src/test.ts"
   },
-  "dependencies": { 
+  "dependencies": {
     "lodash": "^4.17.21",
     "unzipper": "^0.10.14",
     "xml2js": "^0.6.2"
+  },
+  "config": {
+    "type": "package",
+    "publish": true
   }
 }
