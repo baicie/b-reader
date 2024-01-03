@@ -46,8 +46,8 @@ jobs:
         with:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
           dependencies: false
-          packagePath: "../../packages/extension"
-          path: "../../packages/extension/b-reader-${{env.TAG_VERSION}}.vsix"
+          packagePath: "packages/extension"
+          path: "packages/extension/b-reader-${{env.TAG_VERSION}}.vsix"
           registryUrl: https://marketplace.visualstudio.com
     
       - name: Publish to Open VSX Registry
@@ -55,5 +55,5 @@ jobs:
         with:
           pat: ${{ secrets.OPEN_VSX_TOKEN }}
           dependencies: false
-          packagePath: "../../packages/extension"
-          path: "../../packages/extension/b-reader-${{env.TAG_VERSION}}.vsix"
+          packagePath: "packages/extension"
+          path: "packages/extension/b-reader-${{env.TAG_VERSION}}.vsix"
