@@ -1,7 +1,8 @@
 import { exec } from 'node:child_process'
 import process from 'node:process'
+import open from 'open'
 
-export function openUrl(folderPath: string) {
+export async function openUrl(folderPath: string) {
   // TOFIX  替换为包稳健
   try {
     switch (process.platform) {

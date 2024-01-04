@@ -1,3 +1,4 @@
+import type { Epub } from '@b-reader/epub'
 import type {
   BReaderContext,
   BReaderUser,
@@ -8,15 +9,13 @@ import type {
 } from '@b-reader/utils'
 import type { ExtensionContext, Webview } from 'vscode'
 import { commands } from 'vscode'
-import type { Epub } from '@b-reader/epub'
-import open from 'open'
+import { parseBook } from './book-parse'
 import { Commands, StoreKeys } from './config'
 import { useDatabase } from './db'
+import { getCacheBook } from './utils/book'
 import { openUrl } from './utils/open'
 import { writeBook, writeBookInfor } from './utils/read-file'
 import { sendMessage, sendMessageToAll } from './utils/send-message'
-import { parseBook } from './book-parse'
-import { getCacheBook } from './utils/book'
 
 export async function receiveMessage(
   webview: Webview,
@@ -33,7 +32,7 @@ export async function receiveMessage(
         case 'openLocal':
           if (!message.data)
             return
-          openUrl(message.data)
+          await openUrl(message.data)
           break
         case 'bookInfor':
           receiveBookInfor(config, webview)
