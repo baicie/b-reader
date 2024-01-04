@@ -9,6 +9,7 @@ import type {
 import type { ExtensionContext, Webview } from 'vscode'
 import { commands } from 'vscode'
 import type { Epub } from '@b-reader/epub'
+import open from 'open'
 import { Commands, StoreKeys } from './config'
 import { useDatabase } from './db'
 import { openUrl } from './utils/open'

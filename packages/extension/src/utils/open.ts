@@ -1,4 +1,5 @@
 import { exec } from 'node:child_process'
+import process from 'node:process'
 
 export function openUrl(folderPath: string) {
   // TOFIX  替换为包稳健
@@ -19,6 +20,7 @@ export function openUrl(folderPath: string) {
     }
   }
   catch (error) {
+    // eslint-disable-next-line no-console
     console.log('error', error)
   }
 }

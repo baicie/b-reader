@@ -18,7 +18,7 @@ export function useDatabase(config: BReaderContext) {
   }
 
   function resolvePath(_path: string) {
-    const resultPath = path.resolve(config.dbPath!.path, `${_path}.json`)
+    const resultPath = path.resolve(config.dbPath!.fsPath, `${_path}.json`)
     existsOrCreate(resultPath)
     return Uri.file(resultPath)
   }

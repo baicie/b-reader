@@ -61,14 +61,14 @@ onBeforeMount(() => {
         </Button>
       </UploadDragger>
 
-      <Button type="ghost" @click="() => handleOpenLocal(config.bookPath?.path)">
+      <Button type="ghost" @click="() => handleOpenLocal(config.bookPath?.fsPath)">
         打开本地
       </Button>
 
       <Button
         v-dev
         type="ghost"
-        @click="() => handleOpenLocal(config.globalStorageUri?.path)"
+        @click="() => handleOpenLocal(config.globalStorageUri?.fsPath)"
       >
         dev
       </Button>
