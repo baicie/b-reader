@@ -65,13 +65,13 @@ onBeforeMount(() => {
         打开本地
       </Button>
 
-      <!-- <Button
+      <Button
         v-dev
         type="ghost"
-        @click="() => handleOpenLocal(config.globalStorageUri?.fsPath)"
+        @click="() => handleOpenLocal(config.globalStorageUri?.path)"
       >
         dev
-      </Button> -->
+      </Button>
 
       <!-- <div>
         <img class="logo" src="../../../extension/icon/icon.svg">

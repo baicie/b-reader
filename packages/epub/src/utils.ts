@@ -57,8 +57,17 @@ function usePath() {
   }
 
   function resolve(form: string, to: string) {
-    const parts = [form, to]
-    return parts.join('/').replace(/\/+/g, '/')
+    const res: string[] = dirname(form).split('/')
+    const args: string[] = to.split('/')
+
+    for (const arg of args) {
+      if (arg === '..')
+        res.pop()
+      else if (arg !== '.')
+        res.push(arg)
+    }
+
+    return res.join('/')
   }
 
   return {
@@ -76,17 +85,19 @@ function usePath() {
 export function resolveId(importer: string, id: string) {
   const path = usePath()
   let res = ''
-  const bareImportRE = /^(?![a-zA-Z]:)[\w@](?!.*:\/\/)/
-  if (!(importer && id))
-    res = id || importer
-  else if (importer.startsWith('/'))
-    res = path.resolve(path.dirname(importer), id)
-  else if (importer.startsWith('/') && id.startsWith('.'))
-    res = path.resolve(path.dirname(importer), id)
-  else if (id.startsWith('.'))
+
+  if (!importer || !id)
+    return id || importer
+
+  if (importer.startsWith('/'))
     res = path.resolve(importer, id)
-  else if (bareImportRE.test(id) && bareImportRE.test(importer))
-    res = path.resolve(path.dirname(importer), id)
-  else res = id
+
+  if (id.startsWith('.') || (importer.startsWith('/') && id.startsWith('.')))
+    res = path.resolve(importer, id)
+
+  const bareImportRE = /^(?![a-zA-Z]:)[\w@](?!.*:\/\/)/
+  if (bareImportRE.test(id) && bareImportRE.test(importer))
+    res = path.resolve(importer, id)
+
   return decodeURIComponent(res)
 }
