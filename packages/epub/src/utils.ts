@@ -1,5 +1,5 @@
 import path from 'node:path'
-import os from 'node:os'
+import fs from 'node:fs'
 import { get } from 'lodash'
 import mime from 'mime-types'
 import type { Nav, TocNavPoint } from './types'
@@ -61,35 +61,18 @@ export function transformNavPoint(nav: TocNavPoint[], parentId: string = 'root')
  * @returns
  */
 export function resolveId(importer: string, id: string) {
-  const _importer = normalizePath(importer)
-  const _id = normalizePath(id)
   let res = ''
   const bareImportRE = /^(?![a-zA-Z]:)[\w@](?!.*:\/\/)/
-  if (!(_importer && _id))
-    res = _id || _importer
-
-  else if (_importer.startsWith('/'))
-    res = path.resolve(path.dirname(_importer), _id)
-
-  else if (_importer.startsWith('/') && _id.startsWith('.'))
-    res = path.resolve(path.dirname(_importer), _id)
-
-  else if (_id.startsWith('.'))
-    res = path.resolve(_importer, _id)
-
-  else if (bareImportRE.test(_id) && bareImportRE.test(_importer))
-    res = path.dirname(_importer) === '.' ? _id : path.resolve(path.dirname(_importer), _id)
-
-  else res = _id
+  if (!(importer && id))
+    res = id || importer
+  else if (importer.startsWith('/'))
+    res = path.resolve(path.dirname(importer), id)
+  else if (importer.startsWith('/') && id.startsWith('.'))
+    res = path.resolve(path.dirname(importer), id)
+  else if (id.startsWith('.'))
+    res = path.resolve(importer, id)
+  else if (bareImportRE.test(id) && bareImportRE.test(importer))
+    res = path.resolve(path.dirname(importer), id)
+  else res = id
   return decodeURIComponent(res)
-}
-
-export const isWindows = os.platform() === 'win32'
-export function normalizePath(id: string): string {
-  return path.posix.normalize(isWindows ? slash(id) : id)
-}
-
-const windowsSlashRE = /\\/g
-export function slash(p: string): string {
-  return p.replace(windowsSlashRE, '/')
 }

@@ -44,7 +44,6 @@ export async function writeBookInfor(book: BookConfig, config: BReaderContext) {
     md5: bookid,
     img: '',
   }
-  console.log('parse', _book, config);
 
   const result = await parseBook(_book, config)
 

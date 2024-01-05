@@ -40,7 +40,7 @@ export async function resolveConfig(context: ExtensionContext) {
 
   const database = useDatabase(config)
 
-  await database.initDatabase(config)
+  await initDir(config)
 
   return {
     extensionConfig,
@@ -50,22 +50,17 @@ export async function resolveConfig(context: ExtensionContext) {
 }
 
 /**
- * @deprecated
  * @param config
  */
-export function initDir(config: BReaderContext) {
-  const { dbPath, bookPath } = config
+export async function initDir(config: BReaderContext) {
+  const { dbPath, bookPath, imgPath } = config
 
   const paths = {
     dbPath,
     bookPath,
+    imgPath,
   }
 
-  for (const key of Object.keys(paths)) {
-    const uri: Uri = paths[key]
-    const _path = path.resolve(uri.fsPath)
-
-    if (!fs.existsSync(_path))
-      fs.mkdirSync(_path, { recursive: true })
-  }
+  for (const key of Object.keys(paths))
+    await workspace.fs.createDirectory(paths[key])
 }

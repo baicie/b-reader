@@ -50,18 +50,26 @@ onBeforeMount(() => {
 <template>
   <ConfigProvider :locale="locale" :theme="theme" class="flex">
     <ButtonGroup :style="{ display: 'flex', flexDirection: 'column' }">
-      <UploadDragger :show-upload-list="false" :before-upload="(file: any) => beforeUpload(file)" accept=".epub"
-        :style="{ width: '100%', display: 'block' }">
+      <UploadDragger
+        :show-upload-list="false"
+        :before-upload="(file:any) => beforeUpload(file)"
+        accept=".epub"
+        :style="{ width: '100%', display: 'block' }"
+      >
         <Button type="ghost" :style="{ width: '100%' }">
           {{ t("menus.add_book") }}
         </Button>
       </UploadDragger>
 
-      <!-- <Button v-dev type="ghost" @click="() => handleOpenLocal(config.bookPath?.path)">
+      <Button type="ghost" @click="() => handleOpenLocal(config.bookPath?.path)">
         打开本地
       </Button>
 
-      <Button v-dev type="ghost" @click="() => handleOpenLocal(config.globalStorageUri?.path)">
+      <!-- <Button
+        v-dev
+        type="ghost"
+        @click="() => handleOpenLocal(config.globalStorageUri?.fsPath)"
+      >
         dev
       </Button> -->
 

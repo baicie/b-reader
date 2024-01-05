@@ -9,11 +9,11 @@ import type {
 } from '@b-reader/utils'
 import type { ExtensionContext, Webview } from 'vscode'
 import { commands } from 'vscode'
+import open from 'open'
 import { parseBook } from './book-parse'
 import { Commands, StoreKeys } from './config'
 import { useDatabase } from './db'
 import { getCacheBook } from './utils/book'
-import { openUrl } from './utils/open'
 import { writeBook, writeBookInfor } from './utils/read-file'
 import { sendMessage, sendMessageToAll } from './utils/send-message'
 
@@ -32,13 +32,13 @@ export async function receiveMessage(
         case 'openLocal':
           if (!message.data)
             return
-          await openUrl(message.data)
+          await open(message.data, { wait: true })
           break
         case 'bookInfor':
           receiveBookInfor(config, webview)
           break
         case 'openWebview':
-          openWebview(message.data, config)
+          openWebview(message.data)
           break
         case 'config':
           sendMessage(webview, 'config', config)
@@ -82,19 +82,8 @@ async function receiveBookInfor(config: BReaderContext, webview: Webview) {
   await sendMessage(webview, 'bookInfor', res)
 }
 
-async function openWebview(data: string, config: BReaderContext) {
-  const { setValue, getValue } = useDatabase(config)
-  const bookStore = await getValue<BReaderUser>(StoreKeys.user)
-
-  if (bookStore.welcome) {
-    await commands.executeCommand(Commands.openBookSelefWebView, data)
-  }
-  else {
-    await commands.executeCommand(Commands.openWelcome, data)
-    await setValue(StoreKeys.user, {
-      welcome: true,
-    })
-  }
+async function openWebview(data: string) {
+  await commands.executeCommand(Commands.openBookSelefWebView, data)
 }
 
 async function receiveOpenBook(bookId: string, config: BReaderContext) {
