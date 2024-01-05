@@ -34,12 +34,6 @@
   "l10n": "./l10n",
   "activationEvents": [],
   "contributes": {
-    "commands": [
-      {
-        "command": "b-reader.helloWorld",
-        "title": "Hello World"
-      }
-    ],
     "viewsContainers": {
       "activitybar": [
         {
@@ -66,6 +60,11 @@
           "type": "boolean",
           "default": false,
           "description": "%b-reader.views.menu.settings.unzip%"
+        },
+        "b-reader.biquge": {
+          "type": "string",
+          "default": "https://www.xbiquge.bz/",
+          "description": "%b-reader.views.menu.settings.biquge%"
         }
       }
     }
@@ -79,6 +78,7 @@
   },
   "dependencies": {
     "@b-reader/epub": "workspace:^",
+    "@b-reader/online": "workspace:^",
     "@b-reader/utils": "workspace:^",
     "file-type": "^18.7.0",
     "lowdb": "^6.1.1",

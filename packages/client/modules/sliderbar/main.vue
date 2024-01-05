@@ -1,11 +1,11 @@
 <script lang="ts" setup>
+import type { BookConfig } from '@b-reader/utils'
 import type { UploadFile } from 'ant-design-vue'
 import { Button, ButtonGroup, ConfigProvider, UploadDragger } from 'ant-design-vue'
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { BookConfig } from '@b-reader/utils'
-import { locale, theme } from '../../src/theme'
 import { useAppStore } from '../../src/store/app'
+import { locale, theme } from '../../src/theme'
 
 const { t } = useI18n()
 const { initApp, sendMessage, config } = useAppStore()
@@ -33,7 +33,6 @@ function handleOpenLocal(path?: string) {
 }
 
 function handleOpenWebview(path: string) {
-  // emitter.emit("openWebview", path);
   sendMessage({
     path: 'openWebview',
     data: path,
@@ -42,8 +41,6 @@ function handleOpenWebview(path: string) {
 
 onBeforeMount(() => {
   initApp()
-  // TOFIX 每次都会渲染？
-  // console.log('initApp')
 })
 </script>
 
@@ -77,8 +74,12 @@ onBeforeMount(() => {
         <img class="logo" src="../../../extension/icon/icon.svg">
       </div> -->
 
-      <Button type="ghost" @click="handleOpenWebview('bookshelf')">
+      <Button type="ghost" @click="handleOpenWebview('openBookSelefWebView')">
         书架
+      </Button>
+
+      <Button type="ghost" @click="handleOpenWebview('openSearchOnline')">
+        在线搜索
       </Button>
 
       <!-- <div>all books</div> -->

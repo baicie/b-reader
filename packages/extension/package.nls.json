@@ -2,5 +2,6 @@
   "b-reader.views.menu.title": "菜单",
   "b-reader.views.menu.home": "主页",
   "b-reader.views.menu.settings": "设置",
-  "b-reader.views.menu.settings.unzip": "解压缩"
+  "b-reader.views.menu.settings.unzip": "解压缩",
+  "b-reader.views.menu.settings.biquge": "笔趣阁"
 }

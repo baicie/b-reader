@@ -2,15 +2,15 @@
   "name": "@b-reader/pdf",
   "version": "0.0.0",
   "description": "",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup",
     "dev": "pnpm run build --watch"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "pdf2json": "^3.0.5"
   },

@@ -10,6 +10,7 @@ import type {
 import type { ExtensionContext, Webview } from 'vscode'
 import { commands } from 'vscode'
 import open from 'open'
+import { search } from '@b-reader/online'
 import { parseBook } from './book-parse'
 import { Commands, StoreKeys } from './config'
 import { useDatabase } from './db'
@@ -55,6 +56,9 @@ export async function receiveMessage(
         case 'getContent':
           receiveContent(message.data, config, webview)
           break
+        case 'online:search':
+          receiveOnlieSearch(message.data, config, webview)
+          break
       }
     },
     undefined,
@@ -83,7 +87,7 @@ async function receiveBookInfor(config: BReaderContext, webview: Webview) {
 }
 
 async function openWebview(data: string) {
-  await commands.executeCommand(Commands.openBookSelefWebView, data)
+  await commands.executeCommand(`b-reader.local.${data}`, data)
 }
 
 async function receiveOpenBook(bookId: string, config: BReaderContext) {
@@ -98,4 +102,8 @@ async function receiveContent(data: MessageTypeGetContent['data'], config: BRead
   const chapter = await bookInstance.getContent()
   await sendMessage(webview, 'sendContent', chapter)
   // cache
+}
+
+async function receiveOnlieSearch(data: string, config: BReaderContext, webview: Webview) {
+
 }

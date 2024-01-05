@@ -15,6 +15,7 @@ export type MessageType =
   | MessageTypeSendNav
   | MessageTypeGetContent
   | MessageTypeSendContent
+  | MessageTypeSearchOnline
 
 export interface MessageTypeConfig {
   path: 'config'
@@ -85,14 +86,14 @@ export interface MessageTypeGetContent {
   }
 }
 
-// interface ContentNode {
-//   content: string
-//   href: string
-// }
-
 export interface MessageTypeSendContent {
   path: 'sendContent'
   data: any[]
+}
+
+export interface MessageTypeSearchOnline {
+  path: 'online:search'
+  data: string
 }
 
 // message
