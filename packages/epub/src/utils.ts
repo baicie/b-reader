@@ -1,7 +1,4 @@
-import path from 'node:path'
-import fs from 'node:fs'
 import { get } from 'lodash'
-import mime from 'mime-types'
 import type { Nav, TocNavPoint } from './types'
 
 interface ItemWithDollar {
@@ -54,6 +51,22 @@ export function transformNavPoint(nav: TocNavPoint[], parentId: string = 'root')
   })
 }
 
+function usePath() {
+  function dirname(path: string) {
+    return path.includes('/') ? path.split('/').slice(0, -1).join('/') : ''
+  }
+
+  function resolve(form: string, to: string) {
+    const parts = [form, to]
+    return parts.join('/').replace(/\/+/g, '/')
+  }
+
+  return {
+    dirname,
+    resolve,
+  }
+}
+
 /**
  *
  * @param importer 引用者得路径 guide
@@ -61,6 +74,7 @@ export function transformNavPoint(nav: TocNavPoint[], parentId: string = 'root')
  * @returns
  */
 export function resolveId(importer: string, id: string) {
+  const path = usePath()
   let res = ''
   const bareImportRE = /^(?![a-zA-Z]:)[\w@](?!.*:\/\/)/
   if (!(importer && id))
