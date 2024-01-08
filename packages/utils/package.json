@@ -8,6 +8,7 @@
   "keywords": [],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "type": "commonjs",
   "scripts": {
     "build": "tsup",
     "dev": "pnpm run build --watch"

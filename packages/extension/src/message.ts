@@ -1,3 +1,4 @@
+import { error } from 'node:console'
 import type { ProgressOptions } from 'vscode'
 import { ProgressLocation, window } from 'vscode'
 
@@ -8,6 +9,7 @@ export function useMessage() {
 
   function berror(message: string) {
     window.showErrorMessage(message)
+    error(message)
   }
 
   function bwarn(message: string) {

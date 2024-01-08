@@ -45,6 +45,24 @@ class Requset {
     }
   }
 
+  async _send(options: any) {
+    const requestOptions
+      = typeof options === 'string'
+        ? {
+            url: options,
+          }
+        : options
+
+    const res = await got({
+      ...requestOptions,
+      cookieJar: this.cookieJar,
+      agent: this.agent,
+    }).catch((e) => {
+      throw e
+    })
+    return res
+  }
+
   async send(options: any) {
     const requestOptions
       = typeof options === 'string'

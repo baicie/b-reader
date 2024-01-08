@@ -137,18 +137,15 @@ importers:
       ant-design-vue:
         specifier: ^4.0.8
         version: 4.0.8(vue@3.4.5)
-      readium-js:
-        specifier: ^0.0.0
-        version: 0.0.0
       vue:
         specifier: ^3.4.5
         version: 3.4.5(typescript@5.3.3)
       vue-i18n:
         specifier: ^9.8.0
         version: 9.8.0(vue@3.4.5)
-      xml2js:
-        specifier: ^0.6.2
-        version: 0.6.2
+      vue-virtual-scroller:
+        specifier: 2.0.0-beta.8
+        version: 2.0.0-beta.8(vue@3.4.5)
 
   packages/epub:
     dependencies:
@@ -5240,6 +5237,10 @@ packages:
     engines: {node: '>=16 || 14 >=14.17'}
     dev: true
 
+  /mitt@2.1.0:
+    resolution: {integrity: sha512-ILj2TpLiysu2wkBbWjAmww7TkZb65aiQO+DkVdUTBpBXq+MHYiETENkKFMtsJZX1Lf4pe4QOrTSjIfUwN5lRdg==}
+    dev: false
+
   /mkdirp-classic@0.5.3:
     resolution: {integrity: sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==}
     requiresBuild: true
@@ -6143,13 +6144,6 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /readium-js@0.0.0:
-    resolution: {integrity: sha512-liv8LZiNlGbmcHH0F8wjqDzKE9AAVAScM4YG2ojiBDfeU8LC9U1otjnhtizMA5kZx8YeHpOgVk/S9Smt+0pgjA==}
-    dependencies:
-      requirejs: 2.3.6
-      requirejs-text: 2.0.16
-    dev: false
-
   /realpath-missing@1.1.0:
     resolution: {integrity: sha512-wnWtnywepjg/eHIgWR97R7UuM5i+qHLA195qdN9UPKvcMqfn60+67S8sPPW3vDlSEfYHoFkKU8IvpCNty3zQvQ==}
     engines: {node: '>=10'}
@@ -6188,16 +6182,6 @@ packages:
     resolution: {integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==}
     engines: {node: '>=0.10.0'}
     dev: true
-
-  /requirejs-text@2.0.16:
-    resolution: {integrity: sha512-XrzjeTb1pwzIWmkz8qnUiM20gENgiwB+66IciNuziwlaPAJsYQsQPSYyQ1kD4tGKGZxTisIfDbOHk02DpI/76Q==}
-    dev: false
-
-  /requirejs@2.3.6:
-    resolution: {integrity: sha512-ipEzlWQe6RK3jkzikgCupiTbTvm4S0/CAU5GlgptkN5SO6F3u0UD0K18wy6ErDqiCyP4J4YYe1HuAShvsxePLg==}
-    engines: {node: '>=0.4.0'}
-    hasBin: true
-    dev: false
 
   /requires-port@1.0.0:
     resolution: {integrity: sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==}
@@ -7328,6 +7312,22 @@ packages:
       vue: 3.4.5(typescript@5.3.3)
     dev: false
 
+  /vue-observe-visibility@2.0.0-alpha.1(vue@3.4.5):
+    resolution: {integrity: sha512-flFbp/gs9pZniXR6fans8smv1kDScJ8RS7rEpMjhVabiKeq7Qz3D9+eGsypncjfIyyU84saU88XZ0zjbD6Gq/g==}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      vue: 3.4.5(typescript@5.3.3)
+    dev: false
+
+  /vue-resize@2.0.0-alpha.1(vue@3.4.5):
+    resolution: {integrity: sha512-7+iqOueLU7uc9NrMfrzbG8hwMqchfVfSzpVlCMeJQe4pyibqyoifDNbKTZvwxZKDvGkB+PdFeKvnGZMoEb8esg==}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      vue: 3.4.5(typescript@5.3.3)
+    dev: false
+
   /vue-template-compiler@2.7.15:
     resolution: {integrity: sha512-yQxjxMptBL7UAog00O8sANud99C6wJF+7kgbcwqkvA38vCGF7HWE66w0ZFnS/kX5gSoJr/PQ4/oS3Ne2pW37Og==}
     dependencies:
@@ -7355,6 +7355,17 @@ packages:
     dependencies:
       is-plain-object: 3.0.1
       vue: 3.4.5(typescript@5.3.3)
+    dev: false
+
+  /vue-virtual-scroller@2.0.0-beta.8(vue@3.4.5):
+    resolution: {integrity: sha512-b8/f5NQ5nIEBRTNi6GcPItE4s7kxNHw2AIHLtDp+2QvqdTjVN0FgONwX9cr53jWRgnu+HRLPaWDOR2JPI5MTfQ==}
+    peerDependencies:
+      vue: ^3.2.0
+    dependencies:
+      mitt: 2.1.0
+      vue: 3.4.5(typescript@5.3.3)
+      vue-observe-visibility: 2.0.0-alpha.1(vue@3.4.5)
+      vue-resize: 2.0.0-alpha.1(vue@3.4.5)
     dev: false
 
   /vue@3.4.5(typescript@5.3.3):

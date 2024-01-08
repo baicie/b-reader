@@ -1,9 +1,10 @@
 import type { Webview } from 'vscode'
+import type { MessageType } from '@b-reader/utils'
 import { getWebviewCache } from '../view/cache'
 
 export async function sendMessage(
   webview: Webview,
-  _path: string,
+  _path: MessageType['path'],
   data: unknown,
 ) {
   await webview.postMessage({
@@ -14,7 +15,7 @@ export async function sendMessage(
 
 export async function sendMessageToAll(
   name: string,
-  _path: string,
+  _path: MessageType['path'],
   data: unknown,
 ) {
   const webviews = getWebviewCache(name)

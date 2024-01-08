@@ -1,16 +1,18 @@
 import type { Epub } from '@b-reader/epub'
-import { search } from '@b-reader/online'
+import { getChapter, getChapterContent, search } from '@b-reader/online'
 import type {
   BReaderContext,
   Book,
   BookConfig,
   MessageType,
   MessageTypeGetContent,
+  MessageTypeOnlineContentReq,
   SearchOnlineResult,
 } from '@b-reader/utils'
 import open from 'open'
 import type { ExtensionContext, Webview } from 'vscode'
 import { commands } from 'vscode'
+import { isEmpty } from 'lodash'
 import { parseBook } from './book-parse'
 import { Commands, StoreKeys } from './config'
 import { useDatabase } from './db'
@@ -68,11 +70,61 @@ export async function receiveMessage(
         case 'online:add_bookshelf:req':
           receiveOnlineAddBookshelfReq(message.data, config)
           break
+        case 'reader:common:get_nav:req':
+          receiveCommonReaderNav(message.data, config, webview)
+          break
+        case 'reader:common:content:req':
+          receiveCommonReaderContent(message.data, config, webview)
+          break
       }
     },
     undefined,
     context.subscriptions,
   )
+}
+
+async function receiveCommonReaderContent(book: MessageTypeOnlineContentReq['data'], config: BReaderContext, webview: Webview) {
+  try {
+    const { getValue, setValue } = useDatabase(config)
+    const cachePath = `${StoreKeys.cache}/${book.md5}`
+    const cache = await getValue<any>(cachePath)
+    let content = cache?.contents?.[book.path]
+    // use cache
+    if (isEmpty(content) || !content) {
+      content = await getChapterContent(config.biquge!, book.path)
+      await setValue(cachePath, {
+        ...cache,
+        contents: {
+          ...cache?.contents,
+          [book.path]: content,
+        },
+      })
+    }
+
+    await sendMessage(webview, 'reader:common:content:res', {
+      path: book.path,
+      content,
+    })
+  }
+  catch (error) {
+    berror(error)
+  }
+}
+
+async function receiveCommonReaderNav(book: Book, config: BReaderContext, webview: Webview) {
+  const { getValue, setValue } = useDatabase(config)
+  const cachePath = `${StoreKeys.cache}/${book.md5}`
+  const cache = await getValue<any>(cachePath)
+  let navs = cache?.navs
+  if (isEmpty(navs) || !navs) {
+    navs = await getChapter(config.biquge!, book.config.path)
+    await setValue(cachePath, {
+      ...cache,
+      navs,
+    })
+  }
+
+  await sendMessage(webview, 'reader:common:get_nav:res', navs)
 }
 
 async function receiveNav(bookId: string, config: BReaderContext, webview: Webview) {

@@ -42,7 +42,6 @@ export async function getChapter(DOMAIN: string, pathStr: string): Promise<any[]
       {
         type: '.biquge',
         name,
-        isDirectory: false,
         path: pathStr + path,
       },
     )

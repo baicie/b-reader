@@ -47,8 +47,3 @@ function addDataToHtml(html: string, data: any) {
 
   return modifiedHtml
 }
-
-export function getDataFromHtml() {
-  const data = document.querySelector('comment')?.innerHTML
-  return data ? JSON.parse(data) : null
-}

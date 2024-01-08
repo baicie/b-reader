@@ -19,6 +19,10 @@ export type MessageType =
   | MessageTypeSearchOnlineResult
   | MessageTypeOnlineReadReq
   | MessageTypeOnlineAddToBookshelfReq
+  | MessageTypeCommonReaderGetNavReq
+  | MessageTypeOnlineAddToBookshelfRes
+  | MessageTypeOnlineContentReq
+  | MessageTypeOnlineContentRes
 
 export interface MessageTypeConfig {
   path: 'config'
@@ -112,6 +116,32 @@ export interface MessageTypeOnlineReadReq {
 export interface MessageTypeOnlineAddToBookshelfReq {
   path: 'online:add_bookshelf:req'
   data: SearchOnlineResult
+}
+
+export interface MessageTypeCommonReaderGetNavReq {
+  path: 'reader:common:get_nav:req'
+  data: Book
+}
+
+export interface MessageTypeOnlineAddToBookshelfRes {
+  path: 'reader:common:get_nav:res'
+  data: SearchOnlineResult[]
+}
+
+export interface MessageTypeOnlineContentReq {
+  path: 'reader:common:content:req'
+  data: {
+    md5: string
+    path: string
+  }
+}
+
+export interface MessageTypeOnlineContentRes {
+  path: 'reader:common:content:res'
+  data: {
+    path: string
+    content: string
+  }
 }
 
 // message
