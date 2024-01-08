@@ -6,11 +6,12 @@ import type {
   BookConfig,
   MessageType,
   MessageTypeGetContent,
+  SearchOnlineResult,
 } from '@b-reader/utils'
 import open from 'open'
 import type { ExtensionContext, Webview } from 'vscode'
 import { commands } from 'vscode'
-import { parseBook } from './book-parse'
+import { parseBook, parseBqg } from './book-parse'
 import { Commands, StoreKeys } from './config'
 import { useDatabase } from './db'
 import { useMessage } from './message'
@@ -60,6 +61,9 @@ export async function receiveMessage(
           break
         case 'online:search':
           receiveOnlieSearch(message.data, config, webview)
+          break
+        case 'online:read:req':
+          receiveOnlineReadReq(message.data)
           break
       }
     },
@@ -114,4 +118,8 @@ async function receiveOnlieSearch(data: string, config: BReaderContext, webview:
   catch (error) {
     berror(error)
   }
+}
+
+async function receiveOnlineReadReq(data: SearchOnlineResult) {
+  await commands.executeCommand(Commands.openCommonReader, data)
 }

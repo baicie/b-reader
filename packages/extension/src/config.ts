@@ -17,6 +17,7 @@ export enum Commands {
   openReader = 'b-reader.local.openReader',
   openWelcome = 'b-reader.local.openWelcome',
   openSearchOnline = 'b-reader.local.openSearchOnline',
+  openCommonReader = 'b-reader.local.openCommonReader',
 }
 
 export enum StoreKeys {

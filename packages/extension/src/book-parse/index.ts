@@ -1,5 +1,6 @@
-import type { BReaderContext, Book } from '@b-reader/utils'
+import type { BReaderContext, Book, BookConfig, SearchOnlineResult } from '@b-reader/utils'
 import type { Epub } from '@b-reader/epub'
+import { writeBookInfor } from '../utils/read-file'
 import { parseEpub } from './epub'
 import { parsePdf } from './pdf'
 
@@ -20,4 +21,14 @@ export async function parseBook(book: Book, config: BReaderContext) {
   }
 
   return bookCache[book.md5]
+}
+
+export async function parseBqg(data: SearchOnlineResult, config: BReaderContext) {
+  const book: BookConfig = {
+    name: data.title,
+    path: data.path,
+    type: 'online/biquge',
+  }
+
+  await writeBookInfor(book, config)
 }

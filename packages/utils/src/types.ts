@@ -17,6 +17,8 @@ export type MessageType =
   | MessageTypeSendContent
   | MessageTypeSearchOnline
   | MessageTypeSearchOnlineResult
+  | MessageTypeOnlineReadReq
+  | MessageTypeOnlineAddToBookshelfReq
 
 export interface MessageTypeConfig {
   path: 'config'
@@ -102,6 +104,16 @@ export interface MessageTypeSearchOnlineResult {
   data: SearchOnlineResult[]
 }
 
+export interface MessageTypeOnlineReadReq {
+  path: 'online:read:req'
+  data: SearchOnlineResult
+}
+
+export interface MessageTypeOnlineAddToBookshelfReq {
+  path: 'online:add_bookshelf:req'
+  data: SearchOnlineResult
+}
+
 // message
 
 export interface BookConfig {
@@ -132,7 +144,7 @@ export interface BReaderContextInFile {
   biquge: string
 }
 
-export type BookType = 'application/epub+zip' | 'application/pdf'
+export type BookType = 'application/epub+zip' | 'application/pdf' | 'online/biquge'
 
 // user
 export interface BReaderUser {
