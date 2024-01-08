@@ -1,8 +1,8 @@
 /* eslint-disable n/prefer-global/buffer */
 import fs from 'node:fs'
 import path from 'node:path'
+import crypto from 'node:crypto'
 import type { BReaderContext, Book, BookConfig, BookType } from '@b-reader/utils'
-import { calculateMD5 } from '@b-reader/utils'
 import { Uri, workspace } from 'vscode'
 import { useDatabase } from '../db'
 import { StoreKeys } from '../config'
@@ -37,18 +37,16 @@ export async function writeBook(book: BookConfig, config: BReaderContext) {
 
 export async function writeBookInfor(book: BookConfig, config: BReaderContext) {
   const { setValue, getValue } = useDatabase(config)
-
-  const bookid = await calculateMD5(book.path)
+  const bookid = crypto.createHash('md5').update(book.path, 'utf-8').digest('hex')
   const _book: Book = {
     config: book,
     md5: bookid,
     img: '',
   }
-
   const result = await parseBook(_book, config)
 
-  if (result)
-    _book.img = await result.getCover()
+  if (result && !_book.img)
+    _book.img = await result.getCover?.() ?? ''
 
   const bookStore = await getValue<Record<string, Book>>(StoreKeys.book)
 
@@ -56,7 +54,3 @@ export async function writeBookInfor(book: BookConfig, config: BReaderContext) {
 
   await setValue(StoreKeys.book, bookStore)
 }
-
-// export function getImage(type: BookType) {
-//   //
-// }

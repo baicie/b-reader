@@ -2,7 +2,7 @@ import type { Agents } from 'got'
 import got from 'got'
 import tough from 'tough-cookie'
 import { HttpProxyAgent, HttpsProxyAgent } from 'hpagent'
-import { search } from './search'
+import { getChapter, getChapterContent, getCover, search } from './functions'
 
 interface cookiesConfig {
   url: string
@@ -65,4 +65,4 @@ class Requset {
 }
 
 export const request = new Requset()
-export { search }
+export { search, getChapter, getChapterContent, getCover }

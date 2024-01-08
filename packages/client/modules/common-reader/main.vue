@@ -1,12 +1,12 @@
 <script lang='ts' setup>
-// # config import
-// # base state
-// # pinia
-// # computed
-// # watch
-// # function
-// # lifecycle
-// # style
+import { onBeforeMount } from 'vue'
+import { useCommonReader } from './use-reader'
+
+const { initApp, state } = useCommonReader()
+
+onBeforeMount(() => {
+  initApp()
+})
 </script>
 
 <template>

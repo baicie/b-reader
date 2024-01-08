@@ -120,12 +120,14 @@ export interface BookConfig {
   name: string
   path: string
   type?: BookType
+  [key: string]: any
 }
 
 export interface Book {
   config: BookConfig
   md5: string
   img: string
+  [key: string]: any
 }
 
 export type BReaderContext = Partial<{

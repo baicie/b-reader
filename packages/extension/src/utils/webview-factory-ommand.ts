@@ -1,4 +1,4 @@
-import type { BReaderContext } from '@b-reader/utils/dist'
+import type { BReaderContext } from '@b-reader/utils'
 import type { ExtensionContext, WebviewPanel } from 'vscode'
 import { commands } from 'vscode'
 

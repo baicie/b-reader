@@ -30,3 +30,38 @@ export async function search(DOMAIN: string, keyword: string): Promise<any> {
   })
   return result
 }
+
+export async function getChapter(DOMAIN: string, pathStr: string): Promise<any[]> {
+  const result: any[] = []
+  const res = await request.send(DOMAIN + pathStr)
+  const $ = load(res.body)
+  $('#list dd').each((i: number, elem: any) => {
+    const name = $(elem).find('a').text()
+    const path = $(elem).find('a').attr()?.href
+    result.push(
+      {
+        type: '.biquge',
+        name,
+        isDirectory: false,
+        path: pathStr + path,
+      },
+    )
+  })
+  return result
+}
+
+export async function getChapterContent(DOMAIN: string, pathStr: string): Promise<string> {
+  let result = ''
+  const res = await request.send(DOMAIN + pathStr)
+  const $ = load(res.body)
+  const html = $('#content').html()
+  result = html || ''
+  return result
+}
+
+export async function getCover(DOMAIN: string, pathStr: string): Promise<any> {
+  const res = await request.send(DOMAIN + pathStr)
+  const $ = load(res.body)
+  const src = $('#fmimg').find('img').attr()?.src
+  return src
+}

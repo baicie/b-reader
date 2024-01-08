@@ -11,7 +11,7 @@ import type {
 import open from 'open'
 import type { ExtensionContext, Webview } from 'vscode'
 import { commands } from 'vscode'
-import { parseBook, parseBqg } from './book-parse'
+import { parseBook } from './book-parse'
 import { Commands, StoreKeys } from './config'
 import { useDatabase } from './db'
 import { useMessage } from './message'
@@ -65,6 +65,9 @@ export async function receiveMessage(
         case 'online:read:req':
           receiveOnlineReadReq(message.data)
           break
+        case 'online:add_bookshelf:req':
+          receiveOnlineAddBookshelfReq(message.data, config)
+          break
       }
     },
     undefined,
@@ -98,7 +101,14 @@ async function openWebview(data: string) {
 
 async function receiveOpenBook(bookId: string, config: BReaderContext) {
   const bookinfo = await getCacheBook(bookId, config)
-  await commands.executeCommand(Commands.openReader, bookinfo)
+  switch (bookinfo.config.type) {
+    case 'application/epub+zip':
+      await commands.executeCommand(Commands.openReader, bookinfo)
+      break
+    default:
+      await commands.executeCommand(Commands.openCommonReader, bookinfo)
+      break
+  }
 }
 
 // 获取章节内容
@@ -122,4 +132,17 @@ async function receiveOnlieSearch(data: string, config: BReaderContext, webview:
 
 async function receiveOnlineReadReq(data: SearchOnlineResult) {
   await commands.executeCommand(Commands.openCommonReader, data)
+}
+
+async function receiveOnlineAddBookshelfReq(data: SearchOnlineResult, config: BReaderContext) {
+  const book: BookConfig = {
+    ...data,
+    name: data.title,
+    path: data.path,
+    type: 'online/biquge',
+  }
+
+  writeBookInfor(book, config).catch((error) => {
+    berror(error)
+  })
 }

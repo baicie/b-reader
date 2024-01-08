@@ -63,7 +63,7 @@ function onRead(data: SearchOnlineResult) {
 function onAddToShelf(data: SearchOnlineResult) {
   sendMessage({
     path: 'online:add_bookshelf:req',
-    data,
+    data: toRaw(data),
   })
 }
 
