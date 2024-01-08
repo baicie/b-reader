@@ -2,22 +2,22 @@ import type { ProgressOptions } from 'vscode'
 import { ProgressLocation, window } from 'vscode'
 
 export function useMessage() {
-  function info(message: string) {
+  function binfo(message: string) {
     window.showInformationMessage(message)
   }
 
-  function error(message: string) {
+  function berror(message: string) {
     window.showErrorMessage(message)
   }
 
-  function warn(message: string) {
+  function bwarn(message: string) {
     window.showWarningMessage(message)
   }
 
   return {
-    info,
-    error,
-    warn,
+    binfo,
+    berror,
+    bwarn,
   }
 }
 
@@ -36,6 +36,7 @@ export function useProgress(title?: string) {
       },
       (progress, token) => {
         token.onCancellationRequested(() => {
+          // eslint-disable-next-line no-console
           console.log('User canceled the long running operation')
         })
 

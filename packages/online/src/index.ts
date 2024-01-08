@@ -12,12 +12,11 @@ interface cookiesConfig {
 class Requset {
   cookieJar: tough.CookieJar
   agent: Agents | undefined
-  cookies: cookiesConfig[] = []
 
-  constructor(cookies: cookiesConfig[] = []) {
-    this.cookies = cookies
+  constructor() {
     this.cookieJar = new tough.CookieJar()
-    this.reLoadCookie()
+    // this.setAgent('http://127.0.0.1:8888')
+    // this.reLoadCookie()
   }
 
   setAgent(proxy: string) {
@@ -33,7 +32,7 @@ class Requset {
 
   reLoadCookie() {
     this.cookieJar.removeAllCookiesSync()
-    const cookies: cookiesConfig[] = this.cookies
+    const cookies: cookiesConfig[] = []
     if (typeof cookies === 'object') {
       cookies.forEach((cookie) => {
         cookie.cookie
@@ -53,6 +52,7 @@ class Requset {
             url: options,
           }
         : options
+
     const res = await got({
       ...requestOptions,
       cookieJar: this.cookieJar,

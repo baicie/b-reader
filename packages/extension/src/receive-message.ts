@@ -1,22 +1,24 @@
 import type { Epub } from '@b-reader/epub'
+import { search } from '@b-reader/online'
 import type {
   BReaderContext,
-  BReaderUser,
   Book,
   BookConfig,
   MessageType,
   MessageTypeGetContent,
 } from '@b-reader/utils'
+import open from 'open'
 import type { ExtensionContext, Webview } from 'vscode'
 import { commands } from 'vscode'
-import open from 'open'
-import { search } from '@b-reader/online'
 import { parseBook } from './book-parse'
 import { Commands, StoreKeys } from './config'
 import { useDatabase } from './db'
+import { useMessage } from './message'
 import { getCacheBook } from './utils/book'
 import { writeBook, writeBookInfor } from './utils/read-file'
 import { sendMessage, sendMessageToAll } from './utils/send-message'
+
+const { berror } = useMessage()
 
 export async function receiveMessage(
   webview: Webview,
@@ -105,5 +107,11 @@ async function receiveContent(data: MessageTypeGetContent['data'], config: BRead
 }
 
 async function receiveOnlieSearch(data: string, config: BReaderContext, webview: Webview) {
-
+  try {
+    const res = await search(config.biquge!, data)
+    await sendMessage(webview, 'online:search:res', res)
+  }
+  catch (error) {
+    berror(error)
+  }
 }

@@ -16,6 +16,7 @@ export type MessageType =
   | MessageTypeGetContent
   | MessageTypeSendContent
   | MessageTypeSearchOnline
+  | MessageTypeSearchOnlineResult
 
 export interface MessageTypeConfig {
   path: 'config'
@@ -96,6 +97,11 @@ export interface MessageTypeSearchOnline {
   data: string
 }
 
+export interface MessageTypeSearchOnlineResult {
+  path: 'online:search:res'
+  data: SearchOnlineResult[]
+}
+
 // message
 
 export interface BookConfig {
@@ -123,6 +129,7 @@ export type BReaderContext = Partial<{
 
 export interface BReaderContextInFile {
   unzip: boolean
+  biquge: string
 }
 
 export type BookType = 'application/epub+zip' | 'application/pdf'
@@ -130,4 +137,15 @@ export type BookType = 'application/epub+zip' | 'application/pdf'
 // user
 export interface BReaderUser {
   welcome: boolean
+}
+
+// sreach result
+export interface SearchOnlineResult {
+  title: string
+  author: string
+  path: string
+  latestChapter: string
+  size: string
+  updateTime: string
+  status: string
 }

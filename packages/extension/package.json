@@ -63,7 +63,7 @@
         },
         "b-reader.biquge": {
           "type": "string",
-          "default": "https://www.xbiquge.bz/",
+          "default": "http://www.xbiquzw.com",
           "description": "%b-reader.views.menu.settings.biquge%"
         }
       }

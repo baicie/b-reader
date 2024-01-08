@@ -127,13 +127,16 @@ export class Epub {
           })
           if (!xml)
             continue
-          await this.traverseImages(xml, filePath)
-          const temp = expandedData(xml)
-          const result = {
-            id: manifest.href,
-            content: temp,
-          }
-          this.content.push(result)
+          this.traverseImages(xml, filePath).then(() => {
+            const temp = expandedData(xml)
+            const result = {
+              id: manifest.href,
+              content: temp,
+            }
+            this.content.push(result)
+          }).catch((error) => {
+            console.error('traverseImages error', error)
+          })
         }
       }
     }
