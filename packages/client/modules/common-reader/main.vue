@@ -30,6 +30,8 @@ const item = computed(() => {
   }
 })
 
+const height = computed(() => window.innerHeight)
+
 function handleClickChapter(selectedKeys: string[], e: { node: EventDataNode }) {
   if (selectedKeys.length) {
     // eslint-disable-next-line no-console
@@ -101,7 +103,15 @@ onBeforeMount(() => {
     <Layout>
       <LayoutSider :width="250" :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0 }">
         <template v-if="state.navs.length">
-          <Tree :tree-data="state.navs as unknown as DataNode[]" block-node default-expand-all selectable :field-names="filedName" @select="handleClickChapter" />
+          <Tree
+            :tree-data="state.navs as unknown as DataNode[]"
+            block-node
+            default-expand-all
+            selectable
+            :field-names="filedName"
+            :height="height"
+            @select="handleClickChapter"
+          />
         </template>
       </LayoutSider>
       <LayoutContent :style="{ marginLeft: '250px', padding: '24px' }">
