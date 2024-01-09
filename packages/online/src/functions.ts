@@ -5,6 +5,8 @@ export async function search(DOMAIN: string, keyword: string): Promise<any> {
   const result: any[] = []
   const url = `${DOMAIN}/modules/article/search.php?searchkey=${encodeURI(keyword)}`
   const res = await request.send(url)
+  if (!res)
+    return result
   const $ = load(res.body)
   $('.grid tbody > tr').each((i: number, elem: any) => {
     const title = $(elem).find('td:nth-child(1)').text()
@@ -34,6 +36,8 @@ export async function search(DOMAIN: string, keyword: string): Promise<any> {
 export async function getChapter(DOMAIN: string, pathStr: string): Promise<any[]> {
   const result: any[] = []
   const res = await request.send(DOMAIN + pathStr)
+  if (!res)
+    return result
   const $ = load(res.body)
   $('#list dd').each((i: number, elem: any) => {
     const name = $(elem).find('a').text()
@@ -52,6 +56,8 @@ export async function getChapter(DOMAIN: string, pathStr: string): Promise<any[]
 export async function getChapterContent(DOMAIN: string, pathStr: string): Promise<string> {
   let result = ''
   const res = await request.send(DOMAIN + pathStr)
+  if (!res)
+    return result
   const $ = load(res.body)
   const html = $('#content').html()
   result = html || ''
@@ -60,6 +66,8 @@ export async function getChapterContent(DOMAIN: string, pathStr: string): Promis
 
 export async function getCover(DOMAIN: string, pathStr: string): Promise<any> {
   const res = await request.send(DOMAIN + pathStr)
+  if (!res)
+    return ''
   const $ = load(res.body)
   const src = $('#fmimg').find('img').attr()?.src
   return src

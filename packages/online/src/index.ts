@@ -2,6 +2,7 @@ import type { Agents } from 'got'
 import got from 'got'
 import tough from 'tough-cookie'
 import { HttpProxyAgent, HttpsProxyAgent } from 'hpagent'
+import PQueue from 'p-queue'
 import { getChapter, getChapterContent, getCover, search } from './functions'
 
 interface cookiesConfig {
@@ -12,11 +13,11 @@ interface cookiesConfig {
 class Requset {
   cookieJar: tough.CookieJar
   agent: Agents | undefined
+  queue: PQueue
 
   constructor() {
     this.cookieJar = new tough.CookieJar()
-    // this.setAgent('http://127.0.0.1:8888')
-    // this.reLoadCookie()
+    this.queue = new PQueue({ interval: 2000, intervalCap: 1, concurrency: 1 })
   }
 
   setAgent(proxy: string) {
@@ -45,24 +46,6 @@ class Requset {
     }
   }
 
-  async _send(options: any) {
-    const requestOptions
-      = typeof options === 'string'
-        ? {
-            url: options,
-          }
-        : options
-
-    const res = await got({
-      ...requestOptions,
-      cookieJar: this.cookieJar,
-      agent: this.agent,
-    }).catch((e) => {
-      throw e
-    })
-    return res
-  }
-
   async send(options: any) {
     const requestOptions
       = typeof options === 'string'
@@ -71,13 +54,14 @@ class Requset {
           }
         : options
 
-    const res = await got({
-      ...requestOptions,
-      cookieJar: this.cookieJar,
-      agent: this.agent,
-    }).catch((e) => {
-      throw e
+    const res = await this.queue.add(async () => {
+      return await got({
+        ...requestOptions,
+        cookieJar: this.cookieJar,
+        agent: this.agent,
+      })
     })
+
     return res
   }
 }

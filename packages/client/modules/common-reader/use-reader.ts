@@ -12,6 +12,7 @@ interface CommonReaderState {
     title: string
   }>
   loading: boolean
+  currentPath: string
 }
 
 export function useCommonReader() {
@@ -22,6 +23,7 @@ export function useCommonReader() {
     navs: [],
     contents: {},
     loading: false,
+    currentPath: '',
   })
 
   const initListen = () => {
@@ -30,6 +32,14 @@ export function useCommonReader() {
       switch (data.path) {
         case 'reader:common:get_nav:res':
           state.navs = data.data
+          for (const nav of state.navs) {
+            state.contents[nav.path] = {
+              path: nav.path,
+              content: '',
+              title: nav.name,
+            }
+          }
+          state.currentPath = state.navs[0].path
           sendMessage({
             path: 'reader:common:content:req',
             data: {
@@ -48,8 +58,11 @@ export function useCommonReader() {
             title,
           }
           state.loading = false
-          if (scroll)
-            scroller.value?.scrollToItem(path)
+
+          if (scroll) {
+            const index = state.navs.findIndex(item => item.path === path)
+            scroller.value?.scrollToItem(index)
+          }
 
           break
         }
