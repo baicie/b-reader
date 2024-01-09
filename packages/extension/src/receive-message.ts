@@ -109,10 +109,12 @@ async function receiveCommonReaderContent(book: MessageTypeOnlineContentReq['dat
       scroll: book.scroll,
       title: book.title,
     })
-    stop()
   }
   catch (error) {
     berror(error)
+  }
+  finally {
+    stop()
   }
 }
 
@@ -132,10 +134,12 @@ async function receiveCommonReaderNav(book: Book, config: BReaderContext, webvie
     }
 
     await sendMessage(webview, 'reader:common:get_nav:res', navs)
-    stop()
   }
   catch (error) {
     berror(error)
+  }
+  finally {
+    stop()
   }
 }
 
@@ -145,10 +149,12 @@ async function receiveNav(bookId: string, config: BReaderContext, webview: Webvi
     const { getValue } = useDatabase(config)
     const cache = await getValue<Epub>(`${StoreKeys.cache}/${bookId}`)
     await sendMessage(webview, 'snedNav', cache.nva)
-    stop()
   }
   catch (error) {
     berror(error)
+  }
+  finally {
+    stop()
   }
 }
 
@@ -160,10 +166,12 @@ async function receiveBook(book: BookConfig, config: BReaderContext) {
     const { getValue } = useDatabase(config)
     const res = await getValue<Record<string, Book>>(StoreKeys.book)
     await sendMessageToAll('bookself', 'bookInfor', res)
-    stop()
   }
   catch (error) {
     berror(error)
+  }
+  finally {
+    stop()
   }
 }
 
@@ -173,10 +181,12 @@ async function receiveBookInfor(config: BReaderContext, webview: Webview) {
     const { getValue } = useDatabase(config)
     const res = await getValue<Record<string, Book>>(StoreKeys.book)
     await sendMessage(webview, 'bookInfor', res)
-    stop()
   }
   catch (error) {
     berror(error)
+  }
+  finally {
+    stop()
   }
 }
 
@@ -184,10 +194,12 @@ async function openWebview(data: string) {
   try {
     start('打开中...')
     await commands.executeCommand(`b-reader.local.${data}`, data)
-    stop()
   }
   catch (error) {
     berror(error)
+  }
+  finally {
+    stop()
   }
 }
 
@@ -203,10 +215,12 @@ async function receiveOpenBook(bookId: string, config: BReaderContext) {
         await commands.executeCommand(Commands.openCommonReader, bookinfo)
         break
     }
-    stop()
   }
   catch (error) {
     berror(error)
+  }
+  finally {
+    stop()
   }
 }
 
@@ -219,10 +233,12 @@ async function receiveContent(data: MessageTypeGetContent['data'], config: BRead
     const chapter = await bookInstance.getContent()
     await sendMessage(webview, 'sendContent', chapter)
     // cache
-    stop()
   }
   catch (error) {
     berror(error)
+  }
+  finally {
+    stop()
   }
 }
 
@@ -231,10 +247,12 @@ async function receiveOnlieSearch(data: string, config: BReaderContext, webview:
     start('搜索中...')
     const res = await search(config.biquge!, data)
     await sendMessage(webview, 'online:search:res', res)
-    stop()
   }
   catch (error) {
     berror(error)
+  }
+  finally {
+    stop()
   }
 }
 
@@ -250,10 +268,12 @@ async function receiveOnlineReadReq(data: SearchOnlineResult, config: BReaderCon
 
     const _book = await writeBookInfor(book, config, false)
     await commands.executeCommand(Commands.openCommonReader, _book)
-    stop()
   }
   catch (error) {
     berror(error)
+  }
+  finally {
+    stop()
   }
 }
 
@@ -271,9 +291,11 @@ async function receiveOnlineAddBookshelfReq(data: SearchOnlineResult, config: BR
     const { getValue } = useDatabase(config)
     const res = await getValue<Record<string, Book>>(StoreKeys.book)
     await sendMessageToAll('bookself', 'bookInfor', res)
-    stop()
   }
   catch (error) {
     berror(error)
+  }
+  finally {
+    stop()
   }
 }

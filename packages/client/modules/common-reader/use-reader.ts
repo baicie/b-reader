@@ -1,4 +1,4 @@
-import { reactive, ref, toRaw } from 'vue'
+import { reactive, ref, shallowReactive, toRaw } from 'vue'
 import type { Book, MessageType, SearchOnlineResult } from '@b-reader/utils'
 import { useAppStore } from '../../src/store/app'
 import { getDataFromHtml } from '../../src/utils'
@@ -18,10 +18,10 @@ interface CommonReaderState {
 export function useCommonReader() {
   const { initApp: init, sendMessage } = useAppStore()
   const scroller = ref()
-  const state = reactive<CommonReaderState>({
+  const state = shallowReactive<CommonReaderState>({
     init: {},
     navs: [],
-    contents: {},
+    contents: shallowReactive({}),
     loading: false,
     currentPath: '',
   })
