@@ -1,9 +1,8 @@
 <script lang='ts' setup>
+import type { SearchOnlineResult } from '@b-reader/utils'
 import { ConfigProvider, Layout, LayoutContent, LayoutSider, Tree } from 'ant-design-vue'
 import type { DataNode, EventDataNode, TreeProps } from 'ant-design-vue/es/tree'
-import { computed, onBeforeMount, reactive } from 'vue'
-import type { SearchOnlineResult } from '@b-reader/utils'
-import { useThrottleFn } from '@vueuse/core'
+import { computed, onBeforeMount } from 'vue'
 import { locale, theme } from '../../src/theme'
 import { useCommonReader } from './use-reader'
 

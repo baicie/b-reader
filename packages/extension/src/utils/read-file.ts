@@ -35,7 +35,7 @@ export async function writeBook(book: BookConfig, config: BReaderContext) {
   }
 }
 
-export async function writeBookInfor(book: BookConfig, config: BReaderContext) {
+export async function writeBookInfor(book: BookConfig, config: BReaderContext, save = true) {
   const { setValue, getValue } = useDatabase(config)
   const bookid = crypto.createHash('md5').update(book.path, 'utf-8').digest('hex')
   const _book: Book = {
@@ -47,6 +47,9 @@ export async function writeBookInfor(book: BookConfig, config: BReaderContext) {
 
   if (result && !_book.img)
     _book.img = await result.getCover?.() ?? ''
+
+  if (!save)
+    return _book
 
   const bookStore = await getValue<Record<string, Book>>(StoreKeys.book)
 

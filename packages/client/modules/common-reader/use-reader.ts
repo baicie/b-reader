@@ -49,6 +49,8 @@ export function useCommonReader() {
               title: state.navs[0].name,
             },
           })
+          // eslint-disable-next-line no-console
+          console.log('navs', state.navs)
           break
         case 'reader:common:content:res': {
           const { path, content, scroll, title } = data.data

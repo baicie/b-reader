@@ -7,9 +7,16 @@ export function useMessage() {
     window.showInformationMessage(message)
   }
 
-  function berror(message: string) {
+  function berror(err: Error | string) {
+    let message = ''
+    if (err instanceof Error)
+      message = `${err.message}\n${err.stack}`
+
+    else
+      message = err
+
     window.showErrorMessage(message)
-    error(message)
+    error(err)
   }
 
   function bwarn(message: string) {
@@ -23,39 +30,35 @@ export function useMessage() {
   }
 }
 
-export function useProgress(title?: string) {
-  const options: ProgressOptions = {
-    location: ProgressLocation.Notification,
-    title: title ?? 'B-Reader',
+export function useProgress(options: ProgressOptions = {
+  location: ProgressLocation.Notification,
+}) {
+  let isStop = false
+  const _options: ProgressOptions = {
+    ...options,
+    title: 'Loading...',
   }
 
-  function start(message: string) {
-    window.withProgress(
-      {
-        location: 15,
-        title: message,
-        cancellable: true,
-      },
-      (progress, token) => {
-        token.onCancellationRequested(() => {
-          // eslint-disable-next-line no-console
-          console.log('User canceled the long running operation')
-        })
-
-        progress.report({ increment: 0 })
-
-        return new Promise<void>((resolve) => {
-          setTimeout(() => {
-            resolve()
-          }, 1000)
-        })
-      },
-    )
+  function start(message?: string) {
+    isStop = false
+    if (message)
+      _options.title = message
+    window.withProgress(_options, async () => {
+      await new Promise((resolve) => {
+        setInterval(() => {
+          if (isStop)
+            resolve(1)
+        }, 100)
+      })
+    })
   }
 
-  function stop() {}
+  function stop() {
+    isStop = true
+  }
 
   return {
     start,
+    stop,
   }
 }
