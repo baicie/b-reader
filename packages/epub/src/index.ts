@@ -114,35 +114,27 @@ export class Epub {
   }
 
   private async parseConent(options?: ParserOptions) {
-    try {
-      for (const item of this.spine ?? []) {
-        const manifest = this.manifest?.find(manifest => manifest.id === item.idref)
-        if (manifest && manifest.href) {
-          const filePath = resolveId(this.fullPath, manifest?.href)
-          const content = await this.usezip.fileFileContent(filePath)
-          const xml = await this.usexml.parse(content, {
-            preserveChildrenOrder: true,
-            explicitChildren: true,
-            ...options,
-          })
-          if (!xml)
-            continue
-          this.traverseImages(xml, filePath).then(() => {
-            const temp = expandedData(xml)
-            const result = {
-              id: manifest.href,
-              content: temp,
-            }
-            this.content.push(result)
-          }).catch((error) => {
-            console.error('traverseImages error', error)
-          })
+    for (const item of this.spine ?? []) {
+      const manifest = this.manifest?.find(manifest => manifest.id === item.idref)
+      if (manifest && manifest.href) {
+        const filePath = resolveId(this.fullPath, manifest?.href)
+        const content = await this.usezip.fileFileContent(filePath)
+        const xml = await this.usexml.parse(content, {
+          preserveChildrenOrder: true,
+          explicitChildren: true,
+          ...options,
+        })
+
+        if (!xml)
+          continue
+        await this.traverseImages(xml, filePath)
+        const temp = expandedData(xml)
+        const result = {
+          id: manifest.href,
+          content: temp,
         }
+        this.content.push(result)
       }
-    }
-    catch (error) {
-      // eslint-disable-next-line no-console
-      console.log('parseConent error', error)
     }
   }
 
@@ -169,7 +161,7 @@ export class Epub {
   }
 
   // 将 img 标签中的图片转换为 base64
-  private async updateImageToBase64(imgNode, importer: string = this.fullPath) {
+  private async updateImageToBase64(imgNode: any, importer: string = this.fullPath) {
     if (imgNode && imgNode[0] && imgNode[0].$ && (imgNode[0].$.src || imgNode[0].$['xlink:href']) && !imgNode[0].$.base64) {
       const imageFilePath = resolveId(importer, imgNode[0].$.src || imgNode[0].$['xlink:href'])
       try {

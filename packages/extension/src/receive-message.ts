@@ -16,12 +16,13 @@ import { isEmpty } from 'lodash'
 import { parseBook } from './book-parse'
 import { Commands, StoreKeys } from './config'
 import { useDatabase } from './db'
-import { useMessage } from './message'
+import { useMessage, useProgress } from './message'
 import { getCacheBook } from './utils/book'
 import { writeBook, writeBookInfor } from './utils/read-file'
 import { sendMessage, sendMessageToAll } from './utils/send-message'
 
 const { berror } = useMessage()
+const { start, stop } = useProgress()
 
 export async function receiveMessage(
   webview: Webview,
@@ -65,7 +66,7 @@ export async function receiveMessage(
           receiveOnlieSearch(message.data, config, webview)
           break
         case 'online:read:req':
-          receiveOnlineReadReq(message.data)
+          receiveOnlineReadReq(message.data, config)
           break
         case 'online:add_bookshelf:req':
           receiveOnlineAddBookshelfReq(message.data, config)
@@ -85,6 +86,7 @@ export async function receiveMessage(
 
 async function receiveCommonReaderContent(book: MessageTypeOnlineContentReq['data'], config: BReaderContext, webview: Webview) {
   try {
+    start(`获取章节内容${book.title}`)
     const { getValue, setValue } = useDatabase(config)
     const cachePath = `${StoreKeys.cache}/${book.md5}`
     const cache = await getValue<any>(cachePath)
@@ -107,6 +109,7 @@ async function receiveCommonReaderContent(book: MessageTypeOnlineContentReq['dat
       scroll: book.scroll,
       title: book.title,
     })
+    stop()
   }
   catch (error) {
     berror(error)
@@ -114,89 +117,163 @@ async function receiveCommonReaderContent(book: MessageTypeOnlineContentReq['dat
 }
 
 async function receiveCommonReaderNav(book: Book, config: BReaderContext, webview: Webview) {
-  const { getValue, setValue } = useDatabase(config)
-  const cachePath = `${StoreKeys.cache}/${book.md5}`
-  const cache = await getValue<any>(cachePath)
-  let navs = cache?.navs
-  if (isEmpty(navs) || !navs) {
-    navs = await getChapter(config.biquge!, book.config.path)
-    await setValue(cachePath, {
-      ...cache,
-      navs,
-    })
-  }
-
-  await sendMessage(webview, 'reader:common:get_nav:res', navs)
-}
-
-async function receiveNav(bookId: string, config: BReaderContext, webview: Webview) {
-  const { getValue } = useDatabase(config)
-  const cache = await getValue<Epub>(`${StoreKeys.cache}/${bookId}`)
-  await sendMessage(webview, 'snedNav', cache.nva)
-}
-
-async function receiveBook(book: BookConfig, config: BReaderContext) {
-  await writeBook(book, config)
-  await writeBookInfor(book, config)
-  const { getValue } = useDatabase(config)
-  const res = await getValue<Record<string, Book>>(StoreKeys.book)
-  await sendMessageToAll('bookself', 'bookInfor', res)
-}
-
-async function receiveBookInfor(config: BReaderContext, webview: Webview) {
-  const { getValue } = useDatabase(config)
-  const res = await getValue<Record<string, Book>>(StoreKeys.book)
-  await sendMessage(webview, 'bookInfor', res)
-}
-
-async function openWebview(data: string) {
-  await commands.executeCommand(`b-reader.local.${data}`, data)
-}
-
-async function receiveOpenBook(bookId: string, config: BReaderContext) {
-  const bookinfo = await getCacheBook(bookId, config)
-  switch (bookinfo.config.type) {
-    case 'application/epub+zip':
-      await commands.executeCommand(Commands.openReader, bookinfo)
-      break
-    default:
-      await commands.executeCommand(Commands.openCommonReader, bookinfo)
-      break
-  }
-}
-
-// 获取章节内容
-async function receiveContent(data: MessageTypeGetContent['data'], config: BReaderContext, webview: Webview) {
-  const bookinfo = await getCacheBook(data.bookId, config)
-  const bookInstance = await parseBook(bookinfo, config)
-  const chapter = await bookInstance.getContent()
-  await sendMessage(webview, 'sendContent', chapter)
-  // cache
-}
-
-async function receiveOnlieSearch(data: string, config: BReaderContext, webview: Webview) {
   try {
-    const res = await search(config.biquge!, data)
-    await sendMessage(webview, 'online:search:res', res)
+    start(`获取目录${book.config.name}`)
+    const { getValue, setValue } = useDatabase(config)
+    const cachePath = `${StoreKeys.cache}/${book.md5}`
+    const cache = await getValue<any>(cachePath)
+    let navs = cache?.navs
+    if (isEmpty(navs) || !navs) {
+      navs = await getChapter(config.biquge!, book.config.path)
+      await setValue(cachePath, {
+        ...cache,
+        navs,
+      })
+    }
+
+    await sendMessage(webview, 'reader:common:get_nav:res', navs)
+    stop()
   }
   catch (error) {
     berror(error)
   }
 }
 
-async function receiveOnlineReadReq(data: SearchOnlineResult) {
-  await commands.executeCommand(Commands.openCommonReader, data)
+async function receiveNav(bookId: string, config: BReaderContext, webview: Webview) {
+  try {
+    start('获取目录')
+    const { getValue } = useDatabase(config)
+    const cache = await getValue<Epub>(`${StoreKeys.cache}/${bookId}`)
+    await sendMessage(webview, 'snedNav', cache.nva)
+    stop()
+  }
+  catch (error) {
+    berror(error)
+  }
+}
+
+async function receiveBook(book: BookConfig, config: BReaderContext) {
+  try {
+    start('下载中...')
+    await writeBook(book, config)
+    await writeBookInfor(book, config)
+    const { getValue } = useDatabase(config)
+    const res = await getValue<Record<string, Book>>(StoreKeys.book)
+    await sendMessageToAll('bookself', 'bookInfor', res)
+    stop()
+  }
+  catch (error) {
+    berror(error)
+  }
+}
+
+async function receiveBookInfor(config: BReaderContext, webview: Webview) {
+  try {
+    start('获取书架中...')
+    const { getValue } = useDatabase(config)
+    const res = await getValue<Record<string, Book>>(StoreKeys.book)
+    await sendMessage(webview, 'bookInfor', res)
+    stop()
+  }
+  catch (error) {
+    berror(error)
+  }
+}
+
+async function openWebview(data: string) {
+  try {
+    start('打开中...')
+    await commands.executeCommand(`b-reader.local.${data}`, data)
+    stop()
+  }
+  catch (error) {
+    berror(error)
+  }
+}
+
+async function receiveOpenBook(bookId: string, config: BReaderContext) {
+  try {
+    start('打开中...')
+    const bookinfo = await getCacheBook(bookId, config)
+    switch (bookinfo.config.type) {
+      case 'application/epub+zip':
+        await commands.executeCommand(Commands.openReader, bookinfo)
+        break
+      default:
+        await commands.executeCommand(Commands.openCommonReader, bookinfo)
+        break
+    }
+    stop()
+  }
+  catch (error) {
+    berror(error)
+  }
+}
+
+// 获取章节内容
+async function receiveContent(data: MessageTypeGetContent['data'], config: BReaderContext, webview: Webview) {
+  try {
+    start('获取章节内容')
+    const bookinfo = await getCacheBook(data.bookId, config)
+    const bookInstance = await parseBook(bookinfo, config)
+    const chapter = await bookInstance.getContent()
+    await sendMessage(webview, 'sendContent', chapter)
+    // cache
+    stop()
+  }
+  catch (error) {
+    berror(error)
+  }
+}
+
+async function receiveOnlieSearch(data: string, config: BReaderContext, webview: Webview) {
+  try {
+    start('搜索中...')
+    const res = await search(config.biquge!, data)
+    await sendMessage(webview, 'online:search:res', res)
+    stop()
+  }
+  catch (error) {
+    berror(error)
+  }
+}
+
+async function receiveOnlineReadReq(data: SearchOnlineResult, config: BReaderContext) {
+  try {
+    start('打开中...')
+    const book: BookConfig = {
+      ...data,
+      name: data.title,
+      path: data.path,
+      type: 'online/biquge',
+    }
+
+    const _book = await writeBookInfor(book, config, false)
+    await commands.executeCommand(Commands.openCommonReader, _book)
+    stop()
+  }
+  catch (error) {
+    berror(error)
+  }
 }
 
 async function receiveOnlineAddBookshelfReq(data: SearchOnlineResult, config: BReaderContext) {
-  const book: BookConfig = {
-    ...data,
-    name: data.title,
-    path: data.path,
-    type: 'online/biquge',
-  }
+  try {
+    start('添加中...')
+    const book: BookConfig = {
+      ...data,
+      name: data.title,
+      path: data.path,
+      type: 'online/biquge',
+    }
 
-  writeBookInfor(book, config).catch((error) => {
+    await writeBookInfor(book, config)
+    const { getValue } = useDatabase(config)
+    const res = await getValue<Record<string, Book>>(StoreKeys.book)
+    await sendMessageToAll('bookself', 'bookInfor', res)
+    stop()
+  }
+  catch (error) {
     berror(error)
-  })
+  }
 }

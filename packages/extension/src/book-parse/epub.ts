@@ -11,21 +11,15 @@ export async function parseEpub(
   config: BReaderContext,
   bookCache: BookCache,
 ) {
-  try {
-    const { config: bookConfig } = book
-    const epub = new Epub(bookConfig.path)
-    await epub.parse()
+  const { config: bookConfig } = book
+  const epub = new Epub(bookConfig.path)
+  await epub.parse()
 
-    // cache
-    // 先去json中找，如果没有再去epub 实例中找
-    // 意味着每次都要构建一个epub实例
-    bookCache[book.md5] = epub
-    cacheBook(book, config, epub)
-  }
-  catch (error) {
-    // eslint-disable-next-line no-console
-    console.log('parseEpub error', error)
-  }
+  // cache
+  // 先去json中找，如果没有再去epub 实例中找
+  // 意味着每次都要构建一个epub实例
+  bookCache[book.md5] = epub
+  cacheBook(book, config, epub)
 }
 
 async function cacheBook(
