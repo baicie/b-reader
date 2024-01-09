@@ -104,6 +104,8 @@ async function receiveCommonReaderContent(book: MessageTypeOnlineContentReq['dat
     await sendMessage(webview, 'reader:common:content:res', {
       path: book.path,
       content,
+      scroll: book.scroll,
+      title: book.title,
     })
   }
   catch (error) {

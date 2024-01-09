@@ -1,13 +1,11 @@
 <script lang='ts' setup>
-import { ConfigProvider, Layout, LayoutContent, LayoutSider, List, ListItem, Skeleton, Tree } from 'ant-design-vue'
+import { ConfigProvider, Layout, LayoutContent, LayoutSider, Tree } from 'ant-design-vue'
 import type { DataNode, EventDataNode, TreeProps } from 'ant-design-vue/es/tree'
-import { computed, onBeforeMount } from 'vue'
+import { computed, onBeforeMount, ref, watchEffect } from 'vue'
 import { locale, theme } from '../../src/theme'
-import { scrollToElement } from '../../src/utils'
 import { useCommonReader } from './use-reader'
 
-const { initApp, state, sendMessage } = useCommonReader()
-
+const { initApp, state, sendMessage, scroller } = useCommonReader()
 const filedName: TreeProps['fieldNames'] = {
   children: 'children',
   title: 'name',
@@ -15,9 +13,10 @@ const filedName: TreeProps['fieldNames'] = {
 }
 
 const _content = computed(() => {
-  return Object.entries(state.contents).map(([key, value]) => ({
-    id: key,
-    content: value,
+  return Object.entries(state.contents).map(([, value]) => ({
+    id: value.path,
+    content: value.content,
+    title: value.title,
   }))
 })
 
@@ -25,23 +24,43 @@ function handleClickChapter(selectedKeys: string[], e: { node: EventDataNode }) 
   if (selectedKeys.length) {
     // eslint-disable-next-line no-console
     console.log(selectedKeys, e)
-    const id = selectedKeys[0].split('#').length > 1 ? selectedKeys[0].split('#')[1] : selectedKeys[0]
-    scrollToElement(id)
+    const name = selectedKeys[0].split('#').length > 1 ? selectedKeys[0].split('#')[1] : selectedKeys[0]
+    const targetElement = document.getElementById(name)
+    // 使用 scrollIntoView 方法滚动到目标元素
+    if (targetElement) {
+      targetElement.scrollIntoView({
+        behavior: 'smooth', // 可选，滚动行为，可以是 'auto', 'smooth', 'instant'
+      })
+    }
+    else {
+      const item = state.navs.find(item => item.path === selectedKeys[0])
+      if (item) {
+        sendMessage({
+          path: 'reader:common:content:req',
+          data: {
+            md5: state.init.md5!,
+            path: item.path,
+            scroll: true,
+            title: item.name,
+          },
+        })
+      }
+    }
   }
 }
 
-function onListUpdate(startIndex: number, endIndex: number, visibleStartIndex: number, visibleEndIndex: number) {
-  console.log('onListUpdate', startIndex, endIndex, visibleStartIndex, visibleEndIndex)
+function onListUpdate() {
   const lastItem = _content.value[_content.value.length - 1]
   const nextIndex = state.navs.findIndex(item => item.path === lastItem.id)
   const next = state.navs[nextIndex + 1]
   if (next) {
-    console.log('next', next)
     sendMessage({
       path: 'reader:common:content:req',
       data: {
         md5: state.init.md5!,
         path: next.path,
+        scroll: false,
+        title: next.name,
       },
     })
   }
@@ -62,9 +81,10 @@ onBeforeMount(() => {
       </LayoutSider>
       <LayoutContent :style="{ marginLeft: '250px', padding: '24px' }">
         <DynamicScroller
+          ref="scroller"
           class="scroller"
           :items="_content"
-          :min-item-size="2"
+          :min-item-size="50"
           page-mode
           :update-interval="100"
           @scroll-end="onListUpdate"
@@ -78,7 +98,10 @@ onBeforeMount(() => {
               ]"
               :data-index="index"
             >
-              <div :id="item.id" v-html="item.content" />
+              <h1 :id="item.id">
+                {{ item.title }}
+              </h1>
+              <div v-html="item.content" />
             </DynamicScrollerItem>
           </template>
         </DynamicScroller>

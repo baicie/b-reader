@@ -133,6 +133,8 @@ export interface MessageTypeOnlineContentReq {
   data: {
     md5: string
     path: string
+    scroll: boolean
+    title: string
   }
 }
 
@@ -141,6 +143,8 @@ export interface MessageTypeOnlineContentRes {
   data: {
     path: string
     content: string
+    scroll?: boolean
+    title: string
   }
 }
 
@@ -192,4 +196,5 @@ export interface SearchOnlineResult {
   size: string
   updateTime: string
   status: string
+  name: string
 }
