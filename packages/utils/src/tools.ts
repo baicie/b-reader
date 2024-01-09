@@ -38,5 +38,12 @@ export function getWebViewContent(
     },
   )
 
-  return html
+  return data ? addDataToHtml(html, data) : html
+}
+
+function addDataToHtml(html: string, data: any) {
+  const newData = `<comment style="display: none;">${JSON.stringify(data)}</comment>`
+  const modifiedHtml = html.replace('</body>', `${newData}</body>`)
+
+  return modifiedHtml
 }

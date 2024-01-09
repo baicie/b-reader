@@ -2,7 +2,9 @@ import type { ExtensionContext } from 'vscode'
 import type { BReaderContext } from '@b-reader/utils'
 import OpenReader from './open-reader'
 import OpenBookSelf from './open-bookself'
-import openWelcome from './open-welcome'
+import OpenWelcome from './open-welcome'
+import SearchOnline from './open-search-online'
+import CommonReader from './open-common-reader'
 
 export function regisiterCommands(
   context: ExtensionContext,
@@ -10,5 +12,7 @@ export function regisiterCommands(
 ) {
   OpenReader(context, config)
   OpenBookSelf(context, config)
-  openWelcome(context, config)
+  OpenWelcome(context, config)
+  SearchOnline(context, config)
+  CommonReader(context, config)
 }

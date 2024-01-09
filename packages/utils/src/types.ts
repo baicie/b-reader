@@ -15,6 +15,14 @@ export type MessageType =
   | MessageTypeSendNav
   | MessageTypeGetContent
   | MessageTypeSendContent
+  | MessageTypeSearchOnline
+  | MessageTypeSearchOnlineResult
+  | MessageTypeOnlineReadReq
+  | MessageTypeOnlineAddToBookshelfReq
+  | MessageTypeCommonReaderGetNavReq
+  | MessageTypeOnlineAddToBookshelfRes
+  | MessageTypeOnlineContentReq
+  | MessageTypeOnlineContentRes
 
 export interface MessageTypeConfig {
   path: 'config'
@@ -85,14 +93,59 @@ export interface MessageTypeGetContent {
   }
 }
 
-// interface ContentNode {
-//   content: string
-//   href: string
-// }
-
 export interface MessageTypeSendContent {
   path: 'sendContent'
   data: any[]
+}
+
+export interface MessageTypeSearchOnline {
+  path: 'online:search'
+  data: string
+}
+
+export interface MessageTypeSearchOnlineResult {
+  path: 'online:search:res'
+  data: SearchOnlineResult[]
+}
+
+export interface MessageTypeOnlineReadReq {
+  path: 'online:read:req'
+  data: SearchOnlineResult
+}
+
+export interface MessageTypeOnlineAddToBookshelfReq {
+  path: 'online:add_bookshelf:req'
+  data: SearchOnlineResult
+}
+
+export interface MessageTypeCommonReaderGetNavReq {
+  path: 'reader:common:get_nav:req'
+  data: Book
+}
+
+export interface MessageTypeOnlineAddToBookshelfRes {
+  path: 'reader:common:get_nav:res'
+  data: SearchOnlineResult[]
+}
+
+export interface MessageTypeOnlineContentReq {
+  path: 'reader:common:content:req'
+  data: {
+    md5: string
+    path: string
+    scroll: boolean
+    title: string
+  }
+}
+
+export interface MessageTypeOnlineContentRes {
+  path: 'reader:common:content:res'
+  data: {
+    path: string
+    content: string
+    scroll?: boolean
+    title: string
+  }
 }
 
 // message
@@ -101,12 +154,14 @@ export interface BookConfig {
   name: string
   path: string
   type?: BookType
+  [key: string]: any
 }
 
 export interface Book {
   config: BookConfig
   md5: string
   img: string
+  [key: string]: any
 }
 
 export type BReaderContext = Partial<{
@@ -122,11 +177,24 @@ export type BReaderContext = Partial<{
 
 export interface BReaderContextInFile {
   unzip: boolean
+  biquge: string
 }
 
-export type BookType = 'application/epub+zip' | 'application/pdf'
+export type BookType = 'application/epub+zip' | 'application/pdf' | 'online/biquge'
 
 // user
 export interface BReaderUser {
   welcome: boolean
+}
+
+// sreach result
+export interface SearchOnlineResult {
+  title: string
+  author: string
+  path: string
+  latestChapter: string
+  size: string
+  updateTime: string
+  status: string
+  name: string
 }

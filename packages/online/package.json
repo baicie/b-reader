@@ -1,12 +1,25 @@
 {
   "name": "@b-reader/online",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "keywords": [],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup",
+    "dev": "pnpm run build --watch"
+  },
+  "dependencies": {
+    "cheerio": "1.0.0-rc.12",
+    "got": "^11.8.5",
+    "hpagent": "^0.1.2",
+    "p-queue": "^6.6.2",
+    "tough-cookie": "^4.0.0"
+  },
+  "config": {
+    "type": "package",
+    "publish": true
+  }
 }

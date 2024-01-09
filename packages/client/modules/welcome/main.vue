@@ -1,12 +1,15 @@
 <script lang="ts" setup>
-import { Button } from 'ant-design-vue'
+import { Button, ConfigProvider } from 'ant-design-vue'
+import { locale, theme } from '../../src/theme'
 </script>
 
 <template>
-  <div>Welcome</div>
-  <Button type="primary">
-    Primary Button
-  </Button>
+  <ConfigProvider :locale="locale" :theme="theme" class="flex">
+    <div>Welcome</div>
+    <Button type="primary">
+      Primary Button
+    </Button>
+  </ConfigProvider>
 </template>
 
 <style lang="scss" scoped></style>
