@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import type { TreeProps } from 'ant-design-vue'
-import { ConfigProvider, Layout, LayoutContent, LayoutSider, Tree, message } from 'ant-design-vue'
-import type { DataNode, EventDataNode } from 'ant-design-vue/es/tree'
+import { ConfigProvider, Layout, LayoutContent, LayoutSider, Tree } from 'ant-design-vue'
 import { get } from 'lodash'
-import { computed, onBeforeMount, watchEffect } from 'vue'
+import { computed, onBeforeMount } from 'vue'
 import { locale, theme } from '../../src/theme'
+import ReaderContainer from '../../src/components/reader/reader-container.vue'
 import { RenderItem2 } from './render-item'
 import { useEpubRender } from './use-render'
 
@@ -30,9 +30,27 @@ const item = computed(() => {
   }
 })
 
+const height = computed(() => window.innerHeight)
+
+const navs = computed<any>(() => state.navs)
+
 function handleClickChapter(selectedKeys: string[]) {
   if (selectedKeys.length)
     getContent(selectedKeys[0])
+}
+
+function handleNext() {
+  const index = navs.value.findIndex(item => item.content === state.currentPath)
+  if (index === navs.value.length - 1)
+    return
+  handleClickChapter([navs.value[index + 1].content])
+}
+
+function handlePre() {
+  const index = navs.value.findIndex(item => item.content === state.currentPath)
+  if (index === 0)
+    return
+  handleClickChapter([navs.value[index - 1].content])
 }
 
 onBeforeMount(() => {
@@ -46,15 +64,27 @@ function getBodyItem(item: any) {
 
 <template>
   <ConfigProvider :locale="locale" :theme="theme">
-    <Layout>
-      <LayoutSider :width="250" :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0 }">
-        <template v-if="state.nva.length">
-          <Tree :tree-data="state.nva as any" block-node default-expand-all selectable :field-names="filedName" @select="handleClickChapter" />
+    <ReaderContainer
+      @next="handleNext"
+      @pre="handlePre"
+    >
+      <template #menus>
+        <template v-if="navs.length">
+          <Tree
+            :tree-data="navs"
+            block-node
+            default-expand-all
+            selectable
+            :field-names="filedName"
+            :height="height"
+            @select="handleClickChapter"
+          />
         </template>
-      </LayoutSider>
-      <LayoutContent :style="{ marginLeft: '250px', padding: '24px' }">
+      </template>
+
+      <template #default>
         <RenderItem2 :items="getBodyItem(item)" :root-id="item.id" />
-      </LayoutContent>
-    </Layout>
+      </template>
+    </ReaderContainer>
   </ConfigProvider>
 </template>

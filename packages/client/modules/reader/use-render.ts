@@ -7,7 +7,7 @@ import { getDataFromHtml, scrollToElement } from '../../src/utils'
 
 interface RenderData {
   init: Partial<Book>
-  nva: Nav[]
+  navs: Nav[]
   contents: Record<string, {
     id: string
     content: any
@@ -22,7 +22,7 @@ export function useEpubRender() {
 
   const state = reactive<RenderData>({
     init: {},
-    nva: [],
+    navs: [],
     contents: {},
     currentPath: '',
   })
@@ -49,8 +49,8 @@ export function useEpubRender() {
       const data = event.data as MessageType
       switch (data.path) {
         case 'snedNav':
-          state.nva = data.data
-          getContent(state.nva[0].content)
+          state.navs = data.data
+          getContent(state.navs[0].content)
           break
         case 'sendContent':
           message.destroy()
