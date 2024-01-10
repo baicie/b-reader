@@ -1,53 +1,63 @@
 import type { Nav } from '@b-reader/epub'
 import type { Book, MessageType } from '@b-reader/utils'
 import { message } from 'ant-design-vue'
-import { reactive, shallowReactive } from 'vue'
+import { reactive, ref, shallowReactive } from 'vue'
 import { useAppStore } from '../../src/store/app'
+import { getDataFromHtml, scrollToElement } from '../../src/utils'
 
 interface RenderData {
-  nva: Nav[]
-  contents: {
+  init: Partial<Book>
+  navs: Nav[]
+  contents: Record<string, {
     id: string
     content: any
-  }[]
+  }>
+  currentPath: string
 }
 
 export function useEpubRender() {
   const { initApp, sendMessage } = useAppStore()
-  const book = reactive<Partial<Book>>({
+
+  const scroller = ref()
+
+  const state = reactive<RenderData>({
+    init: {},
+    navs: [],
+    contents: {},
+    currentPath: '',
   })
 
-  const epub = shallowReactive<RenderData>({
-    nva: [],
-    contents: [],
-  })
+  const getContent = (src: string) => {
+    const [href, idname] = src.split('#')
+    state.currentPath = href
+    if (!state.contents[href]) {
+      sendMessage({
+        path: 'getContent',
+        data: {
+          href,
+          bookId: state.init.md5!,
+        },
+      })
+    }
+
+    if (idname)
+      scrollToElement(idname)
+  }
 
   const initListen = () => {
     window.addEventListener('message', (event) => {
       const data = event.data as MessageType
       switch (data.path) {
-        case 'initData':
-          // message.loading('正在加载书籍', 0)
-          Object.assign(book, data.data)
-          sendMessage({
-            path: 'getNav',
-            bookId: book.md5!,
-          })
-          sendMessage({
-            path: 'getContent',
-            data: {
-              // href,
-              bookId: book.md5!,
-            },
-          })
-          break
         case 'snedNav':
-          epub.nva = data.data
-          message.destroy()
+          state.navs = data.data
+          getContent(state.navs[0].content)
           break
         case 'sendContent':
           message.destroy()
-          epub.contents = data.data
+          for (const item of data.data)
+            state.contents[item.id] = item
+          // eslint-disable-next-line no-console
+          console.log('epub.contents', state.contents)
           break
       }
     })
@@ -57,15 +67,17 @@ export function useEpubRender() {
     message.loading('正在加载书籍', 0)
     initApp()
     initListen()
-
+    state.init = getDataFromHtml()
     sendMessage({
-      path: 'ready',
+      path: 'getNav',
+      bookId: state.init.md5!,
     })
   }
 
   return {
     initReader,
-    epub,
-    // getContent,
+    state,
+    scroller,
+    getContent,
   }
 }

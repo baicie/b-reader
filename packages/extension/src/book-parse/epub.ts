@@ -19,10 +19,10 @@ export async function parseEpub(
   // 先去json中找，如果没有再去epub 实例中找
   // 意味着每次都要构建一个epub实例
   bookCache[book.md5] = epub
-  cacheBook(book, config, epub)
+  // cacheBook(book, config, epub)
 }
 
-async function cacheBook(
+export async function cacheBook(
   book: Book,
   config: BReaderContext,
   epub: Epub,

@@ -5,7 +5,7 @@ import type { SearchOnlineResult } from '@b-reader/utils'
 import { locale, theme } from '../../src/theme'
 import { useSearch } from './use-search'
 
-const value = ref<string>('斗罗大陆')
+const value = ref<string>('')
 const { initApp, sendMessage, state } = useSearch()
 
 const columns = [

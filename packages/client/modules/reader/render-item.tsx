@@ -84,7 +84,7 @@ export const RenderItem2 = defineComponent({
       <Fragment>
         {
           items.value?.map((element) => {
-            const { '#name': tagName, $$: children, ...attributes } = element
+            const { '#name': tagName, $$: children, id: childId, ...attributes } = element
 
             if (Object.keys(attributes).includes('_')) {
               const { _, ...arts } = attributes
@@ -96,7 +96,7 @@ export const RenderItem2 = defineComponent({
               const childElements = children
                 ? <RenderItem2 items={children}></RenderItem2>
                 : null
-              return h(tagName, { ...attributes, id: id.value }, childElements as any)
+              return h(tagName, { ...attributes, id: childId || id.value }, childElements as any)
             }
           })
         }

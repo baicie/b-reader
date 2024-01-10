@@ -228,10 +228,14 @@ async function receiveOpenBook(bookId: string, config: BReaderContext) {
 async function receiveContent(data: MessageTypeGetContent['data'], config: BReaderContext, webview: Webview) {
   try {
     start('获取章节内容')
+    // eslint-disable-next-line no-console
+    console.time('获取章节内容')
     const bookinfo = await getCacheBook(data.bookId, config)
     const bookInstance = await parseBook(bookinfo, config)
-    const chapter = await bookInstance.getContent()
+    const chapter = await bookInstance.getContent(data.href)
     await sendMessage(webview, 'sendContent', chapter)
+    // eslint-disable-next-line no-console
+    console.timeEnd('获取章节内容')
     // cache
   }
   catch (error) {

@@ -86,7 +86,7 @@ export interface MessageTypeSendNav {
 export interface MessageTypeGetContent {
   path: 'getContent'
   data: {
-    // href: string
+    href: string
     bookId: string
     preHref?: string
     nextHref?: string
