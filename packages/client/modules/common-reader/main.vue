@@ -119,32 +119,6 @@ onBeforeMount(() => {
           {{ item.title }}
         </h1>
         <div v-html="item.content" />
-        <!-- <DynamicScroller
-          ref="scroller"
-          class="scroller"
-          :items="_content"
-          :min-item-size="50"
-          page-mode
-          emit-update
-          @scroll-end="onScrollend"
-          @update="onListUpdate"
-        >
-          <template #default="{ item, index, active }">
-            <DynamicScrollerItem
-              :item="item"
-              :active="active"
-              :size-dependencies="[
-                item.id,
-              ]"
-              :data-index="index"
-            >
-              <h1 :id="item.id">
-                {{ item.title }}
-              </h1>
-              <div v-html="item.content" />
-            </DynamicScrollerItem>
-          </template>
-        </DynamicScroller> -->
       </LayoutContent>
     </Layout>
   </ConfigProvider>
