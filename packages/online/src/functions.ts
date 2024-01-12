@@ -1,6 +1,6 @@
 import { load } from 'cheerio'
 import { request } from './index.js'
-
+// 牛逼
 export async function search(DOMAIN: string, keyword: string): Promise<any> {
   const result: any[] = []
   const url = `${DOMAIN}/modules/article/search.php?searchkey=${encodeURI(keyword)}`
