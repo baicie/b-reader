@@ -18,9 +18,7 @@ export const theme: ThemeConfig = {
   components: {
     Layout: {
       colorBgBody: 'var(--vscode-editor-background)',
-    },
-    Slider: {
-      // colorBgBar: 'var(--vscode-editor-background)',
+      colorBgHeader: 'var(--vscode-editor-background)',
     },
   },
 }

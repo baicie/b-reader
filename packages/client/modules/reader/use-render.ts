@@ -28,7 +28,7 @@ export function useEpubRender() {
   })
 
   const getContent = (src: string) => {
-    const [href, idname] = src.split('#')
+    const [href, idname] = src?.split('#')
     state.currentPath = href
     if (!state.contents[href]) {
       sendMessage({
@@ -50,7 +50,7 @@ export function useEpubRender() {
       switch (data.path) {
         case 'snedNav':
           state.navs = data.data
-          getContent(state.navs[0].content)
+          getContent(state.navs?.[0].content)
           break
         case 'sendContent':
           message.destroy()

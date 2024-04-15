@@ -93,20 +93,10 @@ onBeforeMount(() => {
 
 <template>
   <ConfigProvider :locale="locale" :theme="theme" class="flex">
-    <ReaderContainer
-      @next="handleNext"
-      @pre="handlePre"
-    >
+    <ReaderContainer @next="handleNext" @pre="handlePre">
       <template #menus>
-        <Tree
-          :tree-data="navs"
-          block-node
-          default-expand-all
-          selectable
-          :field-names="filedName"
-          :height="height"
-          @select="handleClickChapter"
-        />
+        <Tree :tree-data="navs" block-node default-expand-all selectable :field-names="filedName" :height="height"
+          @select="handleClickChapter" />
       </template>
 
       <template #default>
