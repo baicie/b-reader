@@ -66,7 +66,7 @@ function getBodyItem(item: any) {
   <ConfigProvider :locale="locale" :theme="theme">
     <ReaderContainer @next="handleNext" @pre="handlePre">
       <template #menus>
-        <template v-if="navs.length">
+        <template v-if="navs?.length">
           <Tree :tree-data="navs" block-node default-expand-all selectable :field-names="filedName" :height="height"
             @select="handleClickChapter" />
         </template>

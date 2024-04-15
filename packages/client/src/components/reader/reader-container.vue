@@ -53,9 +53,13 @@ function valueChange2(value: any) {
 
 <template>
   <Layout>
+    <div />
     <Affix :offset-top="0" :style="{ zIndex: '100' }">
       <LayoutHeader v-show="state.showHeader" :style="headerStyle">
-        <InputNumber v-model:value="state.fontSize" :bordered="false" :min="10" :max="42" :step="2" @change="valueChange">
+        <InputNumber
+          v-model:value="state.fontSize" :controls="false" :bordered="false" :min="10" :max="42" :step="2"
+          @change="valueChange"
+        >
           <template #upIcon>
             <ArrowUpOutlined />
           </template>
@@ -64,7 +68,10 @@ function valueChange2(value: any) {
           </template>
         </InputNumber>
 
-        <InputNumber v-model:value="state.paddingSlider" :bordered="false" :min="10" :max="200" :step="2" @change="valueChange2">
+        <InputNumber
+          v-model:value="state.paddingSlider" :controls="false" :bordered="false" :min="10" :max="200"
+          :step="2" @change="valueChange2"
+        >
           <template #upIcon>
             <ArrowUpOutlined />
           </template>
@@ -76,9 +83,7 @@ function valueChange2(value: any) {
     </Affix>
     <Layout>
       <LayoutSider
-        v-show="state.showSlider"
-        :width="250"
-        :style="{
+        v-show="state.showSlider" :width="250" :style="{
           overflow: 'auto',
           height: 'calc(100vh-20px)',
           position: 'fixed',
@@ -89,7 +94,9 @@ function valueChange2(value: any) {
       >
         <slot name="menus" />
       </LayoutSider>
-      <LayoutContent :style="{ marginLeft: state.showSlider ? '250px' : '0', padding: '24px', paddingTop: state.showHeader ? '40px' : '0' }">
+      <LayoutContent
+        :style="{ marginLeft: state.showSlider ? '250px' : '0', padding: '24px', paddingTop: state.showHeader ? '40px' : '0' }"
+      >
         <Dropdown trigger="contextmenu">
           <div :style="style">
             <slot name="default" />

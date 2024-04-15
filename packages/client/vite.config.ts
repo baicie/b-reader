@@ -54,7 +54,8 @@ export default defineConfig(() => {
       outDir: '../extension/vue-dist',
       rollupOptions: {
         external: ['vscode'],
-        input: {},
+        input: {
+        },
         output: {
           chunkFileNames: 'assets/[name].js',
           entryFileNames: 'assets/[name].js',
