@@ -11,6 +11,7 @@ const { t } = useI18n()
 const { initApp, sendMessage, config } = useAppStore()
 
 function beforeUpload(file: UploadFile & { path: string }) {
+  if (!file.path) return Promise.reject()
   sendMessage({
     path: 'book',
     data: {
