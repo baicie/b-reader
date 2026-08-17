@@ -1,7 +1,5 @@
 <script lang="ts" setup>
-import type { BookConfig } from '@b-reader/utils'
-import type { UploadFile } from 'ant-design-vue'
-import { Button, ButtonGroup, ConfigProvider, UploadDragger } from 'ant-design-vue'
+import { Button, ButtonGroup, ConfigProvider } from 'ant-design-vue'
 import { onBeforeMount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '../../src/store/app'
@@ -10,17 +8,10 @@ import { locale, theme } from '../../src/theme'
 const { t } = useI18n()
 const { initApp, sendMessage, config } = useAppStore()
 
-function beforeUpload(file: UploadFile & { path: string }) {
+function handleSelectBook() {
   sendMessage({
-    path: 'book',
-    data: {
-      name: file.name,
-      path: file.path,
-      type: file.type,
-    } as BookConfig,
+    path: 'book:select',
   })
-  // eslint-disable-next-line prefer-promise-reject-errors
-  return Promise.reject()
 }
 
 function handleOpenLocal(path?: string) {
@@ -47,16 +38,9 @@ onBeforeMount(() => {
 <template>
   <ConfigProvider :locale="locale" :theme="theme" class="flex">
     <ButtonGroup :style="{ display: 'flex', flexDirection: 'column' }">
-      <UploadDragger
-        :show-upload-list="false"
-        :before-upload="(file:any) => beforeUpload(file)"
-        accept=".epub"
-        :style="{ width: '100%', display: 'block' }"
-      >
-        <Button type="ghost" :style="{ width: '100%' }">
-          {{ t("menus.add_book") }}
-        </Button>
-      </UploadDragger>
+      <Button type="ghost" :style="{ width: '100%' }" @click="handleSelectBook">
+        {{ t("menus.add_book") }}
+      </Button>
 
       <Button type="ghost" @click="() => handleOpenLocal(config.bookPath?.path)">
         打开本地

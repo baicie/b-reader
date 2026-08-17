@@ -9,12 +9,13 @@
   },
   "scripts": {
     "build": "turbo run build",
-    "check": "pnpm lint && pnpm typecheck && pnpm build",
+    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "cz": "bcz",
     "dev": "turbo run dev",
     "lint": "eslint .",
     "lint:fix": "pnpm lint --fix",
     "publish-script": "tsx scripts/publish-script.ts",
+    "test": "turbo run test",
     "typecheck": "turbo run typecheck",
     "update-version": "tsx scripts/update-version.ts"
   },

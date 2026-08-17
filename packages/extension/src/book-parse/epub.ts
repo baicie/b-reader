@@ -19,7 +19,7 @@ export async function parseEpub(
   // 先去json中找，如果没有再去epub 实例中找
   // 意味着每次都要构建一个epub实例
   bookCache[book.md5] = epub
-  cacheBook(book, config, epub)
+  await cacheBook(book, config, epub)
 }
 
 export async function cacheBook(
@@ -33,7 +33,7 @@ export async function cacheBook(
 
   const cachePath = `${StoreKeys.cache}/${book.md5}`
   const oldEpub = await getValue(cachePath)
-  setValue(cachePath, Object.assign(oldEpub, epub))
+  await setValue(cachePath, Object.assign(oldEpub, epub))
 }
 
 async function unzipEpub(book: Epub, bookConfig: BookConfig) {

@@ -76,6 +76,7 @@
     "dev": "pnpm run code-debug && pnpm cross-env MODE=dev pnpm tsup --watch",
     "lint": "eslint src --ext ts",
     "code-debug": "tsx ../../scripts/run-code.ts",
+    "test": "tsx --test test/book-import.test.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
