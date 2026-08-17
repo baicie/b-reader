@@ -3,7 +3,7 @@ import type { Uri } from 'vscode'
 export type MessageType =
   | MessageTypeConfig
   | MessageTypeBookShelf
-  | MessageTypeBook
+  | MessageTypeSelectLocalBook
   | MessageTypeOpenLocal
   | MessageTypeRouterTo
   | MessageTypeBookInfor
@@ -34,9 +34,8 @@ export interface MessageTypeBookShelf {
   data: string
 }
 
-export interface MessageTypeBook {
-  path: 'book'
-  data: BookConfig
+export interface MessageTypeSelectLocalBook {
+  path: 'book:select'
 }
 
 export interface MessageTypeOpenLocal {

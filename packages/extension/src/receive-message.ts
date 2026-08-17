@@ -10,13 +10,14 @@ import type {
   SearchOnlineResult,
 } from '@b-reader/utils'
 import type { ExtensionContext, Webview } from 'vscode'
-import { Uri, commands, env } from 'vscode'
+import { Uri, commands, env, window, workspace } from 'vscode'
 import { isEmpty } from 'lodash'
 import { parseBook } from './book-parse'
 import { Commands, StoreKeys } from './config'
 import { useDatabase } from './db'
 import { useMessage, useProgress } from './message'
 import { getCacheBook } from './utils/book'
+import { runBookImportTransaction } from './utils/book-import'
 import { writeBook, writeBookInfor } from './utils/read-file'
 import { sendMessage, sendMessageToAll } from './utils/send-message'
 
@@ -32,8 +33,8 @@ export async function receiveMessage(
   webview.onDidReceiveMessage(
     async (message: MessageType) => {
       switch (message.path) {
-        case 'book':
-          await receiveBook(message.data, config)
+        case 'book:select':
+          await selectLocalBook(config)
           break
         case 'openLocal':
           if (!message.data)
@@ -157,11 +158,34 @@ async function receiveNav(bookId: string, config: BReaderContext, webview: Webvi
   }
 }
 
-async function receiveBook(book: BookConfig, config: BReaderContext) {
+async function selectLocalBook(config: BReaderContext) {
   try {
-    start('下载中...')
-    await writeBook(book, config)
-    await writeBookInfor(book, config)
+    const selection = await window.showOpenDialog({
+      canSelectFiles: true,
+      canSelectFolders: false,
+      canSelectMany: false,
+      filters: {
+        EPUB: ['epub', 'EPUB'],
+      },
+    })
+    const source = selection?.[0]
+    if (source)
+      await receiveBook(source, config)
+  }
+  catch (error) {
+    berror(error)
+  }
+}
+
+async function receiveBook(source: Uri, config: BReaderContext) {
+  try {
+    start('Importing EPUB...')
+    await runBookImportTransaction(
+      () => writeBook(source, config),
+      staged => writeBookInfor(staged.book, config),
+      async (staged) => { await workspace.fs.delete(staged.uri) },
+      rollbackError => console.error('Failed to clean up imported EPUB', rollbackError),
+    )
     const { getValue } = useDatabase(config)
     const res = await getValue<Record<string, Book>>(StoreKeys.book)
     await sendMessageToAll('bookself', 'bookInfor', res)

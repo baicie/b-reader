@@ -29,4 +29,10 @@ export default antfu({
     }],
     'yaml/plain-scalar': 'off',
   },
+}, {
+  files: ['**/*.test.ts'],
+  name: 'b-reader/node-tests',
+  rules: {
+    'test/no-import-node-test': 'off',
+  },
 })

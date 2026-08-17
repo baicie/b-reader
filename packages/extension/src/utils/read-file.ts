@@ -1,11 +1,10 @@
-import fs from 'node:fs'
 import path from 'node:path'
-import crypto from 'node:crypto'
 import type { BReaderContext, Book, BookConfig } from '@b-reader/utils'
 import { Uri, workspace } from 'vscode'
-import { useDatabase } from '../db'
-import { StoreKeys } from '../config'
 import { parseBook } from '../book-parse'
+import { StoreKeys } from '../config'
+import { useDatabase } from '../db'
+import { createBookRecord, createLocalBookConfig, getEpubFileName, mergeBookStore } from './book-import'
 
 export async function readFile(filePath: string) {
   return await workspace.fs.readFile(Uri.file(path.resolve(filePath)))
@@ -18,41 +17,48 @@ export async function writeFile(filePath: string, content: string) {
   )
 }
 
-export async function writeBook(book: BookConfig, config: BReaderContext) {
-  try {
-    const { name } = book
-    const bookNamePath = path.join(config.bookPath!.fsPath, name)
+export interface WrittenBook {
+  book: BookConfig
+  created: boolean
+  uri: Uri
+}
 
-    if (!fs.existsSync(bookNamePath)) {
-      // 书不在
-      fs.copyFileSync(book.path, bookNamePath)
-    }
-    book.path = bookNamePath
+export async function writeBook(source: Uri, config: BReaderContext): Promise<WrittenBook> {
+  if (!config.bookPath)
+    throw new Error('Book storage is not initialized')
+
+  const name = getEpubFileName(source.path)
+  const destination = Uri.joinPath(config.bookPath, name)
+  let created = false
+
+  try {
+    await workspace.fs.stat(destination)
   }
   catch {
-    // console.log('writeBook error: ', error)
+    await workspace.fs.copy(source, destination, { overwrite: false })
+    created = true
+  }
+
+  return {
+    book: createLocalBookConfig(name, destination.fsPath),
+    created,
+    uri: destination,
   }
 }
 
-export async function writeBookInfor(book: BookConfig, config: BReaderContext, save = true) {
+export async function writeBookInfor(book: BookConfig, config: BReaderContext, save = true): Promise<Book> {
   const { setValue, getValue } = useDatabase(config)
-  const bookid = crypto.createHash('md5').update(book.path, 'utf-8').digest('hex')
-  const _book: Book = {
-    config: book,
-    md5: bookid,
-    img: '',
-  }
-  const result = await parseBook(_book, config)
+  const nextBook = createBookRecord(book)
+  const result = await parseBook(nextBook, config)
 
-  if (result && !_book.img)
-    _book.img = await result.getCover?.() ?? ''
+  if (result && !nextBook.img)
+    nextBook.img = await result.getCover?.() ?? ''
 
   if (!save)
-    return _book
+    return nextBook
 
   const bookStore = await getValue<Record<string, Book>>(StoreKeys.book)
+  await setValue(StoreKeys.book, mergeBookStore(bookStore, nextBook))
 
-  bookStore[bookid] = _book
-
-  await setValue(StoreKeys.book, bookStore)
+  return nextBook
 }
