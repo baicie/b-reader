@@ -4,15 +4,29 @@
   "description": "",
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": ">=20.18.0"
+  },
   "keywords": [],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "tsup",
-    "dev": "pnpm run build --watch"
+    "dev": "pnpm run build --watch",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "pdf2json": "^3.0.5"
+    "pdf2json": "^4.0.3"
   },
   "config": {
     "type": "package",

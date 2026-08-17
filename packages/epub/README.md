@@ -6,6 +6,7 @@ pnpm i @b-reader/epub
 import { Epub } from '@b-reader/epub'
 
 const epub = new Epub(bookConfig.path)
+await epub.parse()
 
 declare class Epub {
   constructor(bookPath: string)

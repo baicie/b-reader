@@ -1,23 +1,17 @@
 import type { BReaderContext, MessageType } from '@b-reader/utils'
 import { reactive, toRaw } from 'vue'
 import type { WebviewApi } from '../vite-env'
-import type { AppState } from './types'
 
 export function useAppStore() {
   const config: BReaderContext = reactive({})
-  const state = reactive<AppState>({
-    goto: '',
-  })
   let vscode: WebviewApi<unknown> | undefined
 
   const sendMessage = (message: MessageType) => {
     vscode?.postMessage(toRaw(message))
   }
 
-  const mergeObject = (source: BReaderContext, target: object) => {
-    for (const key of Object.keys(target))
-      source[key] = target[key]
-  }
+  const mergeObject = (source: BReaderContext, target: BReaderContext) =>
+    Object.assign(source, target)
 
   const initApp = () => {
     vscode = acquireVsCodeApi()

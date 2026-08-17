@@ -4,19 +4,38 @@
   "description": "",
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": ">=18.17.0"
+  },
   "keywords": [],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "tsup",
     "dev": "pnpm run build --watch",
-    "test": "pnpm tsx ./src/test.ts"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "lodash": "^4.17.21",
-    "mime-types": "^2.1.35",
-    "unzipper": "^0.10.14",
+    "lodash": "^4.18.1",
+    "mime-types": "^3.0.2",
+    "unzipper": "^0.12.5",
     "xml2js": "^0.6.2"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.25",
+    "@types/mime-types": "^3.0.1",
+    "@types/unzipper": "^0.10.11",
+    "@types/xml2js": "^0.4.14"
   },
   "config": {
     "type": "package",

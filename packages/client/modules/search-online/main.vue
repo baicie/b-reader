@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Button, ConfigProvider, InputSearch, Table } from 'ant-design-vue'
+import { ConfigProvider, InputSearch, Table } from 'ant-design-vue'
 import { onBeforeMount, ref, toRaw } from 'vue'
 import type { SearchOnlineResult } from '@b-reader/utils'
 import { locale, theme } from '../../src/theme'

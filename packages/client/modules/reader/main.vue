@@ -1,6 +1,7 @@
 <script lang="ts" setup>
+import type { Nav } from '@b-reader/epub'
 import type { TreeProps } from 'ant-design-vue'
-import { ConfigProvider, Layout, LayoutContent, LayoutSider, Tree } from 'ant-design-vue'
+import { ConfigProvider, Tree } from 'ant-design-vue'
 import { get } from 'lodash'
 import { computed, onBeforeMount } from 'vue'
 import { locale, theme } from '../../src/theme'
@@ -32,25 +33,43 @@ const item = computed(() => {
 
 const height = computed(() => window.innerHeight)
 
-const navs = computed<any>(() => state.navs)
-
-function handleClickChapter(selectedKeys: string[]) {
-  if (selectedKeys.length)
-    getContent(selectedKeys[0])
+interface ReaderNav extends Nav {
+  key: string
+  children?: ReaderNav[]
 }
+
+function toReaderNav(nav: Nav): ReaderNav {
+  return {
+    ...nav,
+    key: nav.content,
+    children: nav.children?.map(toReaderNav),
+  }
+}
+
+const navs = computed(() => state.navs.map(toReaderNav))
+
+type SelectedKeys = Parameters<NonNullable<TreeProps['onSelect']>>[0]
+
+function selectChapter(selectedKeys: SelectedKeys) {
+  if (selectedKeys.length)
+    getContent(String(selectedKeys[0]))
+}
+
+const handleClickChapter: NonNullable<TreeProps['onSelect']> = selectedKeys =>
+  selectChapter(selectedKeys)
 
 function handleNext() {
   const index = navs.value.findIndex(item => item.content === state.currentPath)
   if (index === navs.value.length - 1)
     return
-  handleClickChapter([navs.value[index + 1].content])
+  selectChapter([navs.value[index + 1].content])
 }
 
 function handlePre() {
   const index = navs.value.findIndex(item => item.content === state.currentPath)
   if (index === 0)
     return
-  handleClickChapter([navs.value[index - 1].content])
+  selectChapter([navs.value[index - 1].content])
 }
 
 onBeforeMount(() => {
@@ -67,8 +86,10 @@ function getBodyItem(item: any) {
     <ReaderContainer @next="handleNext" @pre="handlePre">
       <template #menus>
         <template v-if="navs?.length">
-          <Tree :tree-data="navs" block-node default-expand-all selectable :field-names="filedName" :height="height"
-            @select="handleClickChapter" />
+          <Tree
+            :tree-data="navs" block-node default-expand-all selectable :field-names="filedName" :height="height"
+            @select="handleClickChapter"
+          />
         </template>
       </template>
 

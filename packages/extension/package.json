@@ -29,7 +29,7 @@
   "icon": "icon/ikun.png",
   "qna": "https://github.com/baicie/b-reader/issues",
   "engines": {
-    "vscode": "^1.63.0"
+    "vscode": "^1.95.0"
   },
   "l10n": "./l10n",
   "activationEvents": [],
@@ -70,20 +70,26 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "pnpm tsup",
+    "vscode:prepublish": "pnpm run bundle",
     "build": "pnpm vsce package --no-dependencies",
+    "bundle": "tsup",
     "dev": "pnpm run code-debug && pnpm cross-env MODE=dev pnpm tsup --watch",
     "lint": "eslint src --ext ts",
-    "code-debug": "tsx ../../scripts/run-code.ts"
+    "code-debug": "tsx ../../scripts/run-code.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@b-reader/epub": "workspace:^",
     "@b-reader/online": "workspace:^",
     "@b-reader/utils": "workspace:^",
-    "file-type": "^18.7.0",
-    "lowdb": "^6.1.1",
-    "open": "^7.0.0",
-    "uuid": "^9.0.1"
+    "lodash": "^4.18.1"
+  },
+  "devDependencies": {
+    "@b-reader/client": "workspace:^",
+    "@types/lodash": "^4.17.25",
+    "@types/vscode": "1.95.0",
+    "@vscode/vsce": "^3.9.2",
+    "cross-env": "^10.1.0"
   },
   "config": {
     "type": "extension",

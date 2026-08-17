@@ -1,75 +1,52 @@
-import path, { resolve } from 'node:path'
-import type { Plugin } from 'vite'
-import { defineConfig } from 'vite'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import vue from '@vitejs/plugin-vue'
 import jsx from '@vitejs/plugin-vue-jsx'
 import glob from 'fast-glob'
+import { defineConfig } from 'vite'
 
-const modulesPath = path.resolve(__dirname, 'html')
+const projectPath = fileURLToPath(new URL('.', import.meta.url))
+const modulesPath = path.resolve(projectPath, 'html')
 
-function customPlugins(): Plugin[] {
-  const resolveInput: Plugin = {
-    name: 'resolve-input',
-    async config(config) {
-      const files = await glob('*.html', {
-        onlyFiles: true,
-        cwd: modulesPath,
-      })
+export default defineConfig(async () => {
+  const htmlFiles = await glob('*.html', {
+    cwd: modulesPath,
+    onlyFiles: true,
+  })
+  const input = Object.fromEntries(
+    htmlFiles.map(file => [file, path.resolve(modulesPath, file)]),
+  )
 
-      for (const file of files) {
-        config.build!.rollupOptions!.input![file] = path.resolve(
-          modulesPath,
-          file,
-        )
-      }
-    },
-  }
-
-  return [resolveInput]
-}
-
-function getName(path: string, name: string, alias?: string): string {
-  return `${alias || name}/${path
-    .toString()
-    .split(`${name}/`)[1]
-    .split('/')[0]
-    .toString()}`.replace('_', '')
-}
-
-export default defineConfig(() => {
   return {
     resolve: {
       alias: {
-        '@': resolve(__dirname, 'src'),
+        '@': path.resolve(projectPath, 'src'),
       },
     },
     plugins: [
-      customPlugins(),
-      vue({
-        customElement: true,
-      }),
+      vue({ customElement: true }),
       jsx(),
     ],
     build: {
       outDir: '../extension/vue-dist',
       rollupOptions: {
         external: ['vscode'],
-        input: {
-        },
+        input,
         output: {
-          chunkFileNames: 'assets/[name].js',
-          entryFileNames: 'assets/[name].js',
-          inlineDynamicImports: false,
-          manualChunks(id) {
-            if (id.includes('node_modules/'))
-              return getName(id, 'node_modules/.pnpm', 'deps')
+          chunkFileNames: 'assets/[name]-[hash].js',
+          entryFileNames: 'assets/[name]-[hash].js',
+          manualChunks(id: string) {
+            const moduleId = id.replaceAll('\\', '/')
+            if (!moduleId.includes('/node_modules/'))
+              return undefined
+            if (moduleId.includes('/ant-design-vue/') || moduleId.includes('/@ant-design/'))
+              return 'vendor-ant-design'
+            if (moduleId.includes('/vue/') || moduleId.includes('/@vue/') || moduleId.includes('/@intlify/'))
+              return 'vendor-vue'
+            return 'vendor'
           },
         },
       },
-    },
-    define: {
-      __PLATFORM__: 'vscode',
-      __MODE__: 'development',
     },
   }
 })

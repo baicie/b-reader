@@ -9,9 +9,8 @@ import type {
   MessageTypeOnlineContentReq,
   SearchOnlineResult,
 } from '@b-reader/utils'
-import open from 'open'
 import type { ExtensionContext, Webview } from 'vscode'
-import { commands } from 'vscode'
+import { Uri, commands, env } from 'vscode'
 import { isEmpty } from 'lodash'
 import { parseBook } from './book-parse'
 import { Commands, StoreKeys } from './config'
@@ -39,7 +38,7 @@ export async function receiveMessage(
         case 'openLocal':
           if (!message.data)
             return
-          await open(message.data, { wait: true })
+          await env.openExternal(Uri.file(message.data))
           break
         case 'bookInfor':
           receiveBookInfor(config, webview)

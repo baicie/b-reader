@@ -20,7 +20,7 @@ export class Epub {
 
   }
 
-  private fullPath: string
+  private fullPath!: string
 
   // export data
   public bookPath: string
@@ -56,8 +56,8 @@ export class Epub {
   public cover?: string
 
   // core functions
-  private usezip: Awaited<ReturnType<typeof useUnzip>>
-  private usexml: ReturnType<typeof useParseXml>
+  private usezip!: Awaited<ReturnType<typeof useUnzip>>
+  private usexml!: ReturnType<typeof useParseXml>
 
   // parsed data
   // TODO: s?
@@ -175,7 +175,7 @@ export class Epub {
           imgNode[0].$['xlink:href'] = res
         imgNode[0].$.base64 = true
       }
-      catch (error) {
+      catch {
         console.error(`Error reading image file: ${imageFilePath}`)
       }
     }

@@ -6,4 +6,5 @@ export default defineConfig({
   dts: true,
   external: [...Object.keys(pkg.dependencies || {})],
   sourcemap: true,
+  target: 'node20',
 })

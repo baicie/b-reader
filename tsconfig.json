@@ -1,17 +1,18 @@
 {
   "compilerOptions": {
-    "jsx": "preserve",
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "strictNullChecks": true,
-    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "ignoreDeprecations": "6.0",
+    "jsx": "preserve",
+    "lib": ["ES2023"],
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "baseUrl": ".",
-    "allowSyntheticDefaultImports": true,
-    "lib": ["ES2021", "DOM", "DOM.Iterable"],
-    "composite": true,
-    "paths": {
-      "@b-reader/*": ["packages/*"]
-    }
-  }
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2023"
+  },
+  "exclude": ["**/dist/**", "**/vue-dist/**", "node_modules"]
 }

@@ -31,15 +31,21 @@ const item = computed(() => {
   }
 })
 
-const navs = computed<any>(() => state.navs)
+const navs = computed(() => state.navs.map(nav => ({
+  ...nav,
+  key: nav.path,
+})))
 
 const height = computed(() => window.innerHeight)
 
-function handleClickChapter(selectedKeys: string[]) {
+type SelectedKeys = Parameters<NonNullable<TreeProps['onSelect']>>[0]
+
+function selectChapter(selectedKeys: SelectedKeys) {
   if (selectedKeys.length) {
+    const selectedKey = String(selectedKeys[0])
     // eslint-disable-next-line no-console
     console.log(selectedKeys)
-    const name = selectedKeys[0].split('#').length > 1 ? selectedKeys[0].split('#')[1] : selectedKeys[0]
+    const name = selectedKey.split('#').length > 1 ? selectedKey.split('#')[1] : selectedKey
     state.currentPath = name
     const targetElement = document.getElementById(name)
     const target = _content.value.find(item => item.id === name)
@@ -55,6 +61,9 @@ function handleClickChapter(selectedKeys: string[]) {
     }
   }
 }
+
+const handleClickChapter: NonNullable<TreeProps['onSelect']> = selectedKeys =>
+  selectChapter(selectedKeys)
 
 function getContent(item?: SearchOnlineResult, scroll = false) {
   // eslint-disable-next-line no-console
@@ -76,14 +85,14 @@ function handleNext() {
   const index = navs.value.findIndex(item => item.path === state.currentPath)
   if (index === navs.value.length - 1)
     return
-  handleClickChapter([navs.value[index + 1].path])
+  selectChapter([navs.value[index + 1].path])
 }
 
 function handlePre() {
   const index = navs.value.findIndex(item => item.path === state.currentPath)
   if (index === 0)
     return
-  handleClickChapter([navs.value[index - 1].path])
+  selectChapter([navs.value[index - 1].path])
 }
 
 onBeforeMount(() => {
@@ -95,8 +104,10 @@ onBeforeMount(() => {
   <ConfigProvider :locale="locale" :theme="theme" class="flex">
     <ReaderContainer @next="handleNext" @pre="handlePre">
       <template #menus>
-        <Tree :tree-data="navs" block-node default-expand-all selectable :field-names="filedName" :height="height"
-          @select="handleClickChapter" />
+        <Tree
+          :tree-data="navs" block-node default-expand-all selectable :field-names="filedName" :height="height"
+          @select="handleClickChapter"
+        />
       </template>
 
       <template #default>

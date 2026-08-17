@@ -7,13 +7,10 @@ export function useMessage() {
     window.showInformationMessage(message)
   }
 
-  function berror(err: Error | string) {
-    let message = ''
-    if (err instanceof Error)
-      message = `${err.message}\n${err.stack}`
-
-    else
-      message = err
+  function berror(err: unknown) {
+    const message = err instanceof Error
+      ? `${err.message}\n${err.stack ?? ''}`
+      : String(err)
 
     window.showErrorMessage(message)
     error(err)

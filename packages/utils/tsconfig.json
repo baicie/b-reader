@@ -1,8 +1,7 @@
 {
-  "references": [{ "path": "../../tsconfig.json" }],
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "moduleResolution": "NodeNext",
-    "module": "NodeNext"
-  }
+    "types": ["node", "vscode"]
+  },
+  "include": ["src/**/*.ts"]
 }

@@ -1,4 +1,3 @@
-/* eslint-disable n/prefer-global/buffer */
 import unzipper from 'unzipper'
 
 export async function useUnzip(bookPath: string) {

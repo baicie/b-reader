@@ -21,7 +21,7 @@ export function useCommonReader() {
   const state = shallowReactive<CommonReaderState>({
     init: {},
     navs: [],
-    contents: shallowReactive({}),
+    contents: {},
     loading: false,
     currentPath: '',
   })

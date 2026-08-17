@@ -1,4 +1,4 @@
-import type { Webview, WebviewPanel } from 'vscode'
+import type { Webview } from 'vscode'
 
 interface WebviewCache {
   webview: Webview
