@@ -6,7 +6,7 @@ pnpm i --frozen-lockfile --ignore-scripts
 
 pnpm update-version
 
-pnpm build
+pnpm check
 
 pnpm publish-script
 

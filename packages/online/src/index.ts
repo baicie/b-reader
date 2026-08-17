@@ -1,8 +1,8 @@
 import type { Agents } from 'got'
 import got from 'got'
-import tough from 'tough-cookie'
 import { HttpProxyAgent, HttpsProxyAgent } from 'hpagent'
 import PQueue from 'p-queue'
+import { Cookie, CookieJar } from 'tough-cookie'
 import { getChapter, getChapterContent, getCover, search } from './functions'
 
 interface cookiesConfig {
@@ -11,12 +11,12 @@ interface cookiesConfig {
 }
 
 class Requset {
-  cookieJar: tough.CookieJar
+  cookieJar: CookieJar
   agent: Agents | undefined
   queue: PQueue
 
   constructor() {
-    this.cookieJar = new tough.CookieJar()
+    this.cookieJar = new CookieJar()
     this.queue = new PQueue({ interval: 2000, intervalCap: 1, concurrency: 1 })
   }
 
@@ -38,7 +38,7 @@ class Requset {
       cookies.forEach((cookie) => {
         cookie.cookie
           .split(';')
-          .map(e => tough.Cookie.parse(e))
+          .map(e => Cookie.parse(e))
           .forEach((e) => {
             e && this.cookieJar.setCookieSync(e, cookie.url)
           })

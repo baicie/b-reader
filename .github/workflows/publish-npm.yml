@@ -8,52 +8,42 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v3
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
         with:
-          node-version: 18
+          node-version: 24
           registry-url: https://registry.npmjs.com/
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.4
-        with:
-          version: 8.2.0
+          cache: pnpm
 
       - name: Get version
-        run: echo "TAG_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+        run: echo "PACKAGE_VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
 
       - name: Get git head
         run: echo "GIT_HEAD=${GITHUB_SHA}" >> $GITHUB_ENV
-
-      - name: Gen npmrc
-        run: echo "//registry.npmjs.com/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" >> ./.npmrc
-
-      - name: who am i
-        run: npm who am i
 
       - name: Build&publish
         run: sh ./scripts/publish.sh
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_PUBLISH_TOKEN}}
-          TAG_VERSION: ${{env.TAG_VERSION}}
-          GIT_HEAD: ${{env.GIT_HEAD}}
+          TAG_VERSION: ${{ env.PACKAGE_VERSION }}
+          GIT_HEAD: ${{ env.GIT_HEAD }}
           REGISTRY: https://registry.npmjs.com/
           NODE_OPTIONS: --max-old-space-size=4096
       
       - name: Publish to Visual Studio Marketplace
-        uses: HaaLeo/publish-vscode-extension@v1
+        uses: HaaLeo/publish-vscode-extension@v2
         with:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
           dependencies: false
-          packagePath: "packages/extension"
-          path: "packages/extension/b-reader-${{env.TAG_VERSION}}.vsix"
+          extensionFile: packages/extension/b-reader-${{ env.PACKAGE_VERSION }}.vsix
           registryUrl: https://marketplace.visualstudio.com
     
       - name: Publish to Open VSX Registry
-        uses: HaaLeo/publish-vscode-extension@v1
+        uses: HaaLeo/publish-vscode-extension@v2
         with:
           pat: ${{ secrets.OPEN_VSX_TOKEN }}
           dependencies: false
-          packagePath: "packages/extension"
-          path: "packages/extension/b-reader-${{env.TAG_VERSION}}.vsix"
+          extensionFile: packages/extension/b-reader-${{ env.PACKAGE_VERSION }}.vsix

@@ -5,5 +5,7 @@ export default defineConfig({
   entry: ['./src/index.ts'],
   dts: true,
   external: [...Object.keys(pkg.dependencies || {})],
+  format: ['esm'],
   sourcemap: true,
+  target: 'node18',
 })

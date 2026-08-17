@@ -5,4 +5,5 @@ export default defineConfig({
   dts: true,
   sourcemap: true,
   external: ['vscode'],
+  target: 'node20',
 })

@@ -1,8 +1,7 @@
-/* eslint-disable n/prefer-global/buffer */
 import fs from 'node:fs'
 import path from 'node:path'
 import crypto from 'node:crypto'
-import type { BReaderContext, Book, BookConfig, BookType } from '@b-reader/utils'
+import type { BReaderContext, Book, BookConfig } from '@b-reader/utils'
 import { Uri, workspace } from 'vscode'
 import { useDatabase } from '../db'
 import { StoreKeys } from '../config'
@@ -30,7 +29,7 @@ export async function writeBook(book: BookConfig, config: BReaderContext) {
     }
     book.path = bookNamePath
   }
-  catch (error) {
+  catch {
     // console.log('writeBook error: ', error)
   }
 }

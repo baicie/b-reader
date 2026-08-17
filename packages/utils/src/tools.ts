@@ -1,22 +1,7 @@
 import path from 'node:path'
 import fs from 'node:fs'
-import { globSync } from 'fast-glob'
 import type { WebviewPanel, WebviewView } from 'vscode'
 import { Uri } from 'vscode'
-import { clientPath } from '../../extension/src/path'
-
-/**
- * scan client dist
- * @returns string[]
- */
-export function scanClientDist() {
-  const distPath = globSync('**/*.{js,css}', {
-    cwd: clientPath,
-    onlyFiles: true,
-  })
-
-  return distPath
-}
 
 export function getWebViewContent(
   config: any,

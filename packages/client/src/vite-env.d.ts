@@ -40,8 +40,6 @@ declare global {
    *
    * @template StateType Type of the persisted state stored for the webview.
    */
-  // eslint-disable-next-line @definitelytyped/no-unnecessary-generics
   function acquireVsCodeApi<StateType = unknown>(): WebviewApi<StateType>;
 
-  var __MODE__: "development" | "production";
 }

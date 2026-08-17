@@ -1,22 +1,36 @@
 {
   "name": "@b-reader/online",
   "version": "0.0.0",
+  "type": "module",
   "description": "",
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": ">=18.17.0"
+  },
   "keywords": [],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "tsup",
-    "dev": "pnpm run build --watch"
+    "dev": "pnpm run build --watch",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "cheerio": "1.0.0-rc.12",
-    "got": "^11.8.5",
-    "hpagent": "^0.1.2",
-    "p-queue": "^6.6.2",
-    "tough-cookie": "^4.0.0"
+    "cheerio": "1.1.0",
+    "got": "^13.0.0",
+    "hpagent": "^1.2.0",
+    "p-queue": "^8.1.0",
+    "tough-cookie": "^6.0.2"
   },
   "config": {
     "type": "package",

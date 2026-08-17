@@ -1,7 +1,7 @@
 import type { Nav } from '@b-reader/epub'
 import type { Book, MessageType } from '@b-reader/utils'
 import { message } from 'ant-design-vue'
-import { reactive, ref, shallowReactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { useAppStore } from '../../src/store/app'
 import { getDataFromHtml, scrollToElement } from '../../src/utils'
 

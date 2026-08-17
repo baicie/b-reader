@@ -1,5 +1,4 @@
 import path from 'node:path'
-import fs from 'node:fs'
 import type { BReaderContext } from '@b-reader/utils'
 import { BOOKS, DB_NAME } from '@b-reader/utils'
 import type { ExtensionContext } from 'vscode'
@@ -63,6 +62,8 @@ export async function initDir(config: BReaderContext) {
     imgPath,
   }
 
-  for (const key of Object.keys(paths))
-    await workspace.fs.createDirectory(paths[key])
+  for (const uri of Object.values(paths)) {
+    if (uri)
+      await workspace.fs.createDirectory(uri)
+  }
 }

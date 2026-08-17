@@ -1,7 +1,7 @@
 {
   "name": "@b-reader/utils",
   "version": "0.0.0",
-  "private": false,
+  "private": true,
   "description": "",
   "author": "",
   "license": "ISC",
@@ -9,15 +9,16 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "commonjs",
+  "devDependencies": {
+    "@types/vscode": "1.95.0"
+  },
   "scripts": {
     "build": "tsup",
-    "dev": "pnpm run build --watch"
-  },
-  "dependencies": {
-    "fast-glob": "^3.3.2"
+    "dev": "pnpm run build --watch",
+    "typecheck": "tsc --noEmit"
   },
   "config": {
     "type": "package",
-    "publish": true
+    "publish": false
   }
 }

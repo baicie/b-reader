@@ -17,8 +17,7 @@ export function expandedData(data: InputData): any {
       if (key === '$' && typeof newData[key] === 'object') {
         // 将 $ 中的属性展开到父级对象
         Object.assign(newData, newData[key])
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
+        // @ts-expect-error -- the flattened `$` key is intentionally removed
         delete newData[key]
       }
       else if (typeof newData[key] === 'object') {

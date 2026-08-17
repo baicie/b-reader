@@ -1,3 +1,7 @@
 {
-  "references": [{ "path": "../../tsconfig.json" }]
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "types": ["node", "vscode"]
+  },
+  "include": ["src/**/*.ts"]
 }
