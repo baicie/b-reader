@@ -1,4 +1,4 @@
-import type { Epub } from '@b-reader/epub'
+import { Epub } from '@b-reader/epub'
 import { getChapter, getChapterContent, search } from '@b-reader/online'
 import type {
   BReaderContext,
@@ -146,11 +146,16 @@ async function receiveCommonReaderNav(book: Book, config: BReaderContext, webvie
 async function receiveNav(bookId: string, config: BReaderContext, webview: Webview) {
   try {
     start('获取目录')
-    const { getValue } = useDatabase(config)
-    const cache = await getValue<Epub>(`${StoreKeys.cache}/${bookId}`)
-    await sendMessage(webview, 'snedNav', cache.nva)
+    const book = await getCacheBook(bookId, config)
+    if (!book)
+      throw new Error(`Book not found: ${bookId}`)
+    const parsed = await parseBook(book, config)
+    if (!(parsed instanceof Epub))
+      throw new Error(`Book is not an EPUB: ${bookId}`)
+    await sendMessage(webview, 'sendNav', parsed.getNavigation())
   }
   catch (error) {
+    await sendEpubError(webview, bookId, error)
     berror(error)
   }
   finally {
@@ -254,19 +259,34 @@ async function receiveContent(data: MessageTypeGetContent['data'], config: BRead
     // eslint-disable-next-line no-console
     console.time('获取章节内容')
     const bookinfo = await getCacheBook(data.bookId, config)
+    if (!bookinfo)
+      throw new Error(`Book not found: ${data.bookId}`)
     const bookInstance = await parseBook(bookinfo, config)
+    if (!(bookInstance instanceof Epub))
+      throw new Error(`Book is not an EPUB: ${data.bookId}`)
     const chapter = await bookInstance.getContent(data.href)
+    if (!chapter.length)
+      throw new Error(`Chapter not found: ${data.href}`)
     await sendMessage(webview, 'sendContent', chapter)
     // eslint-disable-next-line no-console
     console.timeEnd('获取章节内容')
     // cache
   }
   catch (error) {
+    await sendEpubError(webview, data.bookId, error, data.href)
     berror(error)
   }
   finally {
     stop()
   }
+}
+
+async function sendEpubError(webview: Webview, bookId: string, error: unknown, href?: string) {
+  await sendMessage(webview, 'epub:error', {
+    bookId,
+    href,
+    message: error instanceof Error ? error.message : String(error),
+  })
 }
 
 async function receiveOnlieSearch(data: string, config: BReaderContext, webview: Webview) {

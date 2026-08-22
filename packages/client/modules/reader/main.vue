@@ -2,12 +2,11 @@
 import type { Nav } from '@b-reader/epub'
 import type { TreeProps } from 'ant-design-vue'
 import { ConfigProvider, Tree } from 'ant-design-vue'
-import { get } from 'lodash'
 import { computed, onBeforeMount } from 'vue'
 import { locale, theme } from '../../src/theme'
 import ReaderContainer from '../../src/components/reader/reader-container.vue'
 import { RenderItem2 } from './render-item'
-import { useEpubRender } from './use-render'
+import { flattenNavigation, useEpubRender } from './use-render'
 
 const { initReader, state, getContent } = useEpubRender()
 
@@ -18,16 +17,13 @@ const filedName: TreeProps['fieldNames'] = {
 }
 
 const _content = computed(() => {
-  return Object.entries(state.contents).map(([, value]) => ({
-    id: value.id,
-    content: value.content,
-  }))
+  return Object.values(state.contents)
 })
 
 const item = computed(() => {
   return _content.value.find(item => item.id === state.currentPath) || {
     id: '',
-    content: '',
+    content: undefined,
   }
 })
 
@@ -59,25 +55,33 @@ const handleClickChapter: NonNullable<TreeProps['onSelect']> = selectedKeys =>
   selectChapter(selectedKeys)
 
 function handleNext() {
-  const index = navs.value.findIndex(item => item.content === state.currentPath)
-  if (index === navs.value.length - 1)
+  const chapters = flattenNavigation(state.navs)
+  const index = chapters.findIndex(item => item.content.split('#', 1)[0] === state.currentPath)
+  if (index < 0 || index === chapters.length - 1)
     return
-  selectChapter([navs.value[index + 1].content])
+  selectChapter([chapters[index + 1].content])
 }
 
 function handlePre() {
-  const index = navs.value.findIndex(item => item.content === state.currentPath)
-  if (index === 0)
+  const chapters = flattenNavigation(state.navs)
+  const index = chapters.findIndex(item => item.content.split('#', 1)[0] === state.currentPath)
+  if (index <= 0)
     return
-  selectChapter([navs.value[index - 1].content])
+  selectChapter([chapters[index - 1].content])
 }
 
 onBeforeMount(() => {
   initReader()
 })
 
-function getBodyItem(item: any) {
-  return get(item, 'content.html.$$[1].$$', [])
+function firstValue(value: unknown): any {
+  return Array.isArray(value) ? value[0] : value
+}
+
+function getBodyItem(chapter: { content?: any }) {
+  const html = firstValue(chapter.content?.html)
+  const body = firstValue(html?.body)
+  return body?.$$ ?? []
 }
 </script>
 

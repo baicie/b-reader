@@ -13,6 +13,7 @@ export type MessageType =
   | MessageTypeReady
   | MessageTypeInitData
   | MessageTypeSendNav
+  | MessageTypeEpubError
   | MessageTypeGetContent
   | MessageTypeSendContent
   | MessageTypeSearchOnline
@@ -78,8 +79,28 @@ export interface MessageTypeInitData {
 }
 
 export interface MessageTypeSendNav {
-  path: 'snedNav'
-  data: any
+  path: 'sendNav' | 'snedNav'
+  data: MessageNav[]
+}
+
+export interface MessageNav {
+  id?: string
+  label: string
+  content: string
+  href?: string
+  path?: string
+  fragment?: string
+  parentId?: string
+  children?: MessageNav[]
+}
+
+export interface MessageTypeEpubError {
+  path: 'epub:error'
+  data: {
+    bookId: string
+    href?: string
+    message: string
+  }
 }
 
 export interface MessageTypeGetContent {

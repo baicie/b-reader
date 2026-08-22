@@ -1,17 +1,31 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { Epub } from '@b-reader/epub'
+import type { EpubPublication } from '@b-reader/epub'
 import type { BReaderContext, Book, BookConfig } from '@b-reader/utils'
 import { useDatabase } from '../db'
 import { StoreKeys } from '../config'
 import type { BookCache } from './index'
 
+export const EPUB_CACHE_SCHEMA_VERSION = 1
+
+export interface EpubCacheSnapshot {
+  schemaVersion: typeof EPUB_CACHE_SCHEMA_VERSION
+  sourceFingerprint: string
+  sourcePath: string
+  publication: EpubPublication
+}
+
 export async function parseEpub(
   book: Book,
   config: BReaderContext,
   bookCache: BookCache,
-) {
+): Promise<Epub> {
   const { config: bookConfig } = book
+  const cached = bookCache[book.md5]
+  if (cached instanceof Epub && cached.bookPath === bookConfig.path)
+    return cached
+
   const epub = new Epub(bookConfig.path)
   await epub.parse()
 
@@ -20,6 +34,7 @@ export async function parseEpub(
   // 意味着每次都要构建一个epub实例
   bookCache[book.md5] = epub
   await cacheBook(book, config, epub)
+  return epub
 }
 
 export async function cacheBook(
@@ -27,13 +42,18 @@ export async function cacheBook(
   config: BReaderContext,
   epub: Epub,
 ) {
-  const { setValue, getValue } = useDatabase(config)
+  const { setValue } = useDatabase(config)
   if (config.unzip)
     await unzipEpub(epub, book.config)
 
   const cachePath = `${StoreKeys.cache}/${book.md5}`
-  const oldEpub = await getValue(cachePath)
-  await setValue(cachePath, Object.assign(oldEpub, epub))
+  const snapshot: EpubCacheSnapshot = {
+    schemaVersion: EPUB_CACHE_SCHEMA_VERSION,
+    sourceFingerprint: book.md5,
+    sourcePath: book.config.path,
+    publication: epub.publication!,
+  }
+  await setValue(cachePath, snapshot)
 }
 
 async function unzipEpub(book: Epub, bookConfig: BookConfig) {
