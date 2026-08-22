@@ -1,7 +1,3 @@
-import type { ParserOptions } from 'xml2js'
-
-export type { ParserOptions }
-
 export type EpubVersion = '2' | '3' | string
 
 export interface EpubText {

@@ -11,8 +11,8 @@ const publication = await epub.parse()
 console.log(publication.metadata.title)
 console.log(publication.navigation)
 
-const chapter = await epub.getContent(publication.navigation[0]?.content)
-const cover = await epub.getCover() // `undefined` when no cover is declared
+await epub.getContent(publication.navigation[0]?.content)
+await epub.getCover() // `undefined` when no cover is declared
 ```
 
 ## Public model
@@ -37,6 +37,8 @@ interface EpubContent {
   mediaType: string
   content: unknown // ordered xml2js AST for the current reader renderer
 }
+
+const _chapterKey = (chapter: EpubContent) => chapter.id
 ```
 
 `getContent()` accepts a navigation target, manifest id, package-relative href,
