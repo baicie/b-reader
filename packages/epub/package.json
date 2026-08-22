@@ -23,6 +23,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "pnpm run build --watch",
+    "test": "tsx --test test/*.test.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
