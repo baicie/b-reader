@@ -16,6 +16,28 @@ export interface EpubCacheSnapshot {
   publication: EpubPublication
 }
 
+async function sourceFingerprint(sourcePath: string) {
+  const stat = await fs.promises.stat(sourcePath)
+  return `${stat.size}:${stat.mtimeMs}`
+}
+
+export async function readEpubSnapshot(book: Book, config: BReaderContext) {
+  try {
+    const { getValue } = useDatabase(config)
+    const snapshot = await getValue<Partial<EpubCacheSnapshot>>(`${StoreKeys.cache}/${book.md5}`)
+    if (snapshot.schemaVersion !== EPUB_CACHE_SCHEMA_VERSION
+      || snapshot.sourcePath !== book.config.path
+      || snapshot.sourceFingerprint !== await sourceFingerprint(book.config.path)
+      || !snapshot.publication) {
+      return undefined
+    }
+    return snapshot.publication
+  }
+  catch {
+    return undefined
+  }
+}
+
 export async function parseEpub(
   book: Book,
   config: BReaderContext,
@@ -49,7 +71,7 @@ export async function cacheBook(
   const cachePath = `${StoreKeys.cache}/${book.md5}`
   const snapshot: EpubCacheSnapshot = {
     schemaVersion: EPUB_CACHE_SCHEMA_VERSION,
-    sourceFingerprint: book.md5,
+    sourceFingerprint: await sourceFingerprint(book.config.path),
     sourcePath: book.config.path,
     publication: epub.publication!,
   }

@@ -13,6 +13,7 @@ import type { ExtensionContext, Webview } from 'vscode'
 import { Uri, commands, env, window, workspace } from 'vscode'
 import { isEmpty } from 'lodash'
 import { parseBook } from './book-parse'
+import { readEpubSnapshot } from './book-parse/epub'
 import { Commands, StoreKeys } from './config'
 import { useDatabase } from './db'
 import { useMessage, useProgress } from './message'
@@ -149,6 +150,11 @@ async function receiveNav(bookId: string, config: BReaderContext, webview: Webvi
     const book = await getCacheBook(bookId, config)
     if (!book)
       throw new Error(`Book not found: ${bookId}`)
+    const snapshot = await readEpubSnapshot(book, config)
+    if (snapshot) {
+      await sendMessage(webview, 'sendNav', snapshot.navigation)
+      return
+    }
     const parsed = await parseBook(book, config)
     if (!(parsed instanceof Epub))
       throw new Error(`Book is not an EPUB: ${bookId}`)
