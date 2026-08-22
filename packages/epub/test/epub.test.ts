@@ -173,6 +173,20 @@ describe('EPUB 2 parsing and fallback behavior', () => {
       assert.equal(publication.navigation.length, 1)
       assert.equal(publication.navigation[0].content, 'a.xhtml')
       assert.ok(publication.warnings.some(item => item.code === 'MISSING_TOC'))
+      assert.equal(await epub.getCover(), undefined)
+    })
+  })
+
+  it('downgrades a missing declared cover to a warning', async () => {
+    await withEpub([
+      { name: 'META-INF/container.xml', data: container('package.opf') },
+      { name: 'package.opf', data: `<package version="3.0"><metadata><dc:title xmlns:dc="x">Missing cover</dc:title></metadata><manifest><item id="cover" href="cover.png" media-type="image/png" properties="cover-image"/><item id="a" href="a.xhtml" media-type="application/xhtml+xml"/></manifest><spine><itemref idref="a"/></spine></package>` },
+      { name: 'a.xhtml', data: xhtml('A', '<p>A</p>') },
+    ], async (filePath) => {
+      const epub = new Epub(filePath)
+      const publication = await epub.parse()
+      assert.equal(await epub.getCover(), undefined)
+      assert.ok(publication.warnings.some(item => item.code === 'INVALID_COVER'))
     })
   })
 })
@@ -180,6 +194,7 @@ describe('EPUB 2 parsing and fallback behavior', () => {
 describe('EPUB paths and errors', () => {
   it('normalizes safe references and rejects archive escape', () => {
     assert.equal(resolveArchivePath('OPS/text/chapter.xhtml', '../img/cover%20a.png?x=1#top'), 'OPS/img/cover a.png')
+    assert.equal(resolveArchivePath('OPS/nav.xhtml', '#toc'), 'OPS/nav.xhtml')
     assert.equal(resolveArchivePath('OPS/nav.xhtml', 'https://example.com/book.xhtml'), undefined)
     assert.throws(() => resolveArchivePath('OPS/nav.xhtml', '../../outside.xhtml'), (error: unknown) => {
       return error instanceof EpubError && error.code === 'INVALID_PATH'

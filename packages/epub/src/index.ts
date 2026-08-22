@@ -613,14 +613,26 @@ export class Epub {
     parsedPackage: ParsedPackage,
     localWarnings: EpubWarning[],
   ): Promise<CoverResource | undefined> {
+    const fromManifest = (item: Manifest | undefined) => {
+      if (!item)
+        return undefined
+      if (!archive.hasFile(item.path)) {
+        localWarnings.push(warning('INVALID_COVER', `Cover resource is missing: ${item.path}`, item.path))
+        return undefined
+      }
+      return { path: item.path, mediaType: item.mediaType, manifest: item }
+    }
+
     const direct = parsedPackage.manifest.find(item => item.properties.includes('cover-image'))
-    if (direct)
-      return { path: direct.path, mediaType: direct.mediaType, manifest: direct }
+    const directResource = fromManifest(direct)
+    if (directResource)
+      return directResource
 
     const coverId = parsedPackage.metadataMeta.find(item => item.name?.toLowerCase() === 'cover')?.content
     const metadataCover = coverId ? parsedPackage.manifest.find(item => item.id === coverId) : undefined
-    if (metadataCover)
-      return { path: metadataCover.path, mediaType: metadataCover.mediaType, manifest: metadataCover }
+    const metadataResource = fromManifest(metadataCover)
+    if (metadataResource)
+      return metadataResource
 
     const guideCover = parsedPackage.guide.find(item => tokens(item.type.toLowerCase()).includes('cover'))
     if (guideCover) {
@@ -629,7 +641,7 @@ export class Epub {
         if (coverPath) {
           const directItem = parsedPackage.manifest.find(item => item.path === coverPath)
           if (directItem && directItem.mediaType.startsWith('image/'))
-            return { path: directItem.path, mediaType: directItem.mediaType, manifest: directItem }
+            return fromManifest(directItem)
 
           const source = await archive.fileFileContent(coverPath)
           const document = await this.usexml.parse(source, undefined, coverPath)
@@ -652,8 +664,9 @@ export class Epub {
     }
 
     const heuristic = parsedPackage.manifest.find(item => item.mediaType.startsWith('image/') && /cover/i.test(`${item.id} ${item.href}`))
-    if (heuristic)
-      return { path: heuristic.path, mediaType: heuristic.mediaType, manifest: heuristic }
+    const heuristicResource = fromManifest(heuristic)
+    if (heuristicResource)
+      return heuristicResource
     return undefined
   }
 

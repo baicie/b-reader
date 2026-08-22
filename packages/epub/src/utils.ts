@@ -191,11 +191,14 @@ export function resolveArchivePath(importer: string, reference: string): string 
     return undefined
 
   const importerPath = parseReference(importer)?.pathname ?? importer
-  const segments = parsed.pathname.startsWith('/')
+  const pathname = parsed.pathname || importerPath
+  const segments = pathname.startsWith('/')
     ? []
-    : path.posix.dirname(importerPath).split('/').filter(segment => Boolean(segment) && segment !== '.')
+    : parsed.pathname
+      ? path.posix.dirname(importerPath).split('/').filter(segment => Boolean(segment) && segment !== '.')
+      : []
 
-  appendSegments(segments, parsed.pathname, reference)
+  appendSegments(segments, pathname, reference)
   if (!segments.length)
     throw new EpubError('INVALID_PATH', `EPUB path resolves to the archive root: ${reference}`, { path: reference })
 
