@@ -138,6 +138,9 @@ interface ParsedReference {
 
 function parseReference(reference: string): ParsedReference | undefined {
   const trimmed = reference.trim()
+  if (/^[a-z]:[\\/]/i.test(trimmed)) {
+    throw new EpubError('INVALID_PATH', `Drive-letter EPUB paths are not allowed: ${reference}`, { path: reference })
+  }
   if (externalScheme.test(trimmed) || trimmed.startsWith('//'))
     return undefined
 
@@ -149,6 +152,8 @@ function parseReference(reference: string): ParsedReference | undefined {
 
   try {
     const normalized = rawPathname.replaceAll('\\', '/')
+    if (/^[a-z]:/i.test(normalized))
+      throw new Error('Drive-letter paths are not allowed')
     const pathname = normalized.split('/').map((segment) => {
       const decoded = decodeURIComponent(segment)
       if (decoded.includes('/') || decoded.includes('\\') || decoded.includes('\0'))

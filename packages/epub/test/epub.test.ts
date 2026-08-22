@@ -190,6 +190,9 @@ describe('EPUB paths and errors', () => {
     assert.throws(() => resolveArchivePath('OPS/nav.xhtml', 'broken%.xhtml'), (error: unknown) => {
       return error instanceof EpubError && error.code === 'INVALID_PATH'
     })
+    assert.throws(() => resolveArchivePath('OPS/nav.xhtml', 'C:/outside.xhtml'), (error: unknown) => {
+      return error instanceof EpubError && error.code === 'INVALID_PATH'
+    })
   })
 
   it('rejects unsafe ZIP entries before extraction', async () => {
