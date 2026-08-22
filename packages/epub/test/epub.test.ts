@@ -130,10 +130,10 @@ describe('EPUB 3 parsing', () => {
       const chapter = (await epub.getContent('text/chapter 1.xhtml#intro'))[0]
       assert.equal(chapter.id, 'text/chapter 1.xhtml')
       const serialized = JSON.stringify(chapter.content)
-      assert.match(serialized, /data:image\/png;base64,/) 
+      assert.match(serialized, /data:image\/png;base64,/)
       assert.doesNotMatch(serialized, /onload|javascript:|<script>|"#name":"script"/)
       assert.equal((await epub.getContent('text/encoded entry.xhtml'))[0].id, 'text/encoded entry.xhtml')
-      assert.match(await epub.getCover() as string, /^data:image\/png;base64,/) 
+      assert.match(await epub.getCover() as string, /^data:image\/png;base64,/)
       const firstCount = epub.content.length
       await epub.parse()
       assert.equal(epub.content.length, firstCount)
@@ -158,7 +158,7 @@ describe('EPUB 2 parsing and fallback behavior', () => {
       const publication = await epub.parse()
       assert.equal(publication.metadata.title, 'Legacy')
       assert.equal(publication.navigation[0].content, 'text/one.xhtml#top')
-      assert.match(await epub.getCover() as string, /^data:image\/jpeg;base64,/) 
+      assert.match(await epub.getCover() as string, /^data:image\/jpeg;base64,/)
     })
   })
 
