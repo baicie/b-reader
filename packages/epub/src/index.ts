@@ -234,7 +234,7 @@ export class Epub {
     if (direct)
       return direct.id
 
-    const byManifest = this.manifest?.find(item => item.id === pathname)
+    const byManifest = this.manifest?.find(item => item.id === pathname || item.path === pathname)
     if (byManifest)
       return byManifest.href
 
@@ -634,7 +634,7 @@ export class Epub {
           const source = await archive.fileFileContent(coverPath)
           const document = await this.usexml.parse(source, undefined, coverPath)
           const image = findDescendant(document, name => name === 'img' || name === 'image')
-          const imageHref = attribute(image, 'src') ?? attribute(image, 'href')
+          const imageHref = attribute(image, 'src') ?? attribute(image, 'href') ?? attribute(image, 'xlink:href')
           const imagePath = imageHref ? resolveArchivePath(coverPath, imageHref) : undefined
           if (imagePath && archive.hasFile(imagePath)) {
             const item = parsedPackage.manifest.find(manifest => manifest.path === imagePath)

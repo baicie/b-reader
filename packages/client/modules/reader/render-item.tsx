@@ -42,7 +42,7 @@ function safeAttributes(node: EpubNode, rootId?: string) {
     if (!safeAttributeName(name) || /^on/i.test(name) || rawValue == null)
       continue
     const value = String(rawValue)
-    if (dangerousUrl.test(value) || (name === 'style' && dangerousUrl.test(value)))
+    if (dangerousUrl.test(value) || (name === 'style' && /expression\s*\(|url\s*\(\s*(?:javascript|vbscript)\s*:/i.test(value)))
       continue
     output[name] = value
   }
