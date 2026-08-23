@@ -189,6 +189,33 @@ describe('EPUB 2 parsing and fallback behavior', () => {
       assert.ok(publication.warnings.some(item => item.code === 'INVALID_COVER'))
     })
   })
+
+  it('selects refined main titles and the declared primary identifier', async () => {
+    await withEpub([
+      { name: 'META-INF/container.xml', data: container('package.opf') },
+      { name: 'package.opf', data: `<package version="3.0" unique-identifier="uid-main"><metadata xmlns:dc="x"><dc:title>Subtitle</dc:title><dc:title id="main-title">Main title</dc:title><meta refines="#main-title" property="title-type">main</meta><dc:identifier id="other">other-id</dc:identifier><dc:identifier id="uid-main">primary-id</dc:identifier><meta property="dcterms:modified">2026-08-23T00:00:00Z</meta></metadata><manifest><item id="a" href="a.xhtml" media-type="application/xhtml+xml"/></manifest><spine><itemref idref="a"/></spine></package>` },
+      { name: 'a.xhtml', data: xhtml('A', '<p>A</p>') },
+    ], async (filePath) => {
+      const publication = await new Epub(filePath).parse()
+      assert.equal(publication.metadata.title, 'Main title')
+      assert.equal(publication.metadata.identifier, 'primary-id')
+      assert.equal(publication.metadata.modified, '2026-08-23T00:00:00Z')
+    })
+  })
+
+  it('reads modified metadata from element text and inlines SVG image resources', async () => {
+    await withEpub([
+      { name: 'META-INF/container.xml', data: container('package.opf') },
+      { name: 'package.opf', data: `<package version="3.0"><metadata xmlns:dc="x"><dc:title>SVG</dc:title><meta property="dcterms:modified">2026-08-23T00:00:00Z</meta></metadata><manifest><item id="a" href="a.xhtml" media-type="application/xhtml+xml"/><item id="image" href="image.jpg" media-type="image/jpeg"/></manifest><spine><itemref idref="a"/></spine></package>` },
+      { name: 'a.xhtml', data: xhtml('A', '<svg xmlns="http://www.w3.org/2000/svg"><image href="image.jpg"/></svg>') },
+      { name: 'image.jpg', data: new Uint8Array([255, 216, 255]) },
+    ], async (filePath) => {
+      const epub = new Epub(filePath)
+      const publication = await epub.parse()
+      assert.equal(publication.metadata.modified, '2026-08-23T00:00:00Z')
+      assert.match(JSON.stringify((await epub.getContent())[0].content), /data:image\/jpeg;base64,/)
+    })
+  })
 })
 
 describe('EPUB paths and errors', () => {
@@ -228,7 +255,7 @@ describe('EPUB paths and errors', () => {
   it('reports malformed container as a typed fatal error', async () => {
     await withEpub([{ name: 'META-INF/container.xml', data: '<container><broken>' }], async (filePath) => {
       await assert.rejects(new Epub(filePath).parse(), (error: unknown) => {
-        return error instanceof EpubError && error.code === 'INVALID_XML'
+        return error instanceof EpubError && error.code === 'INVALID_XML' && error.cause instanceof Error
       })
     })
   })

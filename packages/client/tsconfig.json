@@ -13,6 +13,7 @@
     "types": ["node", "vite/client"],
     "useDefineForClassFields": true
   },
+  "exclude": ["modules/zeus-poc/**"],
   "include": [
     "modules/**/*.ts",
     "modules/**/*.tsx",

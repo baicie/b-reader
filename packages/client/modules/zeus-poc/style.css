@@ -1,0 +1,105 @@
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, sans-serif;
+  color: CanvasText;
+  background: Canvas;
+}
+
+body {
+  margin: 0;
+}
+
+.poc-shell {
+  min-height: 100vh;
+  padding: 32px;
+  box-sizing: border-box;
+}
+
+.poc-header,
+.poc-grid {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.poc-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid color-mix(in srgb, CanvasText 18%, transparent);
+}
+
+.eyebrow,
+.status {
+  margin: 0 0 8px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.72;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 8px;
+  font-size: clamp(28px, 5vw, 44px);
+}
+
+.poc-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) 1fr;
+  gap: 24px;
+  padding-top: 24px;
+}
+
+.chapter-panel,
+.chapter-preview {
+  border: 1px solid color-mix(in srgb, CanvasText 18%, transparent);
+  padding: 20px;
+}
+
+.chapter-panel ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.chapter-panel button {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.chapter-panel button:hover,
+.chapter-panel button:focus-visible,
+.chapter-panel button.selected {
+  background: color-mix(in srgb, Highlight 20%, transparent);
+  outline: none;
+}
+
+.nested-list {
+  padding-left: 16px !important;
+}
+
+@media (max-width: 680px) {
+  .poc-shell {
+    padding: 20px;
+  }
+
+  .poc-header,
+  .poc-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+}

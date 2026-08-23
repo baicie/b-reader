@@ -4,7 +4,12 @@ import { message } from 'ant-design-vue'
 import { nextTick, onBeforeUnmount, reactive, ref } from 'vue'
 import { useAppStore } from '../../src/store/app'
 import { getDataFromHtml, scrollToElement } from '../../src/utils'
-import { flattenNavigation } from '../../src/utils/reader-navigation'
+import {
+  createReaderState,
+  flattenNavigation,
+  selectNavigation,
+  splitNavigationTarget,
+} from '../../src/utils/reader-navigation'
 
 export { flattenNavigation } from '../../src/utils/reader-navigation'
 
@@ -14,23 +19,18 @@ interface RenderData {
   contents: Record<string, EpubContent>
   currentPath: string
   pendingFragment?: string
-}
-
-function splitTarget(target: string) {
-  const hashIndex = target.indexOf('#')
-  return hashIndex === -1
-    ? { href: target, fragment: undefined }
-    : { href: target.slice(0, hashIndex), fragment: target.slice(hashIndex + 1) }
+  reader: ReturnType<typeof createReaderState>
 }
 
 export function useEpubRender() {
-  const { initApp, sendMessage } = useAppStore()
+  const { initApp, sendMessage, dispose: disposeApp } = useAppStore()
   const scroller = ref<HTMLElement>()
   const state = reactive<RenderData>({
     init: {},
     navs: [],
     contents: {},
     currentPath: '',
+    reader: createReaderState(),
   })
   let removeListener: (() => void) | undefined
 
@@ -44,9 +44,10 @@ export function useEpubRender() {
   }
 
   const getContent = (target: string) => {
-    const { href, fragment } = splitTarget(target)
+    const { href, fragment } = splitNavigationTarget(target)
     if (!href)
       return
+    selectNavigation(state.reader, target)
     state.currentPath = href
     state.pendingFragment = fragment
     if (!state.contents[href]) {
@@ -109,7 +110,10 @@ export function useEpubRender() {
     })
   }
 
-  onBeforeUnmount(() => removeListener?.())
+  onBeforeUnmount(() => {
+    removeListener?.()
+    disposeApp()
+  })
 
   return {
     initReader,

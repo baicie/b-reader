@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "jsxImportSource": "@zeus-js/zeus",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "types": ["node", "vite/client"]
+  },
+  "include": [
+    "modules/zeus-poc/**/*.tsx",
+    "src/zeus-vite-plugin.d.ts"
+  ]
+}

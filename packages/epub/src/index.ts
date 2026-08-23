@@ -463,7 +463,8 @@ export class Epub {
       relation: firstValue(metadataNode, 'relation'),
       subjects,
       contributors,
-      modified: meta.find(item => localName(item.property ?? '') === 'modified')?.value,
+      modified: meta.find(item => localName(item.property ?? '') === 'modified')?.value
+        ?? meta.find(item => localName(item.property ?? '') === 'modified')?.content,
       meta,
     }
   }

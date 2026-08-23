@@ -5,6 +5,7 @@ import type { WebviewApi } from '../vite-env'
 export function useAppStore() {
   const config: BReaderContext = reactive({})
   let vscode: WebviewApi<unknown> | undefined
+  let removeListener: (() => void) | undefined
 
   const sendMessage = (message: MessageType) => {
     vscode?.postMessage(toRaw(message))
@@ -14,9 +15,12 @@ export function useAppStore() {
     Object.assign(source, target)
 
   const initApp = () => {
-    vscode = acquireVsCodeApi()
+    if (!vscode)
+      vscode = acquireVsCodeApi()
+    if (removeListener)
+      return
 
-    window.addEventListener('message', (event) => {
+    const listener = (event: MessageEvent<unknown>) => {
       const message = event.data as MessageType
       switch (message.path) {
         case 'config':
@@ -25,12 +29,20 @@ export function useAppStore() {
         case 'routerTo':
           break
       }
-    })
-    // get config
+    }
+    window.addEventListener('message', listener)
+    removeListener = () => {
+      window.removeEventListener('message', listener)
+      removeListener = undefined
+    }
     sendMessage({
       path: 'config',
       data: {},
     })
+  }
+
+  const dispose = () => {
+    removeListener?.()
   }
 
   return {
@@ -38,5 +50,6 @@ export function useAppStore() {
     vscode,
     initApp,
     sendMessage,
+    dispose,
   }
 }

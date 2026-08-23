@@ -1,7 +1,15 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 import type { Nav } from '@b-reader/epub'
-import { flattenNavigation } from '../src/utils/reader-navigation'
+import {
+  createReaderState,
+  flattenNavigation,
+  moveNavigation,
+  selectNavigation,
+  setProgress,
+  splitNavigationTarget,
+  toggleBookmark,
+} from '../src/utils/reader-navigation'
 
 const nav = (content: string, extra: Partial<Nav> = {}): Nav => ({
   label: content,
@@ -44,5 +52,29 @@ describe('reader navigation', () => {
     const before = JSON.stringify(items)
     flattenNavigation(items)
     assert.equal(JSON.stringify(items), before)
+  })
+
+  it('selects fragments and moves between readable chapters', () => {
+    const state = createReaderState()
+    const items = [nav('one', { content: 'one.xhtml#intro' }), nav('two', { content: 'two.xhtml' })]
+
+    assert.deepEqual(splitNavigationTarget('one.xhtml#intro'), { href: 'one.xhtml', fragment: 'intro' })
+    selectNavigation(state, 'one.xhtml#intro')
+    assert.equal(state.currentHref, 'one.xhtml')
+    assert.equal(state.currentFragment, 'intro')
+    assert.equal(moveNavigation(state, items, 1)?.content, 'two.xhtml')
+    assert.equal(state.currentHref, 'two.xhtml')
+    assert.equal(moveNavigation(state, items, 1), undefined)
+  })
+
+  it('clamps progress and toggles a bookmark for the current target', () => {
+    const state = createReaderState()
+    selectNavigation(state, 'chapter.xhtml#part')
+    setProgress(state, 2)
+    assert.equal(state.progress, 1)
+    assert.equal(toggleBookmark(state, 'Chapter', 123), true)
+    assert.equal(state.bookmarks[0].createdAt, 123)
+    assert.equal(toggleBookmark(state, 'Chapter', 456), false)
+    assert.equal(state.bookmarks.length, 0)
   })
 })

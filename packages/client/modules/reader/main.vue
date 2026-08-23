@@ -6,7 +6,8 @@ import { computed, onBeforeMount } from 'vue'
 import { locale, theme } from '../../src/theme'
 import ReaderContainer from '../../src/components/reader/reader-container.vue'
 import { RenderItem2 } from './render-item'
-import { flattenNavigation, useEpubRender } from './use-render'
+import { useEpubRender } from './use-render'
+import { moveNavigation } from '../../src/utils/reader-navigation'
 
 const { initReader, state, getContent } = useEpubRender()
 
@@ -55,19 +56,15 @@ const handleClickChapter: NonNullable<TreeProps['onSelect']> = selectedKeys =>
   selectChapter(selectedKeys)
 
 function handleNext() {
-  const chapters = flattenNavigation(state.navs)
-  const index = chapters.findIndex(item => item.content.split('#', 1)[0] === state.currentPath)
-  if (index < 0 || index === chapters.length - 1)
-    return
-  selectChapter([chapters[index + 1].content])
+  const chapter = moveNavigation(state.reader, state.navs, 1)
+  if (chapter)
+    selectChapter([chapter.content])
 }
 
 function handlePre() {
-  const chapters = flattenNavigation(state.navs)
-  const index = chapters.findIndex(item => item.content.split('#', 1)[0] === state.currentPath)
-  if (index <= 0)
-    return
-  selectChapter([chapters[index - 1].content])
+  const chapter = moveNavigation(state.reader, state.navs, -1)
+  if (chapter)
+    selectChapter([chapter.content])
 }
 
 onBeforeMount(() => {
